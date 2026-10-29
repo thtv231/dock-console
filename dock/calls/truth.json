@@ -1,0 +1,44 @@
+{
+ "C1": {
+  "shipment_id": "HF-26038",
+  "issue": "delay",
+  "callback": true,
+  "script": "Hi, this is Marco, driving for Lotus. I'm stuck on the A7 near Hamburg, big accident. Shipment H F two six zero three eight will be about two hours late. Call me back if that's a problem.",
+  "voice": "Paul - Frustrated"
+ },
+ "C2": {
+  "shipment_id": "HF-26016",
+  "issue": "question",
+  "callback": true,
+  "script": "Morning, Jenny here. I'm at the Felixstowe gate with HF twenty-six oh one six. The gate says the booking reference is wrong, they won't let me in. Can someone fix it?",
+  "voice": "Jane - Confused"
+ },
+ "C3": {
+  "shipment_id": "HF-26025",
+  "issue": "arrived",
+  "callback": false,
+  "script": "Hello, it's Tom. Just letting you know container for H F two six zero two five is delivered to the warehouse in Los Angeles. All good, no need to call back.",
+  "voice": "Oliver - Cheerful"
+ },
+ "C4": {
+  "shipment_id": "HF-26019",
+  "issue": "address",
+  "callback": true,
+  "script": "This is Pieter's driver for shipment two six zero one nine. The address on my papers is an old warehouse, it's closed. Where do I deliver?",
+  "voice": "Paul - Neutral"
+ },
+ "C5": {
+  "shipment_id": "HF-26036",
+  "issue": "damage",
+  "callback": true,
+  "script": "Hi, Sam calling about H F two six zero three six. Two pallets fell over during unloading, some cartons are crushed. I've taken photos.",
+  "voice": "Jane - Neutral"
+ },
+ "C6": {
+  "shipment_id": "HF-26040",
+  "issue": "delay",
+  "callback": false,
+  "script": "Yeah hi, it's Ana. Running about forty minutes behind with HF two six oh four zero, traffic at the port. No reply needed.",
+  "voice": "Jane - Frustrated"
+ }
+}

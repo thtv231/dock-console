@@ -1,0 +1,297 @@
+{
+  "invoice_01_clean.pdf": {
+    "kind": "invoice",
+    "invoice_no": "INV-2026-3100",
+    "date": "2026-09-01",
+    "shipment_id": "HF-26001",
+    "container_no": "HRBU4100003",
+    "incoterm": "CIF",
+    "seller": "Lotus Ceramics Co., Ltd.",
+    "buyer": "Pacific Grove Foods Inc.",
+    "currency": "USD",
+    "lines": [
+      {
+        "description": "Glazed stoneware vase, 30 cm",
+        "hs_code": "6913.90",
+        "quantity": 600,
+        "unit_price": 6.4,
+        "amount": 3840.0
+      },
+      {
+        "description": "Ceramic dinner plate set (6)",
+        "hs_code": "6912.00",
+        "quantity": 2400,
+        "unit_price": 11.8,
+        "amount": 28320.0
+      }
+    ],
+    "subtotal": 32160.0,
+    "freight": 1929.6,
+    "insurance": 128.64,
+    "total": 34218.24,
+    "number_style": "us",
+    "flags": []
+  },
+  "invoice_02_clean.pdf": {
+    "kind": "invoice",
+    "invoice_no": "INV-2026-3105",
+    "date": "2026-09-11",
+    "shipment_id": "HF-26006",
+    "container_no": "HRBU4106850",
+    "incoterm": "FOB",
+    "seller": "Saigon Coffee Roasters JSC",
+    "buyer": "Nordlicht Moebel GmbH",
+    "currency": "USD",
+    "lines": [
+      {
+        "description": "Roasted coffee beans, Robusta, 1 kg bag",
+        "hs_code": "0901.21",
+        "quantity": 1500,
+        "unit_price": 7.9,
+        "amount": 11850.0
+      },
+      {
+        "description": "Green coffee beans, Arabica, 60 kg sack",
+        "hs_code": "0901.11",
+        "quantity": 10,
+        "unit_price": 312.0,
+        "amount": 3120.0
+      }
+    ],
+    "subtotal": 14970.0,
+    "freight": 0.0,
+    "insurance": 0.0,
+    "total": 14970.0,
+    "number_style": "us",
+    "flags": []
+  },
+  "invoice_03_eu_numbers.pdf": {
+    "kind": "invoice",
+    "invoice_no": "INV-2026-3110",
+    "date": "2026-09-21",
+    "shipment_id": "HF-26011",
+    "container_no": "HRBU4113700",
+    "incoterm": "FOB",
+    "seller": "Lion City Electronics Pte. Ltd.",
+    "buyer": "Van der Berg Bikes B.V.",
+    "currency": "USD",
+    "lines": [
+      {
+        "description": "USB-C charging module",
+        "hs_code": "8504.40",
+        "quantity": 1500,
+        "unit_price": 3.15,
+        "amount": 4725.0
+      },
+      {
+        "description": "LED panel driver board",
+        "hs_code": "8542.39",
+        "quantity": 1500,
+        "unit_price": 9.6,
+        "amount": 14400.0
+      }
+    ],
+    "subtotal": 19125.0,
+    "freight": 0.0,
+    "insurance": 0.0,
+    "total": 19125.0,
+    "number_style": "eu",
+    "flags": []
+  },
+  "invoice_04_scan.pdf": {
+    "kind": "invoice",
+    "invoice_no": "INV-2026-3115",
+    "date": "2026-10-01",
+    "shipment_id": "HF-26016",
+    "container_no": "HRBU4120550",
+    "incoterm": "CIF",
+    "seller": "Kanto Precision Parts K.K.",
+    "buyer": "Brightwater Textiles Ltd.",
+    "currency": "USD",
+    "lines": [
+      {
+        "description": "Precision ball bearing 6204-2RS",
+        "hs_code": "8482.10",
+        "quantity": 40,
+        "unit_price": 1.85,
+        "amount": 74.0
+      },
+      {
+        "description": "CNC machined aluminium bracket",
+        "hs_code": "7616.99",
+        "quantity": 1500,
+        "unit_price": 4.2,
+        "amount": 6300.0
+      }
+    ],
+    "subtotal": 6374.0,
+    "freight": 382.44,
+    "insurance": 25.5,
+    "total": 6781.94,
+    "number_style": "us",
+    "flags": []
+  },
+  "invoice_05_scan_stain.pdf": {
+    "kind": "invoice",
+    "invoice_no": "INV-2026-3120",
+    "date": "2026-10-11",
+    "shipment_id": "HF-26021",
+    "container_no": "HRBU4127405",
+    "incoterm": "EXW",
+    "seller": "Lotus Ceramics Co., Ltd.",
+    "buyer": "Pacific Grove Foods Inc.",
+    "currency": "USD",
+    "lines": [
+      {
+        "description": "Glazed stoneware vase, 30 cm",
+        "hs_code": "6913.90",
+        "quantity": 250,
+        "unit_price": 6.4,
+        "amount": 1600.0
+      },
+      {
+        "description": "Ceramic dinner plate set (6)",
+        "hs_code": "6912.00",
+        "quantity": 2400,
+        "unit_price": 11.8,
+        "amount": 28320.0
+      }
+    ],
+    "subtotal": 29920.0,
+    "freight": 0.0,
+    "insurance": 0.0,
+    "total": 29920.0,
+    "number_style": "us",
+    "flags": []
+  },
+  "invoice_06_scan_eu.pdf": {
+    "kind": "invoice",
+    "invoice_no": "INV-2026-3138",
+    "date": "2026-11-16",
+    "shipment_id": "HF-26039",
+    "container_no": "HRBU4152060",
+    "incoterm": "DAP",
+    "seller": "Lion City Electronics Pte. Ltd.",
+    "buyer": "Van der Berg Bikes B.V.",
+    "currency": "USD",
+    "lines": [
+      {
+        "description": "USB-C charging module",
+        "hs_code": "8504.40",
+        "quantity": 2400,
+        "unit_price": 3.15,
+        "amount": 7560.0
+      },
+      {
+        "description": "LED panel driver board",
+        "hs_code": "8542.39",
+        "quantity": 1500,
+        "unit_price": 9.6,
+        "amount": 14400.0
+      }
+    ],
+    "subtotal": 21960.0,
+    "freight": 1317.6,
+    "insurance": 87.84,
+    "total": 23365.44,
+    "number_style": "eu",
+    "flags": []
+  },
+  "invoice_07_scan_mismatch.pdf": {
+    "kind": "invoice",
+    "invoice_no": "INV-2026-3139",
+    "date": "2026-11-18",
+    "shipment_id": "HF-26040",
+    "container_no": "HRBU4153430",
+    "incoterm": "DAP",
+    "seller": "Kanto Precision Parts K.K.",
+    "buyer": "Brightwater Textiles Ltd.",
+    "currency": "USD",
+    "lines": [
+      {
+        "description": "Precision ball bearing 6204-2RS",
+        "hs_code": "8482.10",
+        "quantity": 600,
+        "unit_price": 1.85,
+        "amount": 1110.0
+      },
+      {
+        "description": "CNC machined aluminium bracket",
+        "hs_code": "7616.99",
+        "quantity": 600,
+        "unit_price": 4.2,
+        "amount": 2520.0
+      }
+    ],
+    "subtotal": 3630.0,
+    "freight": 217.8,
+    "insurance": 14.52,
+    "total": 8362.32,
+    "number_style": "us",
+    "flags": [
+      "total_mismatch"
+    ]
+  },
+  "bill_of_lading_01.pdf": {
+    "kind": "bill_of_lading",
+    "bl_no": "HRBF2600161",
+    "shipment_id": "HF-26001",
+    "shipper": "Lotus Ceramics Co., Ltd.",
+    "consignee": "Pacific Grove Foods Inc.",
+    "vessel_voyage": "MV Coral Bay 088W",
+    "port_of_loading": "VNCLI Cat Lai",
+    "port_of_discharge": "USLAX Los Angeles",
+    "container_no": "HRBU4100003",
+    "flags": [],
+    "seal_no": "SL165271",
+    "packages": 180,
+    "gross_weight_kg": 3573.5
+  },
+  "bill_of_lading_02.pdf": {
+    "kind": "bill_of_lading",
+    "bl_no": "HRBF2600566",
+    "shipment_id": "HF-26005",
+    "shipper": "Lotus Ceramics Co., Ltd.",
+    "consignee": "Pacific Grove Foods Inc.",
+    "vessel_voyage": "MV Harbor Star 214E",
+    "port_of_loading": "VNCLI Cat Lai",
+    "port_of_discharge": "USLAX Los Angeles",
+    "container_no": "HRBU4105480",
+    "flags": [],
+    "seal_no": "SL270187",
+    "packages": 180,
+    "gross_weight_kg": 5520.7
+  },
+  "bill_of_lading_03_scan.pdf": {
+    "kind": "bill_of_lading",
+    "bl_no": "HRBF2602023",
+    "shipment_id": "HF-26020",
+    "shipper": "Kanto Precision Parts K.K.",
+    "consignee": "Brightwater Textiles Ltd.",
+    "vessel_voyage": "MV Coral Bay 088W",
+    "port_of_loading": "JPYOK Yokohama",
+    "port_of_discharge": "GBFXT Felixstowe",
+    "container_no": "HRBU4126034",
+    "flags": [],
+    "seal_no": "SL100244",
+    "packages": 410,
+    "gross_weight_kg": 9190.4
+  },
+  "bill_of_lading_04_scan.pdf": {
+    "kind": "bill_of_lading",
+    "bl_no": "HRBF2603888",
+    "shipment_id": "HF-26038",
+    "shipper": "Saigon Coffee Roasters JSC",
+    "consignee": "Nordlicht Moebel GmbH",
+    "vessel_voyage": "MV Harbor Star 214E",
+    "port_of_loading": "VNCLI Cat Lai",
+    "port_of_discharge": "DEHAM Hamburg",
+    "container_no": "HRBU4153690",
+    "flags": [
+      "bad_check_digit"
+    ],
+    "seal_no": "SL126739",
+    "packages": 180,
+    "gross_weight_kg": 5382.4
+  }
+}

@@ -1,0 +1,102 @@
+{
+ "M01": {
+  "intent": "tracking",
+  "shipment_id": "HF-26012",
+  "language": "en"
+ },
+ "M02": {
+  "intent": "customs",
+  "shipment_id": "HF-26038",
+  "language": "de"
+ },
+ "M03": {
+  "intent": "invoice",
+  "shipment_id": "HF-26040",
+  "language": "en"
+ },
+ "M04": {
+  "intent": "booking",
+  "shipment_id": null,
+  "language": "en"
+ },
+ "M05": {
+  "intent": "damage",
+  "shipment_id": "HF-26037",
+  "language": "en"
+ },
+ "M06": {
+  "intent": "other",
+  "shipment_id": null,
+  "language": "en"
+ },
+ "M07": {
+  "intent": "tracking",
+  "shipment_id": "HF-26019",
+  "language": "nl"
+ },
+ "M08": {
+  "intent": "customs",
+  "shipment_id": "HF-26038",
+  "language": "en"
+ },
+ "M09": {
+  "intent": "booking",
+  "shipment_id": null,
+  "language": "en"
+ },
+ "M10": {
+  "intent": "tracking",
+  "shipment_id": "HF-26016",
+  "language": "en"
+ },
+ "M11": {
+  "intent": "invoice",
+  "shipment_id": "HF-26031",
+  "language": "fr"
+ },
+ "M12": {
+  "intent": "customs",
+  "shipment_id": null,
+  "language": "en"
+ },
+ "M13": {
+  "intent": "damage",
+  "shipment_id": "HF-26036",
+  "language": "en"
+ },
+ "M14": {
+  "intent": "booking",
+  "shipment_id": null,
+  "language": "de"
+ },
+ "M15": {
+  "intent": "tracking",
+  "shipment_id": "HF-26099",
+  "language": "en"
+ },
+ "M16": {
+  "intent": "other",
+  "shipment_id": null,
+  "language": "en"
+ },
+ "M17": {
+  "intent": "invoice",
+  "shipment_id": "HF-26003",
+  "language": "en"
+ },
+ "M18": {
+  "intent": "damage",
+  "shipment_id": "HF-26034",
+  "language": "en"
+ },
+ "M19": {
+  "intent": "tracking",
+  "shipment_id": "HF-26025",
+  "language": "en"
+ },
+ "M20": {
+  "intent": "customs",
+  "shipment_id": "HF-26033",
+  "language": "en"
+ }
+}

@@ -1,0 +1,137 @@
+[
+ {
+  "id": "Q01",
+  "question": "Can we import roasted coffee into Germany, and what must the invoice show?",
+  "sources": [
+   "HB-03"
+  ],
+  "must_contain": [
+   "hs code"
+  ]
+ },
+ {
+  "id": "Q02",
+  "question": "Shipment HF-26038 is on customs hold in Hamburg. Which three documents does the broker need?",
+  "sources": [
+   "HB-01"
+  ],
+  "must_contain": [
+   "invoice",
+   "packing list",
+   "bill of lading"
+  ]
+ },
+ {
+  "id": "Q03",
+  "question": "The importer wants the lower duty rate for goods from Vietnam. Which document is needed?",
+  "sources": [
+   "HB-02"
+  ],
+  "must_contain": [
+   "certificate of origin"
+  ]
+ },
+ {
+  "id": "Q04",
+  "question": "Our customer ships wooden chairs on pallets to Hamburg. What mark must the pallets carry?",
+  "sources": [
+   "HB-04"
+  ],
+  "must_contain": [
+   "ispm 15"
+  ]
+ },
+ {
+  "id": "Q05",
+  "question": "Can Harbor Freight carry a carton of loose lithium batteries of 160 Wh each?",
+  "sources": [
+   "HB-05"
+  ],
+  "must_contain": [
+   "not"
+  ]
+ },
+ {
+  "id": "Q06",
+  "question": "A container has been on customs hold for six days. From which day is port storage charged, and how much?",
+  "sources": [
+   "HB-06"
+  ],
+  "must_contain": [
+   "fourth|4th",
+   "85"
+  ]
+ },
+ {
+  "id": "Q07",
+  "question": "How many free days do we get at Los Angeles before demurrage starts?",
+  "sources": [
+   "HB-07"
+  ],
+  "must_contain": [
+   "four|4"
+  ]
+ },
+ {
+  "id": "Q08",
+  "question": "Under DAP, who pays the import duty?",
+  "sources": [
+   "HB-08"
+  ],
+  "must_contain": [
+   "buyer"
+  ]
+ },
+ {
+  "id": "Q09",
+  "question": "A customer found damaged cartons nine days after delivery. Can they still claim?",
+  "sources": [
+   "HB-09"
+  ],
+  "must_contain": [
+   "seven|7"
+  ]
+ },
+ {
+  "id": "Q10",
+  "question": "What does a UK importer need before Felixstowe can clear the goods?",
+  "sources": [
+   "HB-10"
+  ],
+  "must_contain": [
+   "eori"
+  ]
+ },
+ {
+  "id": "Q11",
+  "question": "When must the ISF be filed for a shipment to Los Angeles?",
+  "sources": [
+   "HB-11"
+  ],
+  "must_contain": [
+   "24 hours|24-hour"
+  ]
+ },
+ {
+  "id": "Q12",
+  "question": "How heavy can the cargo in a 40ft container be?",
+  "sources": [
+   "HB-12"
+  ],
+  "must_contain": [
+   "26"
+  ]
+ },
+ {
+  "id": "Q13",
+  "question": "What is the import duty rate for bicycle frames into the Netherlands?",
+  "sources": [],
+  "must_contain": []
+ },
+ {
+  "id": "Q14",
+  "question": "Does Harbor Freight ship live animals?",
+  "sources": [],
+  "must_contain": []
+ }
+]

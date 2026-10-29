@@ -1,0 +1,62 @@
+[
+ {
+  "id": "HB-01",
+  "title": "Documents for every import",
+  "text": "Every import shipment handled by Harbor Freight needs three documents before the customs broker can file: the commercial invoice, the packing list and the bill of lading. The invoice total must match the declared value. If any of the three is missing, the shipment stays on customs hold until it arrives."
+ },
+ {
+  "id": "HB-02",
+  "title": "Certificate of origin",
+  "text": "A certificate of origin states the country where the goods were made. For imports into the EU, the broker needs it whenever the importer claims a reduced duty rate under a trade agreement, for example goods from Vietnam under the EU-Vietnam agreement. Without it, the full duty rate applies, but the goods can still be cleared."
+ },
+ {
+  "id": "HB-03",
+  "title": "Coffee and other food into the EU",
+  "text": "Roasted and green coffee may be imported into the EU. Food shipments need the commercial invoice to show the HS code of each line. Green coffee from outside the EU must also travel with a phytosanitary check record from the exporter. Harbor Freight does not accept food shipments that need refrigeration."
+ },
+ {
+  "id": "HB-04",
+  "title": "Wooden furniture and packaging",
+  "text": "Furniture made of solid wood may be imported into the EU and the UK. All wooden pallets and crates must carry the ISPM 15 mark, which shows the wood was heat-treated. Shipments with unmarked wooden packaging are held at the port until the packaging is replaced, at the importer's cost."
+ },
+ {
+  "id": "HB-05",
+  "title": "Lithium batteries",
+  "text": "Shipments that contain lithium batteries, including batteries packed inside devices, are dangerous goods. Harbor Freight carries them only with a dangerous-goods declaration from the shipper and a UN number on every carton. Loose lithium batteries over 100 Wh each are not accepted by Harbor Freight."
+ },
+ {
+  "id": "HB-06",
+  "title": "Customs hold: what to do",
+  "text": "When a shipment is on customs hold, Harbor Freight's ops team first asks the broker which document or inspection caused the hold. The customer is informed within one working day. Storage at the port is charged from the fourth day of the hold at 85 USD per container per day."
+ },
+ {
+  "id": "HB-07",
+  "title": "Demurrage and detention",
+  "text": "Demurrage is charged when a full container stays in the port terminal beyond the free days, which are five days at Rotterdam, Hamburg and Felixstowe and four days at Los Angeles. Detention is charged when the empty container is returned late to the carrier. Both are billed to the importer at cost."
+ },
+ {
+  "id": "HB-08",
+  "title": "Incoterms used by Harbor Freight",
+  "text": "Harbor Freight quotes four incoterms: EXW, FOB, CIF and DAP. Under FOB, the buyer pays the sea freight and insurance. Under CIF, the seller pays freight and insurance to the destination port. Under DAP, the seller delivers to the named place, but import duty is paid by the buyer."
+ },
+ {
+  "id": "HB-09",
+  "title": "Damage claims",
+  "text": "Damage must be reported to Harbor Freight within seven days of delivery, with photos of the cartons and the container seal number. Claims are limited to the declared value of the damaged goods. Damage found during a customs inspection is reported by the broker and handled the same way."
+ },
+ {
+  "id": "HB-10",
+  "title": "Imports into the United Kingdom",
+  "text": "Since 2021, goods entering Great Britain from the EU or the rest of the world need a UK import declaration. The importer must have an EORI number starting with GB. Harbor Freight's broker in Felixstowe files the declaration once the commercial invoice, packing list and bill of lading are received."
+ },
+ {
+  "id": "HB-11",
+  "title": "Imports into the United States",
+  "text": "For US imports, the importer must file an Importer Security Filing, called ISF or 10+2, at least 24 hours before the cargo is loaded at the origin port. A late or missing ISF can lead to a fine and a hold in Los Angeles. Harbor Freight files the ISF for customers who send the data five days before loading."
+ },
+ {
+  "id": "HB-12",
+  "title": "Booking rules",
+  "text": "Bookings must reach Harbor Freight at least seven days before the cargo is ready to load. A booking needs the origin and destination ports, the container size, the commodity and the gross weight. A 20ft container holds up to 21 tonnes of cargo, a 40ft container up to 26 tonnes."
+ }
+]

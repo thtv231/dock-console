@@ -1,0 +1,122 @@
+[
+ {
+  "id": "M01",
+  "from": "freight@brightwater.example.com",
+  "subject": "Where is HF-26012?",
+  "body": "Hi team, could you tell me where container for HF-26012 is right now? Our warehouse wants to plan the unloading. Thanks, Amy"
+ },
+ {
+  "id": "M02",
+  "from": "import@nordlicht.example.com",
+  "subject": "Sendung HF-26038 im Zoll",
+  "body": "Guten Tag, unsere Sendung HF-26038 steht seit Tagen im Zoll in Hamburg. Welche Dokumente fehlen noch? Wir brauchen die Ware dringend. Mit freundlichen Grüßen, Jonas Weber"
+ },
+ {
+  "id": "M03",
+  "from": "freight@brightwater.example.com",
+  "subject": "Invoice INV-2026-3139 looks wrong",
+  "body": "Hello, the commercial invoice we received for HF-26040 shows a total of 8,362.32 USD, but our order was for about 3,900. Can you check and send a corrected invoice? Regards, Amy"
+ },
+ {
+  "id": "M04",
+  "from": "orders@vdberg-bikes.example.com",
+  "subject": "New booking Singapore → Rotterdam",
+  "body": "Hi, we'd like to book one 40ft container from Singapore to Rotterdam, ready to load on 2 December. Goods: bicycle frames, about 9 tonnes. Please send a quote. Pieter"
+ },
+ {
+  "id": "M05",
+  "from": "logistics@pgfoods.example.com",
+  "subject": "Damaged cartons on HF-26037",
+  "body": "Hi, we unpacked HF-26037 this morning and 14 cartons of plates arrived broken. Photos attached. How do we file a claim? Maria"
+ },
+ {
+  "id": "M06",
+  "from": "supply@lce.example.com",
+  "subject": "Webinar: 5 trends in electronics sourcing",
+  "body": "Join our free webinar next Thursday on five trends shaping electronics sourcing in 2027. Register now, seats are limited!"
+ },
+ {
+  "id": "M07",
+  "from": "orders@vdberg-bikes.example.com",
+  "subject": "Status zending HF26019",
+  "body": "Goedemiddag, kunt u laten weten wanneer zending HF26019 in Rotterdam aankomt? Alvast bedankt, Pieter"
+ },
+ {
+  "id": "M08",
+  "from": "export@saigoncoffee.example.com",
+  "subject": "Certificate of origin for HF-26038",
+  "body": "Dear Harbor Freight, customs in Hamburg asks for the certificate of origin for HF-26038. We attach it here. Please forward it to the broker today. Best, Linh"
+ },
+ {
+  "id": "M09",
+  "from": "shipping@kanto-pp.example.com",
+  "subject": "Booking: Yokohama to Felixstowe, January",
+  "body": "Hello, please reserve space for two 20ft containers Yokohama to Felixstowe, loading 8 January. Machined parts, 14 tonnes in total. Kind regards, Hiroshi Sato"
+ },
+ {
+  "id": "M10",
+  "from": "freight@brightwater.example.com",
+  "subject": "Re: HF-26016 arrival",
+  "body": "Hi, HF-26016 has been on the water for a while now. When will it reach Felixstowe, and is the ETA still the same? Amy"
+ },
+ {
+  "id": "M11",
+  "from": "orders@vdberg-bikes.example.com",
+  "subject": "Facture pour HF-26031",
+  "body": "Bonjour, la facture pour l'envoi HF-26031 indique un fret de 1 317,60 USD alors que le devis était de 1 100 USD. Pouvez-vous vérifier ? Cordialement, Pieter van der Berg"
+ },
+ {
+  "id": "M12",
+  "from": "logistics@pgfoods.example.com",
+  "subject": "Customs hold?",
+  "body": "Hi, our broker says one of our containers might be held by US customs, but he didn't give us the reference. Can you check which shipment it is? Maria"
+ },
+ {
+  "id": "M13",
+  "from": "shipping@kanto-pp.example.com",
+  "subject": "Wet cartons HF-26036",
+  "body": "Hello, our consignee reports that 6 cartons on HF-26036 were wet when they opened the container. Was there a problem at the port? Hiroshi"
+ },
+ {
+  "id": "M14",
+  "from": "import@nordlicht.example.com",
+  "subject": "Neue Buchung Cat Lai - Hamburg",
+  "body": "Hallo, wir möchten einen 40-Fuß-Container von Cat Lai nach Hamburg buchen, Abfahrt Mitte Januar. Möbel, ca. 11 Tonnen. Bitte um ein Angebot. Jonas"
+ },
+ {
+  "id": "M15",
+  "from": "shipping@kanto-pp.example.com",
+  "subject": "Where is HF-26099?",
+  "body": "Hi, can you give me an update on shipment HF-26099? Our customer is asking. Thanks, Hiroshi"
+ },
+ {
+  "id": "M16",
+  "from": "freight@brightwater.example.com",
+  "subject": "Out of office",
+  "body": "I am out of the office until 3 December with limited access to email. For urgent matters please contact ops@brightwater.example.com."
+ },
+ {
+  "id": "M17",
+  "from": "supply@lce.example.com",
+  "subject": "Two invoices for one shipment",
+  "body": "Hello, we received two invoices for HF-26003, INV-2026-3102 and a second one without a number. Which one should we pay? Wei Ling"
+ },
+ {
+  "id": "M18",
+  "from": "import@nordlicht.example.com",
+  "subject": "Torn sacks found at inspection",
+  "body": "Hello, customs in Hamburg inspected HF-26034 and found two coffee sacks torn open. We want to claim for the damaged goods. Jonas"
+ },
+ {
+  "id": "M19",
+  "from": "logistics@pgfoods.example.com",
+  "subject": "Is HF-26025 released?",
+  "body": "Hi again, is HF-26025 released by customs yet, or is it still at the port? We need to send a truck. Maria"
+ },
+ {
+  "id": "M20",
+  "from": "ops@lotus-ceramics.example.com",
+  "subject": "Packing list missing for customs",
+  "body": "Hello, the broker in Los Angeles says the packing list for HF-26033 is missing, so customs cannot clear it. Can you send it again? Thanh"
+ }
+]
