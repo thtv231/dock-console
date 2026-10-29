@@ -50,7 +50,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 503,
+    "ms": 796,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -59,15 +59,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 415,
+    "ms": 383,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:15+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:21+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|bill_of_lading_02.pdf|": {
@@ -121,7 +121,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 523,
+    "ms": 583,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -130,15 +130,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 433,
+    "ms": 428,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:16+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:22+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|bill_of_lading_03_scan.pdf|": {
@@ -192,7 +192,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1233,
+    "ms": 1506,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -201,15 +201,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 843,
+    "ms": 896,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:19+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:24+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|bill_of_lading_04_scan.pdf|": {
@@ -265,7 +265,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 988,
+    "ms": 1341,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -274,15 +274,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1030,
+    "ms": 1144,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:21+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:27+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_01_clean.pdf|": {
@@ -356,7 +356,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 601,
+    "ms": 654,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -365,15 +365,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 518,
+    "ms": 472,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:02+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:07+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_01_clean.pdf|schema=v1": {
@@ -450,7 +450,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 516,
+    "ms": 542,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -459,15 +459,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 611,
+    "ms": 394,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:22+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:28+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_02_clean.pdf|": {
@@ -541,7 +541,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 513,
+    "ms": 482,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -550,15 +550,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 879,
+    "ms": 756,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:03+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:08+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_02_clean.pdf|schema=v1": {
@@ -635,7 +635,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 849,
+    "ms": 515,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -644,15 +644,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 417,
+    "ms": 383,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:23+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:29+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_03_eu_numbers.pdf|": {
@@ -726,7 +726,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 507,
+    "ms": 764,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -735,15 +735,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 416,
+    "ms": 398,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:04+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:10+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_03_eu_numbers.pdf|schema=v1": {
@@ -820,7 +820,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1002,
+    "ms": 499,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -829,15 +829,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 584,
+    "ms": 474,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:25+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:30+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_04_scan.pdf|": {
@@ -911,7 +911,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1375,
+    "ms": 1280,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -920,15 +920,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 783,
+    "ms": 1040,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:06+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:12+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_04_scan.pdf|schema=v1": {
@@ -1005,7 +1005,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1300,
+    "ms": 1322,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -1014,15 +1014,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 949,
+    "ms": 1358,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:27+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:32+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_05_scan_stain.pdf|": {
@@ -1096,7 +1096,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 2010,
+    "ms": 1067,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -1105,15 +1105,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1331,
+    "ms": 1227,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:10+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:14+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_05_scan_stain.pdf|schema=v1": {
@@ -1190,7 +1190,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1572,
+    "ms": 1473,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -1199,15 +1199,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 868,
+    "ms": 842,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:29+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:35+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_06_scan_eu.pdf|": {
@@ -1281,7 +1281,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1263,
+    "ms": 1267,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -1290,15 +1290,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1083,
+    "ms": 1415,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:12+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:17+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_06_scan_eu.pdf|schema=v1": {
@@ -1375,7 +1375,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1240,
+    "ms": 1039,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -1384,15 +1384,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1016,
+    "ms": 1029,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:32+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:37+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_07_scan_mismatch.pdf|": {
@@ -1470,7 +1470,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1360,
+    "ms": 1810,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -1479,15 +1479,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 941,
+    "ms": 786,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:15+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:20+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  },
  "extract|invoice_07_scan_mismatch.pdf|schema=v1": {
@@ -1568,7 +1568,7 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 1294,
+    "ms": 1429,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
@@ -1577,15 +1577,15 @@
    {
     "op": "ocr.process",
     "model": "mistral-ocr-latest",
-    "ms": 891,
+    "ms": 773,
     "tokens": null,
     "tokens_in": null,
     "tokens_out": null,
     "pages": 1
    }
   ],
-  "recorded_at": "2026-10-29T18:36:34+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T19:02:39+00:00",
+  "git_sha": "ab7f1ff",
   "sdk_version": "3.6.0"
  }
 }
