@@ -1,6 +1,7 @@
 """Record real runs into replays/<capability>.json, through the same API code a visitor's Live request runs.
 
     python scripts/record.py triage        # or: handbook guardrails documents agents, or all
+    python scripts/record.py design_c      # only design C's runs, into replays/agents.json
 
 Reads MISTRAL_API_KEY from .env and sends it as X-Mistral-Key to the in-process app. The key is never
 printed, and a record that contains it (or anything shaped like a key) is refused before it is written.
@@ -150,6 +151,21 @@ def left_on_account(key):
     return asyncio.run(tagged())
 
 
+def record_designs(http, key, designs, serial=False):
+    cases = [(replay.key("design", d, guard=1 if guard else None, run=n), {"design": d, "guard": guard, "run": n})
+             for d in designs for guard in (False, True) for n in range(1, agents.RUNS + 1)]
+    if serial:
+        cases.append((replay.key("design", "serial", run=1), {"design": "serial", "run": 1}))
+    return record_cases(http, key, "/api/agents/design", cases, lambda g: (
+        f"{g['seconds']:>5} s {g['tool_calls']:>2} calls {g['score']['covered']} "
+        f"invented={len(g['score']['invented reasons'])} note={g['score']['follows the note'] or '-'} "
+        f"retries={sum(c.get('retries', 0) for c in g['meter'])} {sorted(c['ms'] for c in g['meter'])}"))
+
+
+def record_design_c(http, key):
+    return record_designs(http, key, ("parallel",))
+
+
 def record_agents(http, key):
     inbox = dataset("inbox.json")
     cases = [(replay.key("handoff", m["id"], **({"rule": rule} if rule != agents.DEFAULT_RULE else {})),
@@ -160,12 +176,7 @@ def record_agents(http, key):
     for rule in ("v1", "v2"):
         rows = [v for k, v in handoffs.items() if k.endswith(f"|rule={rule}" if rule != agents.DEFAULT_RULE else "|")]
         print(f"rule {rule}: routed correctly {sum(r['right'] for r in rows)} / {len(rows)}")
-    cases = [(replay.key("design", d, guard=1 if guard else None, run=n), {"design": d, "guard": guard, "run": n})
-             for d in ("a", "parallel") for guard in (False, True) for n in range(1, agents.RUNS + 1)]
-    cases.append((replay.key("design", "serial", run=1), {"design": "serial", "run": 1}))
-    designs, failed_designs = record_cases(http, key, "/api/agents/design", cases, lambda g: (
-        f"{g['seconds']:>5} s {g['tool_calls']:>2} calls {g['score']['covered']} "
-        f"invented={len(g['score']['invented reasons'])} note={g['score']['follows the note'] or '-'}"))
+    designs, failed_designs = record_designs(http, key, ("a", "parallel"), serial=True)
     left = left_on_account(key)
     print(f"tagged agents left on the account: {len(left)}")
     for a in left:
@@ -174,7 +185,8 @@ def record_agents(http, key):
 
 
 CAPABILITIES = {"triage": record_triage, "handbook": record_handbook, "guardrails": record_guardrails,
-                "documents": record_documents, "agents": record_agents}
+                "documents": record_documents, "agents": record_agents, "design_c": record_design_c}
+FILES = {"design_c": "agents"}   # a part of a capability, saved into that capability's file
 
 
 def save(capability, records):
@@ -190,7 +202,7 @@ def main(names):
     key = dotenv_values(ROOT / ".env").get("MISTRAL_API_KEY")
     if not key:
         raise SystemExit("MISTRAL_API_KEY is not set in .env")
-    names = list(CAPABILITIES) if names in ([], ["all"]) else names
+    names = [n for n in CAPABILITIES if n not in FILES] if names in ([], ["all"]) else names
     unknown = [n for n in names if n not in CAPABILITIES]
     if unknown:
         raise SystemExit(f"unknown capability {unknown}; known: {sorted(CAPABILITIES)}")
@@ -198,7 +210,7 @@ def main(names):
     for name in names:
         records, failed = CAPABILITIES[name](http, key)
         if records:
-            save(name, records)
+            save(FILES.get(name, name), records)
         if failed:
             any_failed = True
             print(f"{name}: {len(failed)} not recorded: {failed}")
