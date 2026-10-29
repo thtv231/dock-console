@@ -85,7 +85,16 @@ def _usage(result):
     u = getattr(result, "usage", None) or getattr(result, "usage_info", None)
     return {"tokens": getattr(u, "total_tokens", None),
             "tokens_in": getattr(u, "prompt_tokens", None),
-            "tokens_out": getattr(u, "completion_tokens", None)}
+            "tokens_out": getattr(u, "completion_tokens", None),
+            "pages": getattr(u, "pages_processed", None)}   # OCR bills pages, not tokens
+
+
+def _detail(op, result):
+    """What a screen shows that the dock function doesn't return: the raw moderation flags and scores."""
+    if op == "classifiers.moderate":
+        return {"categories": [{k: {"flagged": bool(r.categories[k]), "score": round(r.category_scores[k], 4)}
+                                for k in r.categories} for r in result.results]}
+    return {}
 
 
 def _record(op, kwargs, started, result=None, error=None):
@@ -93,7 +102,7 @@ def _record(op, kwargs, started, result=None, error=None):
     if scope is None:
         return
     entry = {"op": op, "model": kwargs.get("model"), "ms": round((time.perf_counter() - started) * 1000)}
-    entry.update(_usage(result) if error is None else {"error": type(error).__name__})
+    entry.update({**_usage(result), **_detail(op, result)} if error is None else {"error": type(error).__name__})
     scope["meter"].append(entry)
 
 

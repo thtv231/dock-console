@@ -1,10 +1,11 @@
 """Record real runs into replays/<capability>.json, through the same API code a visitor's Live request runs.
 
-    python scripts/record.py triage        # or: all
+    python scripts/record.py triage        # or: handbook guardrails documents, or all
 
 Reads MISTRAL_API_KEY from .env and sends it as X-Mistral-Key to the in-process app. The key is never
 printed, and a record that contains it (or anything shaped like a key) is refused before it is written.
 """
+import asyncio
 import json
 import os
 import re
@@ -18,11 +19,15 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 os.environ["DOCK_LIVE_PER_MIN"] = "0"   # the recorder is not a visitor: no rate limit
 
+import numpy as np                             # noqa: E402
 from dotenv import dotenv_values               # noqa: E402
 from fastapi.testclient import TestClient      # noqa: E402
 
 from api.core import replay                    # noqa: E402
 from api.index import app                      # noqa: E402
+from api.routes import handbook                # noqa: E402
+from dock import app as dock                   # noqa: E402
+from dock._client import request_scope         # noqa: E402
 
 KEY_LIKE = re.compile(r"(?<![A-Za-z0-9])[A-Za-z0-9]{32}(?![A-Za-z0-9])")
 
@@ -61,7 +66,77 @@ def record_triage(http, key):
     return records, failed
 
 
-CAPABILITIES = {"triage": record_triage}
+def dataset(name):
+    return json.loads((ROOT / "dock" / name).read_text(encoding="utf-8"))
+
+
+def cost(got):
+    pages = sum(c.get('pages') or 0 for c in got['meter'])
+    return f"{sum(c['ms'] for c in got['meter']):>6} ms {sum(c['tokens'] or 0 for c in got['meter']):>5} tokens" + (f" {pages} pages" if pages else "")
+
+
+def record_cases(http, key, path, cases, summary):
+    """cases: [(record key, request body)]. Each is one live request; a failure is reported, never stored."""
+    records, failed = {}, []
+    for record_key, body in cases:
+        r = http.post(path, json=body, headers={"X-Mistral-Key": key})
+        if r.status_code != 200 or r.json().get("mode") != "live":
+            failed.append(record_key)
+            print(f"{record_key}  FAILED {r.status_code} {r.json().get('error')}")
+            continue
+        got = r.json()
+        records[record_key] = stamp(got, key)
+        print(f"{record_key:<44} {summary(got):<60} {cost(got)}")
+    return records, failed
+
+
+def record_vectors(key):
+    """The handbook embeddings, once: every live answer then embeds only its question."""
+    if handbook.VECTORS.exists():
+        return
+
+    async def embed():
+        async with request_scope(key):
+            return dock._embed([d["title"] + ". " + d["text"] for d in dock.HANDBOOK])
+
+    vectors = asyncio.run(embed())
+    np.save(handbook.VECTORS, vectors)
+    dock._vectors = vectors
+    print(f"wrote {len(vectors)} handbook vectors to {handbook.VECTORS.relative_to(ROOT)}")
+
+
+def record_handbook(http, key):
+    record_vectors(key)
+    cases = [(replay.key("answer", q["id"]), {"question_id": q["id"]}) for q in dataset("questions.json")]
+    return record_cases(http, key, "/api/answer", cases, lambda g: (
+        f"found={g['found']!s:<5} sources={','.join(g['sources']) or '-':<6} retrieved={','.join(g['retrieved'])} "
+        f"{'ok' if all(g['checks'].values()) else 'CHECK ' + ','.join(k for k, v in g['checks'].items() if not v)}"))
+
+
+def record_guardrails(http, key):
+    ids = [m["id"] for m in dataset("bad.json")] + [m["id"] for m in dataset("inbox.json")]
+    screens, failed = record_cases(http, key, "/api/guardrails/screen",
+                                   [(replay.key("screen", i), {"message_id": i}) for i in ids],
+                                   lambda g: f"block={g['block']!s:<5} {'ok' if g['right'] else 'WRONG'} {g['reasons']}")
+    cases = [(replay.key("reply", a["id"], **({"rule": rule} if rule != "dock" else {})), {"ask_id": a["id"], "rule": rule})
+             for rule in ("dock", "plain") for a in dataset("asks.json")]
+    replies, failed_replies = record_cases(http, key, "/api/guardrails/reply", cases,
+                                           lambda g: f"guarantees_date={g['guarantees_date']}")
+    return {**screens, **replies}, failed + failed_replies
+
+
+def record_documents(http, key):
+    truth = json.loads((ROOT / "dock" / "documents" / "truth.json").read_text(encoding="utf-8"))
+    cases = [(replay.key("extract", name), {"name": name}) for name in truth]
+    cases += [(replay.key("extract", name, schema="v1"), {"name": name, "schema": "v1"})
+              for name, t in truth.items() if t["kind"] == "invoice"]
+    return record_cases(http, key, "/api/documents/extract", cases, lambda g: (
+        f"wrong={','.join(g['truth']['wrong_fields']) or '-':<14} flag_right={g['truth']['flag_right']!s:<5} "
+        f"{g['problems'] or ''} {g['against_database'] or ''} digit_ok={g['check_digit_ok']}"))
+
+
+CAPABILITIES = {"triage": record_triage, "handbook": record_handbook, "guardrails": record_guardrails,
+                "documents": record_documents}
 
 
 def save(capability, records):

@@ -1,0 +1,679 @@
+{
+ "answer|Q01|": {
+  "question_id": "Q01",
+  "question": "Can we import roasted coffee into Germany, and what must the invoice show?",
+  "found": true,
+  "answer": "Yes, roasted coffee may be imported into the EU (including Germany). The commercial invoice must show the HS code of each line.",
+  "sources": [
+   "HB-03"
+  ],
+  "retrieved": [
+   "HB-03",
+   "HB-04",
+   "HB-10"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-03"
+   ],
+   "must_contain": [
+    "hs code"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 797,
+    "tokens": 19,
+    "tokens_in": 19,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 828,
+    "tokens": 336,
+    "tokens_in": 288,
+    "tokens_out": 48
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:11+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q02|": {
+  "question_id": "Q02",
+  "question": "Shipment HF-26038 is on customs hold in Hamburg. Which three documents does the broker need?",
+  "found": true,
+  "answer": "The commercial invoice, the packing list, and the bill of lading.",
+  "sources": [
+   "HB-01"
+  ],
+  "retrieved": [
+   "HB-01",
+   "HB-06",
+   "HB-11"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-01"
+   ],
+   "must_contain": [
+    "invoice",
+    "packing list",
+    "bill of lading"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 1367,
+    "tokens": 27,
+    "tokens_in": 27,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 775,
+    "tokens": 330,
+    "tokens_in": 294,
+    "tokens_out": 36
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:13+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q03|": {
+  "question_id": "Q03",
+  "question": "The importer wants the lower duty rate for goods from Vietnam. Which document is needed?",
+  "found": true,
+  "answer": "A certificate of origin is needed to claim the reduced duty rate under the EU-Vietnam agreement.",
+  "sources": [
+   "HB-02"
+  ],
+  "retrieved": [
+   "HB-02",
+   "HB-10",
+   "HB-01"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-02"
+   ],
+   "must_contain": [
+    "certificate of origin"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 595,
+    "tokens": 20,
+    "tokens_in": 20,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 735,
+    "tokens": 321,
+    "tokens_in": 281,
+    "tokens_out": 40
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:15+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q04|": {
+  "question_id": "Q04",
+  "question": "Our customer ships wooden chairs on pallets to Hamburg. What mark must the pallets carry?",
+  "found": true,
+  "answer": "The pallets must carry the ISPM 15 mark.",
+  "sources": [
+   "HB-04"
+  ],
+  "retrieved": [
+   "HB-04",
+   "HB-03",
+   "HB-11"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-04"
+   ],
+   "must_contain": [
+    "ispm 15"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 817,
+    "tokens": 21,
+    "tokens_in": 21,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 858,
+    "tokens": 336,
+    "tokens_in": 302,
+    "tokens_out": 34
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:16+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q05|": {
+  "question_id": "Q05",
+  "question": "Can Harbor Freight carry a carton of loose lithium batteries of 160 Wh each?",
+  "found": true,
+  "answer": "No, Harbor Freight does not accept loose lithium batteries over 100 Wh each.",
+  "sources": [
+   "HB-05"
+  ],
+  "retrieved": [
+   "HB-05",
+   "HB-12",
+   "HB-09"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-05"
+   ],
+   "must_contain": [
+    "not"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 834,
+    "tokens": 24,
+    "tokens_in": 24,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 988,
+    "tokens": 307,
+    "tokens_in": 267,
+    "tokens_out": 40
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:18+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q06|": {
+  "question_id": "Q06",
+  "question": "A container has been on customs hold for six days. From which day is port storage charged, and how much?",
+  "found": true,
+  "answer": "Port storage is charged from the fourth day of the hold at 85 USD per container per day.",
+  "sources": [
+   "HB-06"
+  ],
+  "retrieved": [
+   "HB-06",
+   "HB-07",
+   "HB-11"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-06"
+   ],
+   "must_contain": [
+    "fourth|4th",
+    "85"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 870,
+    "tokens": 25,
+    "tokens_in": 25,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 826,
+    "tokens": 341,
+    "tokens_in": 299,
+    "tokens_out": 42
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:20+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q07|": {
+  "question_id": "Q07",
+  "question": "How many free days do we get at Los Angeles before demurrage starts?",
+  "found": true,
+  "answer": "Four days",
+  "sources": [
+   "HB-07"
+  ],
+  "retrieved": [
+   "HB-07",
+   "HB-11",
+   "HB-12"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-07"
+   ],
+   "must_contain": [
+    "four|4"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 580,
+    "tokens": 18,
+    "tokens_in": 18,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 821,
+    "tokens": 321,
+    "tokens_in": 297,
+    "tokens_out": 24
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:21+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q08|": {
+  "question_id": "Q08",
+  "question": "Under DAP, who pays the import duty?",
+  "found": true,
+  "answer": "The buyer pays the import duty under DAP.",
+  "sources": [
+   "HB-08"
+  ],
+  "retrieved": [
+   "HB-08",
+   "HB-02",
+   "HB-07"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-08"
+   ],
+   "must_contain": [
+    "buyer"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 1681,
+    "tokens": 12,
+    "tokens_in": 12,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 905,
+    "tokens": 317,
+    "tokens_in": 286,
+    "tokens_out": 31
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:24+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q09|": {
+  "question_id": "Q09",
+  "question": "A customer found damaged cartons nine days after delivery. Can they still claim?",
+  "found": true,
+  "answer": "No, damage must be reported within seven days of delivery.",
+  "sources": [
+   "HB-09"
+  ],
+  "retrieved": [
+   "HB-09",
+   "HB-07",
+   "HB-12"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-09"
+   ],
+   "must_contain": [
+    "seven|7"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 1417,
+    "tokens": 18,
+    "tokens_in": 18,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 682,
+    "tokens": 303,
+    "tokens_in": 270,
+    "tokens_out": 33
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:26+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q10|": {
+  "question_id": "Q10",
+  "question": "What does a UK importer need before Felixstowe can clear the goods?",
+  "found": true,
+  "answer": "A UK import declaration, an EORI number starting with GB, and the commercial invoice, packing list, and bill of lading.",
+  "sources": [
+   "HB-10"
+  ],
+  "retrieved": [
+   "HB-10",
+   "HB-11",
+   "HB-04"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-10"
+   ],
+   "must_contain": [
+    "eori"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 1922,
+    "tokens": 18,
+    "tokens_in": 18,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 758,
+    "tokens": 351,
+    "tokens_in": 302,
+    "tokens_out": 49
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:29+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q11|": {
+  "question_id": "Q11",
+  "question": "When must the ISF be filed for a shipment to Los Angeles?",
+  "found": true,
+  "answer": "At least 24 hours before the cargo is loaded at the origin port.",
+  "sources": [
+   "HB-11"
+  ],
+  "retrieved": [
+   "HB-11",
+   "HB-01",
+   "HB-07"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-11"
+   ],
+   "must_contain": [
+    "24 hours|24-hour"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 717,
+    "tokens": 17,
+    "tokens_in": 17,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 1825,
+    "tokens": 325,
+    "tokens_in": 288,
+    "tokens_out": 37
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:31+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q12|": {
+  "question_id": "Q12",
+  "question": "How heavy can the cargo in a 40ft container be?",
+  "found": true,
+  "answer": "A 40ft container can hold up to 26 tonnes of cargo.",
+  "sources": [
+   "HB-12"
+  ],
+  "retrieved": [
+   "HB-12",
+   "HB-07",
+   "HB-11"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [
+    "HB-12"
+   ],
+   "must_contain": [
+    "26"
+   ]
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 1120,
+    "tokens": 16,
+    "tokens_in": 16,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 729,
+    "tokens": 333,
+    "tokens_in": 295,
+    "tokens_out": 38
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:33+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q13|": {
+  "question_id": "Q13",
+  "question": "What is the import duty rate for bicycle frames into the Netherlands?",
+  "found": false,
+  "answer": "Not covered in the provided handbook sections.",
+  "sources": [],
+  "retrieved": [
+   "HB-02",
+   "HB-10",
+   "HB-04"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [],
+   "must_contain": []
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 787,
+    "tokens": 16,
+    "tokens_in": 16,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 771,
+    "tokens": 309,
+    "tokens_in": 284,
+    "tokens_out": 25
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:35+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "answer|Q14|": {
+  "question_id": "Q14",
+  "question": "Does Harbor Freight ship live animals?",
+  "found": false,
+  "answer": "",
+  "sources": [],
+  "retrieved": [
+   "HB-05",
+   "HB-09",
+   "HB-01"
+  ],
+  "model": "mistral-medium-latest",
+  "expected": {
+   "sources": [],
+   "must_contain": []
+  },
+  "checks": {
+   "sources_ok": true,
+   "found_ok": true,
+   "must_contain_ok": true
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 597,
+    "tokens": 10,
+    "tokens_in": 10,
+    "tokens_out": 0
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 657,
+    "tokens": 265,
+    "tokens_in": 249,
+    "tokens_out": 16
+   }
+  ],
+  "recorded_at": "2026-10-29T18:34:36+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ }
+}

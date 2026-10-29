@@ -1,0 +1,1591 @@
+{
+ "extract|bill_of_lading_01.pdf|": {
+  "name": "bill_of_lading_01.pdf",
+  "schema": "bill_of_lading",
+  "fields": {
+   "bl_no": "HRBF2600161",
+   "shipment_id": "HF-26001",
+   "shipper": "Lotus Ceramics Co., Ltd.",
+   "consignee": "Pacific Grove Foods Inc.",
+   "container_no": "HRBU4100003",
+   "packages": 180,
+   "gross_weight_kg": 3573.5
+  },
+  "ocr": {
+   "avg": 0.9946275972320754,
+   "min": 0.7028553421230586,
+   "low_words": [
+    {
+     "text": " ·",
+     "confidence": 0.7028553421230586
+    },
+    {
+     "text": "*Shipped",
+     "confidence": 0.9302949125247044
+    },
+    {
+     "text": "**Shipper**",
+     "confidence": 0.9320056586958108
+    },
+    {
+     "text": "**HRBF2600161**",
+     "confidence": 0.9733777070211833
+    },
+    {
+     "text": "VNCLI",
+     "confidence": 0.9871241494812378
+    }
+   ],
+   "markdown": "# BILL OF LADING\n\nNon-negotiable copy · Harbor Freight Co.\n\nB/L No.\n\n**HRBF2600161**\n\n**Shipper**\n\nLotus Ceramics Co., Ltd.\nHo Chi Minh City, Vietnam\n\n**Consignee**\n\nPacific Grove Foods Inc.\nLos Angeles, United States\n\n**Notify party**\n\nSame as consignee\n\n**Vessel / Voyage**\n\nMV Coral Bay 088W\n\n**Port of loading**\n\nVNCLI Cat Lai\n\n**Port of discharge**\n\nUSLAX Los Angeles\n\n**Container No. / Seal No.**\n\nHRBU4100003 / SL165271\n\n**Packages**\n\n180 cartons\n\n**Gross weight**\n\n3,573.5 kg\n\n**Description of goods**\n\nSaid to contain: see commercial invoice for shipment HF-26001\n\n*Shipped on board 2026-09-01. Freight prepaid.*"
+  },
+  "problems": null,
+  "against_database": null,
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 503,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 415,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:15+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|bill_of_lading_02.pdf|": {
+  "name": "bill_of_lading_02.pdf",
+  "schema": "bill_of_lading",
+  "fields": {
+   "bl_no": "HRBF2600566",
+   "shipment_id": "HF-26005",
+   "shipper": "Lotus Ceramics Co., Ltd.",
+   "consignee": "Pacific Grove Foods Inc.",
+   "container_no": "HRBU4105480",
+   "packages": 180,
+   "gross_weight_kg": 5520.7
+  },
+  "ocr": {
+   "avg": 0.9947210753088667,
+   "min": 0.7031328781235443,
+   "low_words": [
+    {
+     "text": " ·",
+     "confidence": 0.7031328781235443
+    },
+    {
+     "text": "*Shipped",
+     "confidence": 0.9303052822668405
+    },
+    {
+     "text": "**Shipper**",
+     "confidence": 0.9319981345552615
+    },
+    {
+     "text": "**HRBF2600566**",
+     "confidence": 0.9810419857352936
+    },
+    {
+     "text": "VNCLI",
+     "confidence": 0.987173267984682
+    }
+   ],
+   "markdown": "# BILL OF LADING\n\nNon-negotiable copy · Harbor Freight Co.\n\nB/L No.\n\n**HRBF2600566**\n\n**Shipper**\n\nLotus Ceramics Co., Ltd.\nHo Chi Minh City, Vietnam\n\n**Consignee**\n\nPacific Grove Foods Inc.\nLos Angeles, United States\n\n**Notify party**\n\nSame as consignee\n\n**Vessel / Voyage**\n\nMV Harbor Star 214E\n\n**Port of loading**\n\nVNCLI Cat Lai\n\n**Port of discharge**\n\nUSLAX Los Angeles\n\n**Container No. / Seal No.**\n\nHRBU4105480 / SL270187\n\n**Packages**\n\n180 cartons\n\n**Gross weight**\n\n5,520.7 kg\n\n**Description of goods**\n\nSaid to contain: see commercial invoice for shipment HF-26005\n\n*Shipped on board 2026-09-09. Freight prepaid.*"
+  },
+  "problems": null,
+  "against_database": null,
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 523,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 433,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:16+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|bill_of_lading_03_scan.pdf|": {
+  "name": "bill_of_lading_03_scan.pdf",
+  "schema": "bill_of_lading",
+  "fields": {
+   "bl_no": "HRBF2602023",
+   "shipment_id": "HF-26020",
+   "shipper": "Kanto Precision Parts K.K.",
+   "consignee": "Brightwater Textiles Ltd.",
+   "container_no": "HRBU4126034",
+   "packages": 410,
+   "gross_weight_kg": 9190.4
+  },
+  "ocr": {
+   "avg": 0.9984848420351502,
+   "min": 0.9014191078872095,
+   "low_words": [
+    {
+     "text": " ·",
+     "confidence": 0.9014191078872095
+    },
+    {
+     "text": "#",
+     "confidence": 0.9902912917236982
+    },
+    {
+     "text": " BILL",
+     "confidence": 0.99065254575349
+    },
+    {
+     "text": "9,190.4",
+     "confidence": 0.9951886564034087
+    },
+    {
+     "text": "GBFXT",
+     "confidence": 0.998643555170904
+    }
+   ],
+   "markdown": "# BILL OF LADING\n\nNon-negotiable copy · Harbor Freight Co.\n\nB/L No.\n\nHRBF2602023\n\nShipper\n\nKanto Precision Parts K.K.\nYokohama, Japan\n\nConsignee\n\nBrightwater Textiles Ltd.\nFelixstowe, United Kingdom\n\nNotify party\n\nSame as consignee\n\nVessel / Voyage\n\nMV Coral Bay 088W\n\nPort of loading\n\nJPYOK Yokohama\n\nPort of discharge\n\nGBFXT Felixstowe\n\nContainer No. / Seal No.\n\nHRBU4126034 / SL100244\n\nPackages\n\n410 cartons\n\nGross weight\n\n9,190.4 kg\n\nDescription of goods\n\nSaid to contain: see commercial invoice for shipment HF-26020\n\nShipped on board 2026-10-09. Freight prepaid."
+  },
+  "problems": null,
+  "against_database": null,
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1233,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 843,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:19+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|bill_of_lading_04_scan.pdf|": {
+  "name": "bill_of_lading_04_scan.pdf",
+  "schema": "bill_of_lading",
+  "fields": {
+   "bl_no": "HRBF2603888",
+   "shipment_id": "HF-26038",
+   "shipper": "Saigon Coffee Roasters JSC",
+   "consignee": "Nordlicht Moebel GmbH",
+   "container_no": "HRBU4153690",
+   "packages": 180,
+   "gross_weight_kg": 5382.4
+  },
+  "ocr": {
+   "avg": 0.9956014064852758,
+   "min": 0.6714475174902752,
+   "low_words": [
+    {
+     "text": " -",
+     "confidence": 0.6714475174902752
+    },
+    {
+     "text": " /",
+     "confidence": 0.9772887709375911
+    },
+    {
+     "text": " Seal",
+     "confidence": 0.9924135786709986
+    },
+    {
+     "text": "#",
+     "confidence": 0.9953904233096519
+    },
+    {
+     "text": " BILL",
+     "confidence": 0.9976264681565417
+    }
+   ],
+   "markdown": "# BILL OF LADING\n\nNon-negotiable copy - Harbor Freight Co.\n\nB/L No.\n\nHRBF2603888\n\nShipper\n\nSaigon Coffee Roasters JSC\n\nHo Chi Minh City, Vietnam\n\nConsignee\n\nNordlicht Moebel GmbH\n\nHamburg, Germany\n\nNotify party\n\nSame as consignee\n\nVessel / Voyage\n\nMV Harbor Star 214E\n\nPort of loading\n\nVNCLI Cat Lai\n\nPort of discharge\n\nDEHAM Hamburg\n\nContainer No. / Seal No.\n\nHRBU4153690 / SL126739\n\nPackages\n\n180 cartons\n\nGross weight\n\n5,382.4 kg\n\nDescription of goods\n\nSaid to contain: see commercial invoice for shipment HF-26038\n\nShipped on board 2026-11-14. Freight prepaid."
+  },
+  "problems": null,
+  "against_database": null,
+  "check_digit_ok": false,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [
+    "bad_check_digit"
+   ],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 988,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1030,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:21+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_01_clean.pdf|": {
+  "name": "invoice_01_clean.pdf",
+  "schema": "invoice",
+  "fields": {
+   "invoice_no": "INV-2026-3100",
+   "shipment_id": "HF-26001",
+   "container_no": "HRBU4100003",
+   "incoterm": "CIF",
+   "incoterm_place": "Los Angeles",
+   "seller": "Lotus Ceramics Co., Ltd.",
+   "buyer": "Pacific Grove Foods Inc.",
+   "lines": [
+    {
+     "description": "Glazed stoneware vase, 30 cm",
+     "hs_code": "6913.90",
+     "quantity": 600,
+     "unit_price": 6.4,
+     "amount": 3840.0
+    },
+    {
+     "description": "Ceramic dinner plate set (6)",
+     "hs_code": "6912.00",
+     "quantity": 2400,
+     "unit_price": 11.8,
+     "amount": 28320.0
+    }
+   ],
+   "subtotal": 32160.0,
+   "freight": 1929.6,
+   "insurance": 128.64,
+   "total": 34218.24
+  },
+  "ocr": {
+   "avg": 0.9973526607083664,
+   "min": 0.9378733824779867,
+   "low_words": [
+    {
+     "text": " No.:",
+     "confidence": 0.9378733824779867
+    },
+    {
+     "text": "**Seller",
+     "confidence": 0.9387287724661949
+    },
+    {
+     "text": "Subtotal",
+     "confidence": 0.9500136109732537
+    },
+    {
+     "text": "32,160.00",
+     "confidence": 0.9500136109732537
+    },
+    {
+     "text": "Incoterm:",
+     "confidence": 0.9882933705521236
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\n**Seller / Exporter**\n\nLotus Ceramics Co., Ltd.\nHo Chi Minh City, Vietnam\nops@lotus-ceramics.example.com\n\nInvoice No.: INV-2026-3100\n\nDate: 2026-09-01\n\nShipment ref.: HF-26001\n\nContainer: HRBU4100003\n\nIncoterm: CIF Los Angeles\n\n**Buyer / Importer**\n\nPacific Grove Foods Inc.\nLos Angeles, United States\nlogistics@pgfoods.example.com\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Glazed stoneware vase, 30 cm | 6913.90 | 600 pcs | 6.40 | 3,840.00  |\n|  Ceramic dinner plate set (6) | 6912.00 | 2400 sets | 11.80 | 28,320.00  |\n|  |   |   |   |   |\n|  Subtotal |   |   |   | 32,160.00  |\n|  Freight |   |   |   | 1,929.60  |\n|  Insurance |   |   |   | 128.64  |\n|  **TOTAL USD** |   |   |   | **34,218.24**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 601,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 518,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:02+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_01_clean.pdf|schema=v1": {
+  "name": "invoice_01_clean.pdf",
+  "schema": "v1",
+  "fields": {
+   "invoice_no": "INV-2026-3100",
+   "shipment_id": "HF-26001",
+   "container_no": "HRBU4100003",
+   "incoterm": "CIF Los Angeles",
+   "seller": "Lotus Ceramics Co., Ltd.\nHo Chi Minh City, Vietnam\nops@lotus-ceramics.example.com",
+   "buyer": "Pacific Grove Foods Inc.\nLos Angeles, United States\nlogistics@pgfoods.example.com",
+   "lines": [
+    {
+     "description": "Glazed stoneware vase, 30 cm",
+     "hs_code": "6913.90",
+     "quantity": 600,
+     "unit_price": 6.4,
+     "amount": 3840.0
+    },
+    {
+     "description": "Ceramic dinner plate set (6)",
+     "hs_code": "6912.00",
+     "quantity": 2400,
+     "unit_price": 11.8,
+     "amount": 28320.0
+    }
+   ],
+   "subtotal": 32160.0,
+   "freight": 1929.6,
+   "insurance": 128.64,
+   "total": 34218.24
+  },
+  "ocr": {
+   "avg": 0.9973526607083664,
+   "min": 0.9378733824779867,
+   "low_words": [
+    {
+     "text": " No.:",
+     "confidence": 0.9378733824779867
+    },
+    {
+     "text": "**Seller",
+     "confidence": 0.9387287724661949
+    },
+    {
+     "text": "Subtotal",
+     "confidence": 0.9500136109732537
+    },
+    {
+     "text": "32,160.00",
+     "confidence": 0.9500136109732537
+    },
+    {
+     "text": "Incoterm:",
+     "confidence": 0.9882933705521236
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\n**Seller / Exporter**\n\nLotus Ceramics Co., Ltd.\nHo Chi Minh City, Vietnam\nops@lotus-ceramics.example.com\n\nInvoice No.: INV-2026-3100\n\nDate: 2026-09-01\n\nShipment ref.: HF-26001\n\nContainer: HRBU4100003\n\nIncoterm: CIF Los Angeles\n\n**Buyer / Importer**\n\nPacific Grove Foods Inc.\nLos Angeles, United States\nlogistics@pgfoods.example.com\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Glazed stoneware vase, 30 cm | 6913.90 | 600 pcs | 6.40 | 3,840.00  |\n|  Ceramic dinner plate set (6) | 6912.00 | 2400 sets | 11.80 | 28,320.00  |\n|  |   |   |   |   |\n|  Subtotal |   |   |   | 32,160.00  |\n|  Freight |   |   |   | 1,929.60  |\n|  Insurance |   |   |   | 128.64  |\n|  **TOTAL USD** |   |   |   | **34,218.24**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [
+    "incoterm",
+    "seller",
+    "buyer"
+   ],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 516,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 611,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:22+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_02_clean.pdf|": {
+  "name": "invoice_02_clean.pdf",
+  "schema": "invoice",
+  "fields": {
+   "invoice_no": "INV-2026-3105",
+   "shipment_id": "HF-26006",
+   "container_no": "HRBU4106850",
+   "incoterm": "FOB",
+   "incoterm_place": "Hamburg",
+   "seller": "Saigon Coffee Roasters JSC",
+   "buyer": "Nordlicht Moebel GmbH",
+   "lines": [
+    {
+     "description": "Roasted coffee beans, Robusta, 1 kg bag",
+     "hs_code": "0901.21",
+     "quantity": 1500,
+     "unit_price": 7.9,
+     "amount": 11850.0
+    },
+    {
+     "description": "Green coffee beans, Arabica, 60 kg sack",
+     "hs_code": "0901.11",
+     "quantity": 10,
+     "unit_price": 312.0,
+     "amount": 3120.0
+    }
+   ],
+   "subtotal": 14970.0,
+   "freight": 0.0,
+   "insurance": 0.0,
+   "total": 14970.0
+  },
+  "ocr": {
+   "avg": 0.997775495913685,
+   "min": 0.9386436830398429,
+   "low_words": [
+    {
+     "text": "**Seller",
+     "confidence": 0.9386436830398429
+    },
+    {
+     "text": "Subtotal",
+     "confidence": 0.9521230094925797
+    },
+    {
+     "text": "14,970.00",
+     "confidence": 0.9521230094925797
+    },
+    {
+     "text": " No.:",
+     "confidence": 0.9689172277184557
+    },
+    {
+     "text": "Description",
+     "confidence": 0.9921198309953905
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\n**Seller / Exporter**\n\nSaigon Coffee Roasters JSC\nHo Chi Minh City, Vietnam\nexport@saigoncoffee.example.com\n\n**Buyer / Importer**\n\nNordlicht Moebel GmbH\nHamburg, Germany\nimport@nordlicht.example.com\n\nInvoice No.: INV-2026-3105\nDate: 2026-09-11\nShipment ref.: HF-26006\nContainer: HRBU4106850\nIncoterm: FOB Hamburg\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Roasted coffee beans, Robusta, 1 kg bag | 0901.21 | 1500 bags | 7.90 | 11,850.00  |\n|  Green coffee beans, Arabica, 60 kg sack | 0901.11 | 10 sacks | 312.00 | 3,120.00  |\n|  |   |   |   |   |\n|  Subtotal |   |   |   | 14,970.00  |\n|  Freight |   |   |   | 0.00  |\n|  Insurance |   |   |   | 0.00  |\n|  **TOTAL USD** |   |   |   | **14,970.00**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 513,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 879,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:03+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_02_clean.pdf|schema=v1": {
+  "name": "invoice_02_clean.pdf",
+  "schema": "v1",
+  "fields": {
+   "invoice_no": "INV-2026-3105",
+   "shipment_id": "HF-26006",
+   "container_no": "HRBU4106850",
+   "incoterm": "FOB Hamburg",
+   "seller": "Saigon Coffee Roasters JSC, Ho Chi Minh City, Vietnam",
+   "buyer": "Nordlicht Moebel GmbH, Hamburg, Germany",
+   "lines": [
+    {
+     "description": "Roasted coffee beans, Robusta, 1 kg bag",
+     "hs_code": "0901.21",
+     "quantity": 1500,
+     "unit_price": 7.9,
+     "amount": 11850.0
+    },
+    {
+     "description": "Green coffee beans, Arabica, 60 kg sack",
+     "hs_code": "0901.11",
+     "quantity": 10,
+     "unit_price": 312.0,
+     "amount": 3120.0
+    }
+   ],
+   "subtotal": 14970.0,
+   "freight": 0.0,
+   "insurance": 0.0,
+   "total": 14970.0
+  },
+  "ocr": {
+   "avg": 0.997775495913685,
+   "min": 0.9386436830398429,
+   "low_words": [
+    {
+     "text": "**Seller",
+     "confidence": 0.9386436830398429
+    },
+    {
+     "text": "Subtotal",
+     "confidence": 0.9521230094925797
+    },
+    {
+     "text": "14,970.00",
+     "confidence": 0.9521230094925797
+    },
+    {
+     "text": " No.:",
+     "confidence": 0.9689172277184557
+    },
+    {
+     "text": "Description",
+     "confidence": 0.9921198309953905
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\n**Seller / Exporter**\n\nSaigon Coffee Roasters JSC\nHo Chi Minh City, Vietnam\nexport@saigoncoffee.example.com\n\n**Buyer / Importer**\n\nNordlicht Moebel GmbH\nHamburg, Germany\nimport@nordlicht.example.com\n\nInvoice No.: INV-2026-3105\nDate: 2026-09-11\nShipment ref.: HF-26006\nContainer: HRBU4106850\nIncoterm: FOB Hamburg\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Roasted coffee beans, Robusta, 1 kg bag | 0901.21 | 1500 bags | 7.90 | 11,850.00  |\n|  Green coffee beans, Arabica, 60 kg sack | 0901.11 | 10 sacks | 312.00 | 3,120.00  |\n|  |   |   |   |   |\n|  Subtotal |   |   |   | 14,970.00  |\n|  Freight |   |   |   | 0.00  |\n|  Insurance |   |   |   | 0.00  |\n|  **TOTAL USD** |   |   |   | **14,970.00**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [
+    "incoterm",
+    "seller",
+    "buyer"
+   ],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 849,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 417,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:23+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_03_eu_numbers.pdf|": {
+  "name": "invoice_03_eu_numbers.pdf",
+  "schema": "invoice",
+  "fields": {
+   "invoice_no": "INV-2026-3110",
+   "shipment_id": "HF-26011",
+   "container_no": "HRBU4113700",
+   "incoterm": "FOB",
+   "incoterm_place": "Rotterdam",
+   "seller": "Lion City Electronics Pte. Ltd.",
+   "buyer": "Van der Berg Bikes B.V.",
+   "lines": [
+    {
+     "description": "USB-C charging module",
+     "hs_code": "8504.40",
+     "quantity": 1500,
+     "unit_price": 3.15,
+     "amount": 4725.0
+    },
+    {
+     "description": "LED panel driver board",
+     "hs_code": "8542.39",
+     "quantity": 1500,
+     "unit_price": 9.6,
+     "amount": 14400.0
+    }
+   ],
+   "subtotal": 19125.0,
+   "freight": 0.0,
+   "insurance": 0.0,
+   "total": 19125.0
+  },
+  "ocr": {
+   "avg": 0.9987683674950502,
+   "min": 0.9848349581583442,
+   "low_words": [
+    {
+     "text": "Description",
+     "confidence": 0.9848349581583442
+    },
+    {
+     "text": "HS",
+     "confidence": 0.9848349581583442
+    },
+    {
+     "text": "Incoterm:",
+     "confidence": 0.9928472602110933
+    },
+    {
+     "text": "#",
+     "confidence": 0.9933071486460123
+    },
+    {
+     "text": " pcs",
+     "confidence": 0.9944578868125298
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nLion City Electronics Pte. Ltd.\n\nSingapore, Singapore\n\nsupply@lce.example.com\n\nBuyer / Importer\n\nVan der Berg Bikes B.V.\n\nRotterdam, Netherlands\n\norders@vdberg-bikes.example.com\n\nInvoice No.: INV-2026-3110\n\nDate: 2026-09-21\n\nShipment ref.: HF-26011\n\nContainer: HRBU4113700\n\nIncoterm: FOB Rotterdam\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  USB-C charging module | 8504.40 | 1500 pcs | 3,15 | 4.725,00  |\n|  LED panel driver board | 8542.39 | 1500 pcs | 9,60 | 14.400,00  |\n|   |  |  | Subtotal | 19.125,00  |\n|   |  |  | Freight | 0,00  |\n|   |  |  | Insurance | 0,00  |\n|   |  |  | **TOTAL USD** | **19.125,00**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 507,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 416,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:04+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_03_eu_numbers.pdf|schema=v1": {
+  "name": "invoice_03_eu_numbers.pdf",
+  "schema": "v1",
+  "fields": {
+   "invoice_no": "INV-2026-3110",
+   "shipment_id": "HF-26011",
+   "container_no": "HRBU4113700",
+   "incoterm": "FOB Rotterdam",
+   "seller": "Lion City Electronics Pte. Ltd., Singapore, Singapore",
+   "buyer": "Van der Berg Bikes B.V., Rotterdam, Netherlands",
+   "lines": [
+    {
+     "description": "USB-C charging module",
+     "hs_code": "8504.40",
+     "quantity": 1500,
+     "unit_price": 3.15,
+     "amount": 4725.0
+    },
+    {
+     "description": "LED panel driver board",
+     "hs_code": "8542.39",
+     "quantity": 1500,
+     "unit_price": 9.6,
+     "amount": 14400.0
+    }
+   ],
+   "subtotal": 19125.0,
+   "freight": 0.0,
+   "insurance": 0.0,
+   "total": 19125.0
+  },
+  "ocr": {
+   "avg": 0.9987683674950502,
+   "min": 0.9848349581583442,
+   "low_words": [
+    {
+     "text": "Description",
+     "confidence": 0.9848349581583442
+    },
+    {
+     "text": "HS",
+     "confidence": 0.9848349581583442
+    },
+    {
+     "text": "Incoterm:",
+     "confidence": 0.9928472602110933
+    },
+    {
+     "text": "#",
+     "confidence": 0.9933071486460123
+    },
+    {
+     "text": " pcs",
+     "confidence": 0.9944578868125298
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nLion City Electronics Pte. Ltd.\n\nSingapore, Singapore\n\nsupply@lce.example.com\n\nBuyer / Importer\n\nVan der Berg Bikes B.V.\n\nRotterdam, Netherlands\n\norders@vdberg-bikes.example.com\n\nInvoice No.: INV-2026-3110\n\nDate: 2026-09-21\n\nShipment ref.: HF-26011\n\nContainer: HRBU4113700\n\nIncoterm: FOB Rotterdam\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  USB-C charging module | 8504.40 | 1500 pcs | 3,15 | 4.725,00  |\n|  LED panel driver board | 8542.39 | 1500 pcs | 9,60 | 14.400,00  |\n|   |  |  | Subtotal | 19.125,00  |\n|   |  |  | Freight | 0,00  |\n|   |  |  | Insurance | 0,00  |\n|   |  |  | **TOTAL USD** | **19.125,00**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [
+    "incoterm",
+    "seller",
+    "buyer"
+   ],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1002,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 584,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:25+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_04_scan.pdf|": {
+  "name": "invoice_04_scan.pdf",
+  "schema": "invoice",
+  "fields": {
+   "invoice_no": "INV-2026-3115",
+   "shipment_id": "HF-26016",
+   "container_no": "HRBU4120550",
+   "incoterm": "CIF",
+   "incoterm_place": "Felixstowe",
+   "seller": "Kanto Precision Parts K.K.",
+   "buyer": "Brightwater Textiles Ltd.",
+   "lines": [
+    {
+     "description": "Precision ball bearing 6204-2RS",
+     "hs_code": "8482.10",
+     "quantity": 40,
+     "unit_price": 1.85,
+     "amount": 74.0
+    },
+    {
+     "description": "CNC machined aluminium bracket",
+     "hs_code": "7616.99",
+     "quantity": 1500,
+     "unit_price": 4.2,
+     "amount": 6300.0
+    }
+   ],
+   "subtotal": 6374.0,
+   "freight": 382.44,
+   "insurance": 25.5,
+   "total": 6781.94
+  },
+  "ocr": {
+   "avg": 0.9982153743486195,
+   "min": 0.8961574643774485,
+   "low_words": [
+    {
+     "text": "Incoterm:",
+     "confidence": 0.8961574643774485
+    },
+    {
+     "text": "Description",
+     "confidence": 0.9925518832236625
+    },
+    {
+     "text": "HS",
+     "confidence": 0.9925518832236625
+    },
+    {
+     "text": " Ltd.",
+     "confidence": 0.9953510542612622
+    },
+    {
+     "text": " pcs",
+     "confidence": 0.9979065462596947
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nKanto Precision Parts K.K.\n\nYokohama, Japan\n\nshipping@kanto-pp.example.com\n\nBuyer / Importer\n\nBrightwater Textiles Ltd.\n\nFelixstowe, United Kingdom\n\nfreight@brightwater.example.com\n\nInvoice No.: INV-2026-3115\n\nDate: 2026-10-01\n\nShipment ref.: HF-26016\n\nContainer: HRBU4120550\n\nIncoterm: CIF Felixstowe\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Precision ball bearing 6204-2RS | 8482.10 | 40 pcs | 1.85 | 74.00  |\n|  CNC machined aluminium bracket | 7616.99 | 1500 pcs | 4.20 | 6,300.00  |\n|   |  |  | Subtotal | 6,374.00  |\n|   |  |  | Freight | 382.44  |\n|   |  |  | Insurance | 25.50  |\n|   |  |  | **TOTAL USD** | **6,781.94**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1375,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 783,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:06+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_04_scan.pdf|schema=v1": {
+  "name": "invoice_04_scan.pdf",
+  "schema": "v1",
+  "fields": {
+   "invoice_no": "INV-2026-3115",
+   "shipment_id": "HF-26016",
+   "container_no": "HRBU4120550",
+   "incoterm": "CIF Felixstowe",
+   "seller": "Kanto Precision Parts K.K., Yokohama, Japan",
+   "buyer": "Brightwater Textiles Ltd., Felixstowe, United Kingdom",
+   "lines": [
+    {
+     "description": "Precision ball bearing 6204-2RS",
+     "hs_code": "8482.10",
+     "quantity": 40,
+     "unit_price": 1.85,
+     "amount": 74.0
+    },
+    {
+     "description": "CNC machined aluminium bracket",
+     "hs_code": "7616.99",
+     "quantity": 1500,
+     "unit_price": 4.2,
+     "amount": 6300.0
+    }
+   ],
+   "subtotal": 6374.0,
+   "freight": 382.44,
+   "insurance": 25.5,
+   "total": 6781.94
+  },
+  "ocr": {
+   "avg": 0.9982153743486195,
+   "min": 0.8961574643774485,
+   "low_words": [
+    {
+     "text": "Incoterm:",
+     "confidence": 0.8961574643774485
+    },
+    {
+     "text": "Description",
+     "confidence": 0.9925518832236625
+    },
+    {
+     "text": "HS",
+     "confidence": 0.9925518832236625
+    },
+    {
+     "text": " Ltd.",
+     "confidence": 0.9953510542612622
+    },
+    {
+     "text": " pcs",
+     "confidence": 0.9979065462596947
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nKanto Precision Parts K.K.\n\nYokohama, Japan\n\nshipping@kanto-pp.example.com\n\nBuyer / Importer\n\nBrightwater Textiles Ltd.\n\nFelixstowe, United Kingdom\n\nfreight@brightwater.example.com\n\nInvoice No.: INV-2026-3115\n\nDate: 2026-10-01\n\nShipment ref.: HF-26016\n\nContainer: HRBU4120550\n\nIncoterm: CIF Felixstowe\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Precision ball bearing 6204-2RS | 8482.10 | 40 pcs | 1.85 | 74.00  |\n|  CNC machined aluminium bracket | 7616.99 | 1500 pcs | 4.20 | 6,300.00  |\n|   |  |  | Subtotal | 6,374.00  |\n|   |  |  | Freight | 382.44  |\n|   |  |  | Insurance | 25.50  |\n|   |  |  | **TOTAL USD** | **6,781.94**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [
+    "incoterm",
+    "seller",
+    "buyer"
+   ],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1300,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 949,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:27+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_05_scan_stain.pdf|": {
+  "name": "invoice_05_scan_stain.pdf",
+  "schema": "invoice",
+  "fields": {
+   "invoice_no": "INV-2026-3120",
+   "shipment_id": "HF-26021",
+   "container_no": "HRBU4127405",
+   "incoterm": "EXW",
+   "incoterm_place": "Los Angeles",
+   "seller": "Lotus Ceramics Co., Ltd.",
+   "buyer": "Pacific Grove Foods Inc.",
+   "lines": [
+    {
+     "description": "Glazed stoneware vase, 30 cm",
+     "hs_code": "6913.90",
+     "quantity": 250,
+     "unit_price": 6.4,
+     "amount": 1600.0
+    },
+    {
+     "description": "Ceramic dinner plate set (6)",
+     "hs_code": "6912.00",
+     "quantity": 2400,
+     "unit_price": 11.8,
+     "amount": 28320.0
+    }
+   ],
+   "subtotal": 29920.0,
+   "freight": 0.0,
+   "insurance": 0.0,
+   "total": 29920.0
+  },
+  "ocr": {
+   "avg": 0.9995167820501855,
+   "min": 0.98838792204844,
+   "low_words": [
+    {
+     "text": "Incoterm:",
+     "confidence": 0.98838792204844
+    },
+    {
+     "text": "Description",
+     "confidence": 0.988762308182839
+    },
+    {
+     "text": "HS",
+     "confidence": 0.988762308182839
+    },
+    {
+     "text": "\n",
+     "confidence": 0.9976281291779934
+    },
+    {
+     "text": " INV-2026-3120",
+     "confidence": 0.9981955347940832
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nLotus Ceramics Co., Ltd.\n\nHo Chi Minh City, Vietnam\n\nops@lotus-ceramics.example.com\n\nBuyer / Importer\n\nPacific Grove Foods Inc.\n\nLos Angeles, United States\n\nlogistics@pgfoods.example.com\n\nInvoice No.: INV-2026-3120\n\nDate: 2026-10-11\n\nShipment ref.: HF-26021\n\nContainer: HRBU4127405\n\nIncoterm: EXW Los Angeles\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Glazed stoneware vase, 30 cm | 6913.90 | 250 pcs | 6.40 | 1,600.00  |\n|  Ceramic dinner plate set (6) | 6912.00 | 2400 sets | 11.80 | 28,320.00  |\n\nSubtotal\n\nFreight\n\nInsurance\n\nTOTAL USD\n\n29,920.00\n0.00\n0.00\n29,920.00\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 2010,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1331,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:10+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_05_scan_stain.pdf|schema=v1": {
+  "name": "invoice_05_scan_stain.pdf",
+  "schema": "v1",
+  "fields": {
+   "invoice_no": "INV-2026-3120",
+   "shipment_id": "HF-26021",
+   "container_no": "HRBU4127405",
+   "incoterm": "EXW Los Angeles",
+   "seller": "Lotus Ceramics Co., Ltd., Ho Chi Minh City, Vietnam",
+   "buyer": "Pacific Grove Foods Inc., Los Angeles, United States",
+   "lines": [
+    {
+     "description": "Glazed stoneware vase, 30 cm",
+     "hs_code": "6913.90",
+     "quantity": 250,
+     "unit_price": 6.4,
+     "amount": 1600.0
+    },
+    {
+     "description": "Ceramic dinner plate set (6)",
+     "hs_code": "6912.00",
+     "quantity": 2400,
+     "unit_price": 11.8,
+     "amount": 28320.0
+    }
+   ],
+   "subtotal": 29920.0,
+   "freight": 0.0,
+   "insurance": 0.0,
+   "total": 29920.0
+  },
+  "ocr": {
+   "avg": 0.9995167820501855,
+   "min": 0.98838792204844,
+   "low_words": [
+    {
+     "text": "Incoterm:",
+     "confidence": 0.98838792204844
+    },
+    {
+     "text": "Description",
+     "confidence": 0.988762308182839
+    },
+    {
+     "text": "HS",
+     "confidence": 0.988762308182839
+    },
+    {
+     "text": "\n",
+     "confidence": 0.9976281291779934
+    },
+    {
+     "text": " INV-2026-3120",
+     "confidence": 0.9981955347940832
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nLotus Ceramics Co., Ltd.\n\nHo Chi Minh City, Vietnam\n\nops@lotus-ceramics.example.com\n\nBuyer / Importer\n\nPacific Grove Foods Inc.\n\nLos Angeles, United States\n\nlogistics@pgfoods.example.com\n\nInvoice No.: INV-2026-3120\n\nDate: 2026-10-11\n\nShipment ref.: HF-26021\n\nContainer: HRBU4127405\n\nIncoterm: EXW Los Angeles\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Glazed stoneware vase, 30 cm | 6913.90 | 250 pcs | 6.40 | 1,600.00  |\n|  Ceramic dinner plate set (6) | 6912.00 | 2400 sets | 11.80 | 28,320.00  |\n\nSubtotal\n\nFreight\n\nInsurance\n\nTOTAL USD\n\n29,920.00\n0.00\n0.00\n29,920.00\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [
+    "incoterm",
+    "seller",
+    "buyer"
+   ],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1572,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 868,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:29+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_06_scan_eu.pdf|": {
+  "name": "invoice_06_scan_eu.pdf",
+  "schema": "invoice",
+  "fields": {
+   "invoice_no": "INV-2026-3138",
+   "shipment_id": "HF-26039",
+   "container_no": "HRBU4152060",
+   "incoterm": "DAP",
+   "incoterm_place": "Rotterdam",
+   "seller": "Lion City Electronics Pte. Ltd.",
+   "buyer": "Van der Berg Bikes B.V.",
+   "lines": [
+    {
+     "description": "USB-C charging module",
+     "hs_code": "8504.40",
+     "quantity": 2400,
+     "unit_price": 3.15,
+     "amount": 7560.0
+    },
+    {
+     "description": "LED panel driver board",
+     "hs_code": "8542.39",
+     "quantity": 1500,
+     "unit_price": 9.6,
+     "amount": 14400.0
+    }
+   ],
+   "subtotal": 21960.0,
+   "freight": 1317.6,
+   "insurance": 87.84,
+   "total": 23365.44
+  },
+  "ocr": {
+   "avg": 0.9987647888754511,
+   "min": 0.9861128716592984,
+   "low_words": [
+    {
+     "text": "Description",
+     "confidence": 0.9861128716592984
+    },
+    {
+     "text": "HS",
+     "confidence": 0.9861128716592984
+    },
+    {
+     "text": " pcs",
+     "confidence": 0.9904562139557466
+    },
+    {
+     "text": "3,15",
+     "confidence": 0.9904562139557466
+    },
+    {
+     "text": "7.560,00",
+     "confidence": 0.9904562139557466
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nLion City Electronics Pte. Ltd.\n\nSingapore, Singapore\n\nsupply@lce.example.com\n\nBuyer / Importer\n\nVan der Berg Bikes B.V.\n\nRotterdam, Netherlands\n\norders@vdberg-bikes.example.com\n\nInvoice No.: INV-2026-3138\n\nDate: 2026-11-16\n\nShipment ref.: HF-26039\n\nContainer: HRBU4152060\n\nIncoterm: DAP Rotterdam\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  USB-C charging module | 8504.40 | 2400 pcs | 3,15 | 7.560,00  |\n|  LED panel driver board | 8542.39 | 1500 pcs | 9,60 | 14.400,00  |\n|   |  |  | Subtotal | 21.960,00  |\n|   |  |  | Freight | 1.317,60  |\n|   |  |  | Insurance | 87,84  |\n|   |  |  | **TOTAL USD** | **23.365,44**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1263,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1083,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:12+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_06_scan_eu.pdf|schema=v1": {
+  "name": "invoice_06_scan_eu.pdf",
+  "schema": "v1",
+  "fields": {
+   "invoice_no": "INV-2026-3138",
+   "shipment_id": "HF-26039",
+   "container_no": "HRBU4152060",
+   "incoterm": "DAP Rotterdam",
+   "seller": "Lion City Electronics Pte. Ltd., Singapore, Singapore",
+   "buyer": "Van der Berg Bikes B.V., Rotterdam, Netherlands",
+   "lines": [
+    {
+     "description": "USB-C charging module",
+     "hs_code": "8504.40",
+     "quantity": 2400,
+     "unit_price": 3.15,
+     "amount": 7560.0
+    },
+    {
+     "description": "LED panel driver board",
+     "hs_code": "8542.39",
+     "quantity": 1500,
+     "unit_price": 9.6,
+     "amount": 14400.0
+    }
+   ],
+   "subtotal": 21960.0,
+   "freight": 1317.6,
+   "insurance": 87.84,
+   "total": 23365.44
+  },
+  "ocr": {
+   "avg": 0.9987647888754511,
+   "min": 0.9861128716592984,
+   "low_words": [
+    {
+     "text": "Description",
+     "confidence": 0.9861128716592984
+    },
+    {
+     "text": "HS",
+     "confidence": 0.9861128716592984
+    },
+    {
+     "text": " pcs",
+     "confidence": 0.9904562139557466
+    },
+    {
+     "text": "3,15",
+     "confidence": 0.9904562139557466
+    },
+    {
+     "text": "7.560,00",
+     "confidence": 0.9904562139557466
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nLion City Electronics Pte. Ltd.\n\nSingapore, Singapore\n\nsupply@lce.example.com\n\nBuyer / Importer\n\nVan der Berg Bikes B.V.\n\nRotterdam, Netherlands\n\norders@vdberg-bikes.example.com\n\nInvoice No.: INV-2026-3138\n\nDate: 2026-11-16\n\nShipment ref.: HF-26039\n\nContainer: HRBU4152060\n\nIncoterm: DAP Rotterdam\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  USB-C charging module | 8504.40 | 2400 pcs | 3,15 | 7.560,00  |\n|  LED panel driver board | 8542.39 | 1500 pcs | 9,60 | 14.400,00  |\n|   |  |  | Subtotal | 21.960,00  |\n|   |  |  | Freight | 1.317,60  |\n|   |  |  | Insurance | 87,84  |\n|   |  |  | **TOTAL USD** | **23.365,44**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [],
+  "against_database": "matches database",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [
+    "incoterm",
+    "seller",
+    "buyer"
+   ],
+   "flags": [],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1240,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1016,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:32+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_07_scan_mismatch.pdf|": {
+  "name": "invoice_07_scan_mismatch.pdf",
+  "schema": "invoice",
+  "fields": {
+   "invoice_no": "INV-2026-3139",
+   "shipment_id": "HF-26040",
+   "container_no": "HRBU4153430",
+   "incoterm": "DAP",
+   "incoterm_place": "Felixstowe",
+   "seller": "Kanto Precision Parts K.K.",
+   "buyer": "Brightwater Textiles Ltd.",
+   "lines": [
+    {
+     "description": "Precision ball bearing 6204-2RS",
+     "hs_code": "8482.10",
+     "quantity": 600,
+     "unit_price": 1.85,
+     "amount": 1110.0
+    },
+    {
+     "description": "CNC machined aluminium bracket",
+     "hs_code": "7616.99",
+     "quantity": 600,
+     "unit_price": 4.2,
+     "amount": 2520.0
+    }
+   ],
+   "subtotal": 3630.0,
+   "freight": 217.8,
+   "insurance": 14.52,
+   "total": 8362.32
+  },
+  "ocr": {
+   "avg": 0.9989952822100509,
+   "min": 0.9837843194039134,
+   "low_words": [
+    {
+     "text": "Incoterm:",
+     "confidence": 0.9837843194039134
+    },
+    {
+     "text": "Description",
+     "confidence": 0.9909038872766431
+    },
+    {
+     "text": "HS",
+     "confidence": 0.9909038872766431
+    },
+    {
+     "text": " No.:",
+     "confidence": 0.9942909946473886
+    },
+    {
+     "text": " pcs",
+     "confidence": 0.9965200321848641
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nKanto Precision Parts K.K.\n\nYokohama, Japan\n\nshipping@kanto-pp.example.com\n\nInvoice No.: INV-2026-3139\n\nDate: 2026-11-18\n\nShipment ref.: HF-26040\n\nContainer: HRBU4153430\n\nIncoterm: DAP Felixstowe\n\nBuyer / Importer\n\nBrightwater Textiles Ltd.\n\nFelixstowe, United Kingdom\n\nfreight@brightwater.example.com\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Precision ball bearing 6204-2RS | 8482.10 | 600 pcs | 1.85 | 1,110.00  |\n|  CNC machined aluminium bracket | 7616.99 | 600 pcs | 4.20 | 2,520.00  |\n|   |  |  | Subtotal | 3,630.00  |\n|   |  |  | Freight | 217.80  |\n|   |  |  | Insurance | 14.52  |\n|   |  |  | **TOTAL USD** | **8,362.32**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [
+   "total should be 3,862.32, printed 8,362.32"
+  ],
+  "against_database": "database says 3,862.32",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [],
+   "flags": [
+    "total_mismatch"
+   ],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1360,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 941,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:15+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "extract|invoice_07_scan_mismatch.pdf|schema=v1": {
+  "name": "invoice_07_scan_mismatch.pdf",
+  "schema": "v1",
+  "fields": {
+   "invoice_no": "INV-2026-3139",
+   "shipment_id": "HF-26040",
+   "container_no": "HRBU4153430",
+   "incoterm": "DAP Felixstowe",
+   "seller": "Kanto Precision Parts K.K., Yokohama, Japan",
+   "buyer": "Brightwater Textiles Ltd., Felixstowe, United Kingdom",
+   "lines": [
+    {
+     "description": "Precision ball bearing 6204-2RS",
+     "hs_code": "8482.10",
+     "quantity": 600,
+     "unit_price": 1.85,
+     "amount": 1110.0
+    },
+    {
+     "description": "CNC machined aluminium bracket",
+     "hs_code": "7616.99",
+     "quantity": 600,
+     "unit_price": 4.2,
+     "amount": 2520.0
+    }
+   ],
+   "subtotal": 3630.0,
+   "freight": 217.8,
+   "insurance": 14.52,
+   "total": 8362.32
+  },
+  "ocr": {
+   "avg": 0.9989952822100509,
+   "min": 0.9837843194039134,
+   "low_words": [
+    {
+     "text": "Incoterm:",
+     "confidence": 0.9837843194039134
+    },
+    {
+     "text": "Description",
+     "confidence": 0.9909038872766431
+    },
+    {
+     "text": "HS",
+     "confidence": 0.9909038872766431
+    },
+    {
+     "text": " No.:",
+     "confidence": 0.9942909946473886
+    },
+    {
+     "text": " pcs",
+     "confidence": 0.9965200321848641
+    }
+   ],
+   "markdown": "# COMMERCIAL INVOICE\n\nSeller / Exporter\n\nKanto Precision Parts K.K.\n\nYokohama, Japan\n\nshipping@kanto-pp.example.com\n\nInvoice No.: INV-2026-3139\n\nDate: 2026-11-18\n\nShipment ref.: HF-26040\n\nContainer: HRBU4153430\n\nIncoterm: DAP Felixstowe\n\nBuyer / Importer\n\nBrightwater Textiles Ltd.\n\nFelixstowe, United Kingdom\n\nfreight@brightwater.example.com\n\n|  Description | HS code | Qty | Unit price | Amount  |\n| --- | --- | --- | --- | --- |\n|  Precision ball bearing 6204-2RS | 8482.10 | 600 pcs | 1.85 | 1,110.00  |\n|  CNC machined aluminium bracket | 7616.99 | 600 pcs | 4.20 | 2,520.00  |\n|   |  |  | Subtotal | 3,630.00  |\n|   |  |  | Freight | 217.80  |\n|   |  |  | Insurance | 14.52  |\n|   |  |  | **TOTAL USD** | **8,362.32**  |\n\nWe certify that this invoice is true and correct. Harbor Freight Co. is the forwarder."
+  },
+  "problems": [
+   "total should be 3,862.32, printed 8,362.32"
+  ],
+  "against_database": "database says 3,862.32",
+  "check_digit_ok": true,
+  "truth": {
+   "wrong_fields": [
+    "incoterm",
+    "seller",
+    "buyer"
+   ],
+   "flags": [
+    "total_mismatch"
+   ],
+   "flag_right": true
+  },
+  "meter": [
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 1294,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   },
+   {
+    "op": "ocr.process",
+    "model": "mistral-ocr-latest",
+    "ms": 891,
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": 1
+   }
+  ],
+  "recorded_at": "2026-10-29T18:36:34+00:00",
+  "git_sha": "76bb410-dirty",
+  "sdk_version": "3.6.0"
+ }
+}

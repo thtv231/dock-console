@@ -28,5 +28,5 @@ def test_no_recorded_reply_guarantees_a_date():
     records = json.loads(GUARDRAILS.read_text(encoding="utf-8"))
     replies = {k: v for k, v in records.items() if k.startswith("reply|") and k.endswith("|")}
     assert replies, "no reply under the default rule is recorded"
-    promised = [f"{k}: {v['quote']}" for k, v in replies.items() if v["guarantees_date"]]
+    promised = [f"{k}: {v['reply'][:120]}" for k, v in replies.items() if v["guarantees_date"]]
     assert not promised, "\n".join(promised)
