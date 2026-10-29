@@ -14,6 +14,9 @@ export type MeterCall = {
   tokens_out?: number | null;
   pages?: number | null;
   error?: string;
+  // HTTP attempts the SDK retried inside this call (absent in recordings made before retries were metered).
+  retries?: number;
+  retried?: (number | string)[];
 };
 
 export type ApiError = { error: string; status: number; message?: string; mode?: Mode };
