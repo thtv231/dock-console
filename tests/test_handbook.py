@@ -37,3 +37,10 @@ def test_answer_has_must_contain_words(replayed, q):
     text = got["answer"].lower()
     missing = [words for words in q["must_contain"] if not any(w in text for w in words.split("|"))]
     assert not missing, f"{missing} not in: {got['answer']}"
+
+
+@pytest.mark.parametrize("q", QUESTIONS, ids=lambda q: q["id"])
+def test_retrieved_sections_have_scores_best_first(replayed, q):
+    got = replayed("/api/answer", {"question_id": q["id"]})
+    scores = [got["scores"][i] for i in got["retrieved"]]
+    assert len(scores) == 3 and scores == sorted(scores, reverse=True), got["scores"]

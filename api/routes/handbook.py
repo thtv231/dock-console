@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from api.core import ratelimit, replay
 from api.core.mode import error, mode
 from dock import app as dock
-from dock._client import live, meter
+from dock._client import live, meter, results
 
 ROOT = Path(__file__).resolve().parents[2]
 QUESTIONS = {q["id"]: q for q in json.loads((ROOT / "dock" / "questions.json").read_text(encoding="utf-8"))}
@@ -58,7 +58,11 @@ def answer(body: AnswerIn, request: Request):
     expected = QUESTIONS.get(body.question_id)
     question = expected["question"] if expected else body.question
     parsed, retrieved = dock.answer(question, model=body.model)
-    got = {**parsed.model_dump(), "retrieved": retrieved}
+    # search() keeps its scores to itself: recompute them from the same vectors and the question's own embedding.
+    question_vector = results("embeddings.create")[-1].data[0].embedding
+    scores = dict(zip((d["id"] for d in dock.HANDBOOK), (dock._vectors @ np.array(question_vector)).tolist()))
+    got = {**parsed.model_dump(), "retrieved": retrieved,
+           "scores": {i: round(scores[i], 4) for i in retrieved}}
     return {"question_id": body.question_id, "question": question, **got, "model": body.model,
             "expected": expected and {"sources": expected["sources"], "must_contain": expected["must_contain"]},
             "checks": checks(expected, got) if expected else None, "mode": mode(), "meter": meter()}

@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 from fastapi import APIRouter
+from fastapi.responses import FileResponse
 
 from api.core.mode import error
 
@@ -27,3 +28,13 @@ def data(name: str):
     if name not in DATASETS:
         return error(404, "unknown_dataset", known=sorted(DATASETS))
     return {"name": name, "data": json.loads((DOCK / DATASETS[name]).read_text(encoding="utf-8"))}
+
+
+@router.get("/api/files/documents/{name}")
+def document_file(name: str):
+    """One of the shipping PDFs, by its name in documents/truth.json only: no other path reaches the disk."""
+    known = json.loads((DOCK / "documents" / "truth.json").read_text(encoding="utf-8"))
+    if name not in known:
+        return error(404, "unknown_document")
+    return FileResponse(DOCK / "documents" / name, media_type="application/pdf",
+                        headers={"Content-Disposition": f'inline; filename="{name}"'})

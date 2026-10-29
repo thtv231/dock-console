@@ -51,7 +51,7 @@ def _current():
 @asynccontextmanager
 async def request_scope(key=None):
     """Bind one request's key; yield its meter. The client is closed and the key dropped on exit."""
-    scope = {"key": key, "client": None, "meter": []}
+    scope = {"key": key, "client": None, "meter": [], "results": []}
     token = _SCOPE.set(scope)
     try:
         yield scope["meter"]
@@ -72,6 +72,12 @@ def live():
 def meter():
     scope = _SCOPE.get()
     return list(scope["meter"]) if scope else []
+
+
+def results(op):
+    """This request's raw SDK results for one op, oldest first: what a route shows that a dock function doesn't return."""
+    scope = _SCOPE.get()
+    return [r for o, r in scope["results"] if o == op] if scope else []
 
 
 def scrub(text):
@@ -103,6 +109,8 @@ def _record(op, kwargs, started, result=None, error=None):
         return
     entry = {"op": op, "model": kwargs.get("model"), "ms": round((time.perf_counter() - started) * 1000)}
     entry.update({**_usage(result), **_detail(op, result)} if error is None else {"error": type(error).__name__})
+    if error is None:
+        scope["results"].append((op, result))
     scope["meter"].append(entry)
 
 

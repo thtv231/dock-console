@@ -22,11 +22,6 @@ class ExtractIn(BaseModel):
     schema_: Optional[Literal["v1", "invoice", "bill_of_lading"]] = Field(None, alias="schema")
 
 
-def container_ok(box):
-    """s02's check digit, guarded so a misread box is a failed check, not a crash."""
-    return len(box) == 11 and box[:10].isalnum() and box[10].isdigit() and docs.check_digit(box[:10]) == int(box[10])
-
-
 @router.post("/api/documents/extract")
 def extract(body: ExtractIn, request: Request):
     if body.name not in TRUTH:
@@ -48,7 +43,7 @@ def extract(body: ExtractIn, request: Request):
     fields = docs.extract(path, SCHEMAS[schema])
 
     invoice = schema != "bill_of_lading"
-    digit_ok = container_ok(fields.container_no)
+    digit_ok = docs.container_ok(fields.container_no)
     found = docs.problems(fields) if invoice else None
     flagged = bool(found) if invoice else not digit_ok
     return {"name": body.name, "schema": schema, "fields": fields.model_dump(),

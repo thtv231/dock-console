@@ -6,6 +6,7 @@
 Ported from notebooks/s02_document_ai.ipynb: schemas, descriptions and checks exactly as written there.
 """
 import base64
+import re
 import sqlite3
 from pathlib import Path
 from typing import Literal
@@ -98,6 +99,11 @@ def check_digit(code10):
     return sum(d * 2 ** i for i, d in enumerate(digits)) % 11 % 10
 
 
+def container_ok(box):
+    """check_digit on a box OCR may have misread: anything but 10 capitals/digits plus a digit fails, never raises."""
+    return re.fullmatch(r"[A-Z0-9]{10}[0-9]", box) is not None and check_digit(box[:10]) == int(box[10])
+
+
 def problems(inv):
     found = []
     lines_sum = round(sum(l.amount for l in inv.lines), 2)
@@ -107,7 +113,7 @@ def problems(inv):
     if abs(expected - inv.total) > 0.01:
         found.append(f"total should be {expected:,.2f}, printed {inv.total:,.2f}")
     box = inv.container_no
-    if len(box) != 11 or check_digit(box[:10]) != int(box[10]):
+    if not container_ok(box):   # the notebook's len/check_digit test raised on a misread box
         found.append(f"container {box} fails the check digit")
     return found
 

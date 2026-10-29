@@ -12,6 +12,11 @@
    "HB-04",
    "HB-10"
   ],
+  "scores": {
+   "HB-03": 0.8556,
+   "HB-04": 0.7442,
+   "HB-10": 0.7419
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -30,22 +35,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 797,
+    "ms": 681,
     "tokens": 19,
     "tokens_in": 19,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 828,
+    "ms": 865,
     "tokens": 336,
     "tokens_in": 288,
-    "tokens_out": 48
+    "tokens_out": 48,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:11+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:40:55+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q02|": {
@@ -61,6 +68,11 @@
    "HB-06",
    "HB-11"
   ],
+  "scores": {
+   "HB-01": 0.8427,
+   "HB-06": 0.8378,
+   "HB-11": 0.7819
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -81,22 +93,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 1367,
+    "ms": 739,
     "tokens": 27,
     "tokens_in": 27,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 775,
+    "ms": 794,
     "tokens": 330,
     "tokens_in": 294,
-    "tokens_out": 36
+    "tokens_out": 36,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:13+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:40:56+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q03|": {
@@ -112,6 +126,11 @@
    "HB-10",
    "HB-01"
   ],
+  "scores": {
+   "HB-02": 0.826,
+   "HB-10": 0.7846,
+   "HB-01": 0.783
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -130,22 +149,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 595,
+    "ms": 842,
     "tokens": 20,
     "tokens_in": 20,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 735,
+    "ms": 825,
     "tokens": 321,
     "tokens_in": 281,
-    "tokens_out": 40
+    "tokens_out": 40,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:15+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:40:58+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q04|": {
@@ -161,6 +182,11 @@
    "HB-03",
    "HB-11"
   ],
+  "scores": {
+   "HB-04": 0.847,
+   "HB-03": 0.7579,
+   "HB-11": 0.7571
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -179,22 +205,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 817,
+    "ms": 691,
     "tokens": 21,
     "tokens_in": 21,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 858,
+    "ms": 673,
     "tokens": 336,
     "tokens_in": 302,
-    "tokens_out": 34
+    "tokens_out": 34,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:16+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:40:59+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q05|": {
@@ -210,6 +238,11 @@
    "HB-12",
    "HB-09"
   ],
+  "scores": {
+   "HB-05": 0.8817,
+   "HB-12": 0.7626,
+   "HB-09": 0.7624
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -228,22 +261,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 834,
+    "ms": 952,
     "tokens": 24,
     "tokens_in": 24,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 988,
+    "ms": 999,
     "tokens": 307,
     "tokens_in": 267,
-    "tokens_out": 40
+    "tokens_out": 40,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:18+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:01+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q06|": {
@@ -259,6 +294,11 @@
    "HB-07",
    "HB-11"
   ],
+  "scores": {
+   "HB-06": 0.867,
+   "HB-07": 0.8403,
+   "HB-11": 0.7861
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -278,22 +318,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 870,
+    "ms": 823,
     "tokens": 25,
     "tokens_in": 25,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 826,
+    "ms": 761,
     "tokens": 341,
     "tokens_in": 299,
-    "tokens_out": 42
+    "tokens_out": 42,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:20+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:03+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q07|": {
@@ -309,6 +351,11 @@
    "HB-11",
    "HB-12"
   ],
+  "scores": {
+   "HB-07": 0.8373,
+   "HB-11": 0.7718,
+   "HB-12": 0.7613
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -327,22 +374,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 580,
+    "ms": 592,
     "tokens": 18,
     "tokens_in": 18,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 821,
+    "ms": 653,
     "tokens": 321,
     "tokens_in": 297,
-    "tokens_out": 24
+    "tokens_out": 24,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:21+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:04+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q08|": {
@@ -358,6 +407,11 @@
    "HB-02",
    "HB-07"
   ],
+  "scores": {
+   "HB-08": 0.7892,
+   "HB-02": 0.7414,
+   "HB-07": 0.7291
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -376,22 +430,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 1681,
+    "ms": 1310,
     "tokens": 12,
     "tokens_in": 12,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 905,
+    "ms": 716,
     "tokens": 317,
     "tokens_in": 286,
-    "tokens_out": 31
+    "tokens_out": 31,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:24+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:06+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q09|": {
@@ -407,6 +463,11 @@
    "HB-07",
    "HB-12"
   ],
+  "scores": {
+   "HB-09": 0.848,
+   "HB-07": 0.7449,
+   "HB-12": 0.7251
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -425,29 +486,31 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 1417,
+    "ms": 1238,
     "tokens": 18,
     "tokens_in": 18,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 682,
+    "ms": 743,
     "tokens": 303,
     "tokens_in": 270,
-    "tokens_out": 33
+    "tokens_out": 33,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:26+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:08+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q10|": {
   "question_id": "Q10",
   "question": "What does a UK importer need before Felixstowe can clear the goods?",
   "found": true,
-  "answer": "A UK import declaration, an EORI number starting with GB, and the commercial invoice, packing list, and bill of lading.",
+  "answer": "A UK import declaration and an EORI number starting with GB. The broker in Felixstowe also needs the commercial invoice, packing list, and bill of lading.",
   "sources": [
    "HB-10"
   ],
@@ -456,6 +519,11 @@
    "HB-11",
    "HB-04"
   ],
+  "scores": {
+   "HB-10": 0.8268,
+   "HB-11": 0.7828,
+   "HB-04": 0.7773
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -474,29 +542,31 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 1922,
+    "ms": 802,
     "tokens": 18,
     "tokens_in": 18,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 758,
-    "tokens": 351,
+    "ms": 899,
+    "tokens": 358,
     "tokens_in": 302,
-    "tokens_out": 49
+    "tokens_out": 56,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:29+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:10+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q11|": {
   "question_id": "Q11",
   "question": "When must the ISF be filed for a shipment to Los Angeles?",
   "found": true,
-  "answer": "At least 24 hours before the cargo is loaded at the origin port.",
+  "answer": "The ISF must be filed at least 24 hours before the cargo is loaded at the origin port.",
   "sources": [
    "HB-11"
   ],
@@ -505,6 +575,11 @@
    "HB-01",
    "HB-07"
   ],
+  "scores": {
+   "HB-11": 0.8528,
+   "HB-01": 0.7506,
+   "HB-07": 0.738
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -523,22 +598,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 717,
+    "ms": 683,
     "tokens": 17,
     "tokens_in": 17,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 1825,
-    "tokens": 325,
+    "ms": 820,
+    "tokens": 331,
     "tokens_in": 288,
-    "tokens_out": 37
+    "tokens_out": 43,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:31+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:11+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q12|": {
@@ -554,6 +631,11 @@
    "HB-07",
    "HB-11"
   ],
+  "scores": {
+   "HB-12": 0.8339,
+   "HB-07": 0.7409,
+   "HB-11": 0.7357
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [
@@ -572,35 +654,42 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 1120,
+    "ms": 767,
     "tokens": 16,
     "tokens_in": 16,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 729,
+    "ms": 724,
     "tokens": 333,
     "tokens_in": 295,
-    "tokens_out": 38
+    "tokens_out": 38,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:33+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:13+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q13|": {
   "question_id": "Q13",
   "question": "What is the import duty rate for bicycle frames into the Netherlands?",
   "found": false,
-  "answer": "Not covered in the provided handbook sections.",
+  "answer": "",
   "sources": [],
   "retrieved": [
    "HB-02",
    "HB-10",
    "HB-04"
   ],
+  "scores": {
+   "HB-02": 0.7337,
+   "HB-10": 0.7317,
+   "HB-04": 0.7294
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [],
@@ -615,22 +704,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 787,
+    "ms": 700,
     "tokens": 16,
     "tokens_in": 16,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 771,
-    "tokens": 309,
+    "ms": 595,
+    "tokens": 300,
     "tokens_in": 284,
-    "tokens_out": 25
+    "tokens_out": 16,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:35+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:14+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  },
  "answer|Q14|": {
@@ -644,6 +735,11 @@
    "HB-09",
    "HB-01"
   ],
+  "scores": {
+   "HB-05": 0.7982,
+   "HB-09": 0.7787,
+   "HB-01": 0.7772
+  },
   "model": "mistral-medium-latest",
   "expected": {
    "sources": [],
@@ -658,22 +754,24 @@
    {
     "op": "embeddings.create",
     "model": "mistral-embed",
-    "ms": 597,
+    "ms": 553,
     "tokens": 10,
     "tokens_in": 10,
-    "tokens_out": 0
+    "tokens_out": 0,
+    "pages": null
    },
    {
     "op": "chat.parse",
     "model": "mistral-medium-latest",
-    "ms": 657,
+    "ms": 598,
     "tokens": 265,
     "tokens_in": 249,
-    "tokens_out": 16
+    "tokens_out": 16,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T18:34:36+00:00",
-  "git_sha": "76bb410-dirty",
+  "recorded_at": "2026-10-29T18:41:15+00:00",
+  "git_sha": "871fefc-dirty",
   "sdk_version": "3.6.0"
  }
 }

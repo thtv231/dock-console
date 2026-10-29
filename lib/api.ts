@@ -12,6 +12,7 @@ export type MeterCall = {
   tokens?: number | null;
   tokens_in?: number | null;
   tokens_out?: number | null;
+  pages?: number | null;
   error?: string;
 };
 

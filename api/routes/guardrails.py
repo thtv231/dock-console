@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 from api.core import ratelimit, replay
 from api.core.mode import error, mode
 from dock import app as dock
-from dock._client import live, meter
+from dock._client import live, meter, results
 
 DOCK = Path(__file__).resolve().parents[2] / "dock"
 BAD = {m["id"]: m for m in json.loads((DOCK / "bad.json").read_text(encoding="utf-8"))}
@@ -84,5 +84,9 @@ def reply(body: ReplyIn, request: Request):
         return error(404, "unknown_ask")
     text = ASKS[body.ask_id]["text"] if body.ask_id else body.text
     drafted = dock.reply(text, instructions=RULES[body.rule])
-    return {"ask_id": body.ask_id, "text": text, "rule": body.rule, "reply": drafted,
-            "guarantees_date": dock.guarantees_date(drafted), "mode": mode(), "meter": meter()}
+    verdict = dock.guarantees_date(drafted)
+    judge = results("chat.parse")[-1].choices[0].message.parsed   # the PolicyCheck guarantees_date() reduced to a bool
+    return {"ask_id": body.ask_id, "text": text, "rule": body.rule, "reply": drafted, "guarantees_date": verdict,
+            "judge": {"guarantees_date": judge.guarantees_date, "quote": judge.quote,
+                      "quote_in_reply": bool(judge.quote.strip()) and judge.quote.strip() in drafted},
+            "mode": mode(), "meter": meter()}
