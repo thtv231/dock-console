@@ -15,14 +15,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 1148,
+    "ms": 1004,
     "tokens": 85,
     "tokens_in": 58,
-    "tokens_out": 27
+    "tokens_out": 27,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:23+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:17+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M02|": {
@@ -41,14 +42,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 1253,
+    "ms": 937,
     "tokens": 105,
     "tokens_in": 77,
-    "tokens_out": 28
+    "tokens_out": 28,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:24+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:17+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M03|": {
@@ -67,14 +69,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 1123,
+    "ms": 851,
     "tokens": 114,
     "tokens_in": 87,
-    "tokens_out": 27
+    "tokens_out": 27,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:25+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:18+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M04|": {
@@ -93,14 +96,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 1035,
+    "ms": 1538,
     "tokens": 83,
     "tokens_in": 63,
-    "tokens_out": 20
+    "tokens_out": 20,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:27+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:20+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M05|": {
@@ -119,14 +123,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 946,
+    "ms": 803,
     "tokens": 92,
     "tokens_in": 64,
-    "tokens_out": 28
+    "tokens_out": 28,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:28+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:21+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M06|": {
@@ -145,14 +150,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 1964,
+    "ms": 1446,
     "tokens": 74,
     "tokens_in": 54,
-    "tokens_out": 20
+    "tokens_out": 20,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:30+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:22+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M07|": {
@@ -171,14 +177,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 2730,
+    "ms": 710,
     "tokens": 86,
     "tokens_in": 60,
-    "tokens_out": 26
+    "tokens_out": 26,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:32+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:23+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M08|": {
@@ -197,14 +204,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 822,
+    "ms": 1469,
     "tokens": 94,
     "tokens_in": 66,
-    "tokens_out": 28
+    "tokens_out": 28,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:33+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:24+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M09|": {
@@ -223,14 +231,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 741,
+    "ms": 714,
     "tokens": 84,
     "tokens_in": 64,
-    "tokens_out": 20
+    "tokens_out": 20,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:34+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:25+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M10|": {
@@ -249,14 +258,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 983,
+    "ms": 786,
     "tokens": 90,
     "tokens_in": 63,
-    "tokens_out": 27
+    "tokens_out": 27,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:35+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:26+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M11|": {
@@ -275,14 +285,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 1084,
+    "ms": 841,
     "tokens": 113,
     "tokens_in": 86,
-    "tokens_out": 27
+    "tokens_out": 27,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:36+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:27+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M12|": {
@@ -301,14 +312,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 1241,
+    "ms": 678,
     "tokens": 74,
     "tokens_in": 53,
-    "tokens_out": 21
+    "tokens_out": 21,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:37+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:28+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M13|": {
@@ -327,14 +339,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 762,
+    "ms": 760,
     "tokens": 92,
     "tokens_in": 64,
-    "tokens_out": 28
+    "tokens_out": 28,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:38+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:28+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M14|": {
@@ -353,14 +366,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 794,
+    "ms": 768,
     "tokens": 88,
     "tokens_in": 68,
-    "tokens_out": 20
+    "tokens_out": 20,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:39+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:29+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M15|": {
@@ -379,14 +393,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 2160,
+    "ms": 855,
     "tokens": 78,
     "tokens_in": 51,
-    "tokens_out": 27
+    "tokens_out": 27,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:41+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:30+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M16|": {
@@ -405,14 +420,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 797,
+    "ms": 738,
     "tokens": 67,
     "tokens_in": 47,
-    "tokens_out": 20
+    "tokens_out": 20,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:42+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:31+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M17|": {
@@ -431,14 +447,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 1142,
+    "ms": 847,
     "tokens": 93,
     "tokens_in": 66,
-    "tokens_out": 27
+    "tokens_out": 27,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:43+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:32+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M18|": {
@@ -457,14 +474,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 953,
+    "ms": 947,
     "tokens": 81,
     "tokens_in": 53,
-    "tokens_out": 28
+    "tokens_out": 28,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:44+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:33+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M19|": {
@@ -483,14 +501,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 919,
+    "ms": 710,
     "tokens": 84,
     "tokens_in": 57,
-    "tokens_out": 27
+    "tokens_out": 27,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:45+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:33+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  },
  "triage|M20|": {
@@ -509,14 +528,15 @@
    {
     "op": "chat.parse",
     "model": "mistral-small-latest",
-    "ms": 963,
+    "ms": 715,
     "tokens": 85,
     "tokens_in": 57,
-    "tokens_out": 28
+    "tokens_out": 28,
+    "pages": null
    }
   ],
-  "recorded_at": "2026-10-29T15:54:46+00:00",
-  "git_sha": "c521e6e-dirty",
+  "recorded_at": "2026-10-29T19:04:34+00:00",
+  "git_sha": "73cf988",
   "sdk_version": "3.6.0"
  }
 }
