@@ -1,7 +1,9 @@
 """Record real runs into replays/<capability>.json, through the same API code a visitor's Live request runs.
 
     python scripts/record.py triage        # or: handbook guardrails documents agents, or all
-    python scripts/record.py design_c      # only design C's runs, into replays/agents.json
+    python scripts/record.py designs       # only designs A and C, into replays/agents.json
+
+Every record names the commit that made it, so the tree must be clean: commit first, then record.
 
 Reads MISTRAL_API_KEY from .env and sends it as X-Mistral-Key to the in-process app. The key is never
 printed, and a record that contains it (or anything shaped like a key) is refused before it is written.
@@ -34,10 +36,21 @@ from dock._client import client, request_scope  # noqa: E402
 KEY_LIKE = re.compile(r"(?<![A-Za-z0-9_])[A-Za-z0-9]{32}(?![A-Za-z0-9])")
 
 
-def git_sha():
-    sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
-    dirty = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
-    return sha + ("-dirty" if dirty else "")
+def git_sha(root):
+    """HEAD's short sha, or None when the tree has changes no commit holds (or this isn't a git checkout)."""
+    sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=root, capture_output=True, text=True).stdout.strip()
+    status = subprocess.run(["git", "status", "--porcelain"], cwd=root, capture_output=True, text=True)
+    return sha if sha and status.returncode == 0 and not status.stdout.strip() else None
+
+
+def require_clean(root):
+    """The commit every record will name. A dirty tree is refused: its records would name code that no commit holds."""
+    sha = git_sha(root)
+    if sha is None:
+        changes = subprocess.run(["git", "status", "--short"], cwd=root, capture_output=True, text=True).stdout
+        raise SystemExit("refusing to record on a dirty tree: commit first, so every record names the code that "
+                         "made it\n" + changes)
+    return sha
 
 
 def stamp(response, key):
@@ -162,8 +175,8 @@ def record_designs(http, key, designs, serial=False):
         f"retries={sum(c.get('retries', 0) for c in g['meter'])} {sorted(c['ms'] for c in g['meter'])}"))
 
 
-def record_design_c(http, key):
-    return record_designs(http, key, ("parallel",))
+def record_designs_only(http, key):
+    return record_designs(http, key, ("a", "parallel"))
 
 
 def record_agents(http, key):
@@ -185,8 +198,8 @@ def record_agents(http, key):
 
 
 CAPABILITIES = {"triage": record_triage, "handbook": record_handbook, "guardrails": record_guardrails,
-                "documents": record_documents, "agents": record_agents, "design_c": record_design_c}
-FILES = {"design_c": "agents"}   # a part of a capability, saved into that capability's file
+                "documents": record_documents, "agents": record_agents, "designs": record_designs_only}
+FILES = {"designs": "agents"}   # a part of a capability, saved into that capability's file
 
 
 def save(capability, records):
@@ -199,6 +212,8 @@ def save(capability, records):
 
 
 def main(names):
+    global GIT_SHA
+    GIT_SHA = require_clean(ROOT)   # before the key is read or anything is sent
     key = dotenv_values(ROOT / ".env").get("MISTRAL_API_KEY")
     if not key:
         raise SystemExit("MISTRAL_API_KEY is not set in .env")
@@ -217,7 +232,7 @@ def main(names):
     sys.exit(1 if any_failed else 0)
 
 
-GIT_SHA = git_sha()
+GIT_SHA = None   # set by main(), from a clean tree only
 
 if __name__ == "__main__":
     main(sys.argv[1:])

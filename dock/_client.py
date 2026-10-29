@@ -20,41 +20,65 @@ from mistralai.client.utils import BackoffStrategy, RetryConfig
 
 # One request's key, client and meter. A mutable dict, so the threadpool's copy of the context shares it.
 _SCOPE = ContextVar("dock_scope", default=None)
-# The HTTP attempts of the SDK call running in this task or thread: a status code each, None when no response came.
+# The HTTP attempts of the SDK call running in this task or thread: a status code each, or the exception's name
+# when no response came (ConnectTimeout, ReadError...).
 _ATTEMPTS = ContextVar("dock_attempts", default=None)
 _env_client = None
+# A connection to api.mistral.ai opens in well under a second. One that hasn't opened by then won't: on Windows the OS
+# would otherwise wait ~21 s for it. Failing the attempt lets the SDK retry on a new connection.
+CONNECT_S = 3
 
 
 class NoKey(Exception):
     """A Mistral call was attempted with no key (Replay mode)."""
 
 
-def _sent(request):
+def _attempt(request):
+    """Cap how long this attempt may take to connect, and open its slot in the current call's attempts."""
+    timeout = request.extensions.get("timeout") or {}
+    request.extensions["timeout"] = {**timeout, "connect": min(timeout.get("connect") or CONNECT_S, CONNECT_S)}
     attempts = _ATTEMPTS.get()
     if attempts is not None:
-        attempts.append(None)   # stays None if the attempt never gets a response (a timeout, a dropped connection)
+        attempts.append("no response")
+    return attempts
 
 
-def _answered(response):
-    attempts = _ATTEMPTS.get()
+def _outcome(attempts, outcome):
     if attempts:
-        attempts[-1] = response.status_code
+        attempts[-1] = outcome
 
 
-async def _sent_async(request):
-    _sent(request)
+class _Transport(httpx2.HTTPTransport):
+    """Every attempt the SDK makes, retries included, goes through here: the meter sees each one and how it ended."""
+
+    def handle_request(self, request):
+        attempts = _attempt(request)
+        try:
+            response = super().handle_request(request)
+        except Exception as e:
+            _outcome(attempts, type(e).__name__)
+            raise
+        _outcome(attempts, response.status_code)
+        return response
 
 
-async def _answered_async(response):
-    _answered(response)
+class _AsyncTransport(httpx2.AsyncHTTPTransport):
+    async def handle_async_request(self, request):
+        attempts = _attempt(request)
+        try:
+            response = await super().handle_async_request(request)
+        except Exception as e:
+            _outcome(attempts, type(e).__name__)
+            raise
+        _outcome(attempts, response.status_code)
+        return response
 
 
 def _build(key):
     # app.py's retry and timeout, capped at 50 s so a call ends before Vercel's 60 s maxDuration.
-    # The SDK retries inside one call; the hooks on our own HTTP clients see every attempt, so the meter can count them.
-    http = [httpx2.Client(follow_redirects=True, event_hooks={"request": [_sent], "response": [_answered]}),
-            httpx2.AsyncClient(follow_redirects=True,
-                               event_hooks={"request": [_sent_async], "response": [_answered_async]})]
+    # The SDK retries inside one call; our own transports see every attempt, so the meter can count them.
+    http = [httpx2.Client(follow_redirects=True, transport=_Transport()),
+            httpx2.AsyncClient(follow_redirects=True, transport=_AsyncTransport())]
     built = Mistral(api_key=key, timeout_ms=50000, client=http[0], async_client=http[1],
                     retry_config=RetryConfig("backoff", BackoffStrategy(1000, 20000, 2.0, 50000),
                                              retry_connection_errors=True))
@@ -137,8 +161,8 @@ def _detail(op, result):
 
 def _retries(attempts):
     """Every failed attempt before the last one: each was retried. A run's start/append calls succeed in turn."""
-    failed = [a for a in attempts[:-1] if a is None or a >= 400]
-    return {"retries": len(failed), "retried": ["no response" if a is None else a for a in failed]}
+    failed = [a for a in attempts[:-1] if isinstance(a, str) or a >= 400]
+    return {"retries": len(failed), "retried": failed}
 
 
 def _record(op, kwargs, started, result=None, error=None, usage_of=None, attempts=()):

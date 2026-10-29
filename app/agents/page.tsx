@@ -328,17 +328,19 @@ function RetryNote({ results }: { results: Design[] }) {
   const clean = workers.filter((w) => !w.retries);
   const waited = workers.filter((w) => (w.retries ?? 0) > 0);
   const outcomes = [...new Set(waited.flatMap((w) => w.retried ?? []))];
-  const statuses = outcomes.join(", ");
   const codes = outcomes.filter((o): o is number => typeof o === "number").sort((x, y) => x - y);
-  const noResponse = outcomes.includes("no response");
+  // No HTTP status: the exception the attempt ended with (ConnectTimeout...), or "no response" in older recordings.
+  const errors = outcomes.filter((o): o is string => typeof o === "string");
+  const named = errors.filter((e) => e !== "no response");
+  const noResponse = errors.length > 0
+    ? `got no response from Mistral${named.length ? ` (${named.join(", ")})` : ", no HTTP status came back"}` : "";
   return (
     <div className="rounded-md border bg-card px-4 py-3 text-[13px] leading-relaxed">
       <div className="mb-1 font-medium">{slowerC ? "Why C is slower here" : "Retries in C"}</div>
       {retried.length > 0 ? (
         <p className="max-w-[90ch]">
           In {retried.length} of {c.length} C runs, {waited.length} of {workers.length} worker calls had a first attempt that
-          {noResponse && codes.length === 0 ? " never got a response from Mistral (no HTTP status came back)" :
-            codes.length > 0 ? ` was answered HTTP ${codes.join(", ")}${noResponse ? " or got no response at all" : ""}` : ` failed (${statuses})`},
+          {codes.length > 0 ? ` was answered HTTP ${codes.join(", ")}${noResponse ? ` or ${noResponse}` : ""}` : ` ${noResponse}`},
           and the SDK retried it inside the call. A parallel run takes as long as its slowest worker: the retried calls took a
           median {num(median(waited.map((w) => w.ms)))} ms, while the {clean.length} that went through first time took a
           median {num(median(clean.map((w) => w.ms)))} ms.
