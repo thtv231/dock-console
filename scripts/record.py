@@ -1,6 +1,6 @@
 """Record real runs into replays/<capability>.json, through the same API code a visitor's Live request runs.
 
-    python scripts/record.py triage        # or: handbook guardrails documents, or all
+    python scripts/record.py triage        # or: handbook guardrails documents agents, or all
 
 Reads MISTRAL_API_KEY from .env and sends it as X-Mistral-Key to the in-process app. The key is never
 printed, and a record that contains it (or anything shaped like a key) is refused before it is written.
@@ -25,11 +25,12 @@ from fastapi.testclient import TestClient      # noqa: E402
 
 from api.core import replay                    # noqa: E402
 from api.index import app                      # noqa: E402
-from api.routes import handbook                # noqa: E402
+from api.routes import agents, handbook        # noqa: E402
 from dock import app as dock                   # noqa: E402
-from dock._client import request_scope         # noqa: E402
+from dock._client import client, request_scope  # noqa: E402
 
-KEY_LIKE = re.compile(r"(?<![A-Za-z0-9])[A-Za-z0-9]{32}(?![A-Za-z0-9])")
+# 32 letters and digits on their own. Mistral's object ids (ag_<32 hex>) follow an underscore, so they pass.
+KEY_LIKE = re.compile(r"(?<![A-Za-z0-9_])[A-Za-z0-9]{32}(?![A-Za-z0-9])")
 
 
 def git_sha():
@@ -135,8 +136,44 @@ def record_documents(http, key):
         f"{g['problems'] or ''} {g['against_database'] or ''} digit_ok={g['check_digit_ok']}"))
 
 
+def left_on_account(key):
+    """Every agent on the account that carries the console's tag: there should be none after a recording."""
+    async def tagged():
+        found, page = [], 0
+        async with request_scope(key):
+            while True:
+                batch = await client.beta.agents.list_async(page=page, page_size=100, metadata=agents.TAG)
+                found += [a for a in batch if (a.metadata or {}).get("created_by") == agents.TAG["created_by"]]
+                if len(batch) < 100:
+                    return found
+                page += 1
+    return asyncio.run(tagged())
+
+
+def record_agents(http, key):
+    inbox = dataset("inbox.json")
+    cases = [(replay.key("handoff", m["id"], **({"rule": rule} if rule != agents.DEFAULT_RULE else {})),
+              {"mail_id": m["id"], "rule": rule}) for rule in ("v1", "v2") for m in inbox]
+    handoffs, failed = record_cases(http, key, "/api/agents/handoff", cases, lambda g: (
+        f"{g['route']:<9} {'ok' if g['right'] else 'WRONG, expected ' + g['expected']:<26} "
+        f"deleted {len(g['agents']['deleted'])}/{len(g['agents']['created'])}"))
+    for rule in ("v1", "v2"):
+        rows = [v for k, v in handoffs.items() if k.endswith(f"|rule={rule}" if rule != agents.DEFAULT_RULE else "|")]
+        print(f"rule {rule}: routed correctly {sum(r['right'] for r in rows)} / {len(rows)}")
+    cases = [(replay.key("design", d, guard=1 if guard else None, run=n), {"design": d, "guard": guard, "run": n})
+             for d in ("a", "parallel") for guard in (False, True) for n in range(1, agents.RUNS + 1)]
+    cases.append((replay.key("design", "serial", run=1), {"design": "serial", "run": 1}))
+    designs, failed_designs = record_cases(http, key, "/api/agents/design", cases, lambda g: (
+        f"{g['seconds']:>5} s {g['tool_calls']:>2} calls {g['score']['covered']} "
+        f"invented={len(g['score']['invented reasons'])} note={g['score']['follows the note'] or '-'}"))
+    left = left_on_account(key)
+    print(f"tagged agents left on the account: {len(left)}" + "".join(f"
+  {a.id} {a.name}" for a in left))
+    return {**handoffs, **designs}, failed + failed_designs + [f"left {a.id}" for a in left]
+
+
 CAPABILITIES = {"triage": record_triage, "handbook": record_handbook, "guardrails": record_guardrails,
-                "documents": record_documents}
+                "documents": record_documents, "agents": record_agents}
 
 
 def save(capability, records):

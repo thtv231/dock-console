@@ -11,6 +11,7 @@ import os
 import time
 from contextlib import asynccontextmanager
 from contextvars import ContextVar
+from types import SimpleNamespace
 
 from mistralai.client import Mistral
 from mistralai.client.basesdk import BaseSDK
@@ -103,12 +104,14 @@ def _detail(op, result):
     return {}
 
 
-def _record(op, kwargs, started, result=None, error=None):
+def _record(op, kwargs, started, result=None, error=None, usage_of=None):
     scope = _SCOPE.get()
     if scope is None:
         return
-    entry = {"op": op, "model": kwargs.get("model"), "ms": round((time.perf_counter() - started) * 1000)}
-    entry.update({**_usage(result), **_detail(op, result)} if error is None else {"error": type(error).__name__})
+    model = kwargs.get("model") or getattr(kwargs.get("run_ctx"), "model", None)
+    entry = {"op": op, "model": model, "ms": round((time.perf_counter() - started) * 1000)}
+    entry.update({**_usage(usage_of or result), **_detail(op, result)} if error is None
+                 else {"error": type(error).__name__})
     if error is None:
         scope["results"].append((op, result))
     scope["meter"].append(entry)
@@ -138,6 +141,42 @@ def _metered(fn, op):
     return call
 
 
+class _Calls:
+    """The self Conversations.run_async runs with: everything goes to the real SDK, and start/append usage is kept."""
+
+    def __init__(self, target):
+        self._target, self.usage = target, []
+
+    def __getattr__(self, name):
+        value = getattr(self._target, name)
+        if name not in ("start_async", "append_async"):
+            return value
+
+        async def call(*args, **kwargs):
+            response = await value(*args, **kwargs)
+            self.usage.append(response.usage)
+            return response
+        return call
+
+
+def _metered_run(conversations, op):
+    """run_async returns a RunResult with no usage: its one meter entry sums the start/append calls the run made."""
+    async def call(*args, **kwargs):
+        calls = _Calls(conversations)
+        started = time.perf_counter()
+        try:
+            result = await type(conversations).run_async(calls, *args, **kwargs)
+        except Exception as e:
+            _record(op, kwargs, started, error=e)
+            raise
+        used = [u for u in calls.usage if u is not None]
+        total = {f: sum(getattr(u, f) or 0 for u in used) if used else None
+                 for f in ("total_tokens", "prompt_tokens", "completion_tokens")}
+        _record(op, kwargs, started, result, usage_of=SimpleNamespace(usage=SimpleNamespace(**total)))
+        return result
+    return call
+
+
 class _Proxy:
     """client.chat.parse(...) resolves to this request's Mistral, and the call lands in its meter as 'chat.parse'."""
 
@@ -147,6 +186,8 @@ class _Proxy:
     def __getattr__(self, name):
         value = getattr(self._target() if self._path == "" else self._target, name)
         op = f"{self._path}.{name}" if self._path else name
+        if op == "beta.conversations.run_async":
+            return _metered_run(value.__self__, op)
         if isinstance(value, BaseSDK):
             return _Proxy(value, op)
         if callable(value) and not inspect.isclass(value):
