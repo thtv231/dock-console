@@ -21,7 +21,7 @@ from dock._client import client   # per-request key and meter, see dock/_client.
 
 HERE = Path(__file__).resolve().parent
 load_dotenv()
-db =sqlite3.connect(HERE / "dock.sqlite", check_same_thread=False)
+db = sqlite3.connect((HERE / "dock.sqlite").as_uri() + "?mode=ro", uri=True, check_same_thread=False)
 
 
 # ---------- Section 1: triage an email ----------
