@@ -167,8 +167,9 @@ def record_agents(http, key):
         f"{g['seconds']:>5} s {g['tool_calls']:>2} calls {g['score']['covered']} "
         f"invented={len(g['score']['invented reasons'])} note={g['score']['follows the note'] or '-'}"))
     left = left_on_account(key)
-    print(f"tagged agents left on the account: {len(left)}" + "".join(f"
-  {a.id} {a.name}" for a in left))
+    print(f"tagged agents left on the account: {len(left)}")
+    for a in left:
+        print(f"  {a.id} {a.name}")
     return {**handoffs, **designs}, failed + failed_designs + [f"left {a.id}" for a in left]
 
 
