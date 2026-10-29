@@ -6,7 +6,6 @@
 Every function takes the model as a parameter, so an eval can compare versions.
 """
 import json
-import os
 import re
 import sqlite3
 from pathlib import Path
@@ -14,18 +13,15 @@ from typing import Literal, Optional
 
 import numpy as np
 from dotenv import load_dotenv
-from mistralai.client import Mistral
-from mistralai.client.utils import BackoffStrategy, RetryConfig
 from mistralai.extra.exceptions import DeferredToolCallsException
 from mistralai.extra.run.context import RunContext
 from pydantic import BaseModel, Field, field_validator
 
+from dock._client import client   # per-request key and meter, see dock/_client.py
+
 HERE = Path(__file__).resolve().parent
 load_dotenv()
-client = Mistral(api_key=os.environ["MISTRAL_API_KEY"], timeout_ms=120000,
-                 retry_config=RetryConfig("backoff", BackoffStrategy(1000, 20000, 2.0, 120000),
-                                          retry_connection_errors=True))
-db = sqlite3.connect(HERE / "dock.sqlite", check_same_thread=False)
+db =sqlite3.connect(HERE / "dock.sqlite", check_same_thread=False)
 
 
 # ---------- Section 1: triage an email ----------

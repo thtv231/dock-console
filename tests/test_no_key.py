@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-import httpx
+import httpx2   # the transport mistralai 3.6 uses (it imports httpx2 as httpx); TestClient uses plain httpx
 import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -21,9 +21,12 @@ def test_dock_imports_without_key():
 @pytest.fixture
 def fake_mistral(monkeypatch):
     """Stand in for api.mistral.ai: answer 401 and echo the bearer token, the worst case for a leak."""
+    seen = []
+
     def reply(request):
-        return httpx.Response(401, request=request,
-                              json={"message": "Unauthorized: " + request.headers.get("authorization", "")})
+        seen.append(request.url.path)
+        return httpx2.Response(401, request=request,
+                               json={"message": "Unauthorized: " + request.headers.get("authorization", "")})
 
     def handle(self, request):
         return reply(request)
@@ -31,17 +34,18 @@ def fake_mistral(monkeypatch):
     async def handle_async(self, request):
         return reply(request)
 
-    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", handle)
-    monkeypatch.setattr(httpx.AsyncHTTPTransport, "handle_async_request", handle_async)
+    monkeypatch.setattr(httpx2.HTTPTransport, "handle_request", handle)
+    monkeypatch.setattr(httpx2.AsyncHTTPTransport, "handle_async_request", handle_async)
+    return seen
 
 
 def _requests():
     """Every route on the app, plus the lesson-1 routes with real inputs and a path that doesn't exist."""
-    from fastapi.routing import APIRoute
     from api.index import app
 
-    found = [(m, r.path_format.replace("{", "").replace("}", ""), {})
-             for r in app.routes if isinstance(r, APIRoute) for m in r.methods if m != "HEAD"]
+    # The OpenAPI paths, not app.routes: FastAPI 0.16x keeps included routers as lazy _IncludedRouter objects.
+    found = [(method.upper(), path.replace("{", "").replace("}", ""), {})
+             for path, ops in app.openapi()["paths"].items() for method in ops]
     paths = {p for _, p, _ in found}
     assert {"/api/health", "/api/triage"} <= paths, f"lesson-1 routes missing, app has {sorted(paths)}"
     return found + [
@@ -62,6 +66,7 @@ def test_key_never_in_response(client, fake_mistral):
             leaks.append(f"{method} {path} -> body")
         if any(FAKE_KEY in v for v in r.headers.values()):
             leaks.append(f"{method} {path} -> header value")
+    assert fake_mistral, "no live call reached the fake Mistral, so nothing was tested"
     assert not leaks, leaks
 
 

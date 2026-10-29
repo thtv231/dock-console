@@ -1,0 +1,522 @@
+{
+ "triage|M01|": {
+  "mail_id": "M01",
+  "intent": "tracking",
+  "shipment_id": "HF-26012",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "tracking",
+   "shipment_id": "HF-26012",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1148,
+    "tokens": 85,
+    "tokens_in": 58,
+    "tokens_out": 27
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:23+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M02|": {
+  "mail_id": "M02",
+  "intent": "customs",
+  "shipment_id": "HF-26038",
+  "language": "de",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "customs",
+   "shipment_id": "HF-26038",
+   "language": "de"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1253,
+    "tokens": 105,
+    "tokens_in": 77,
+    "tokens_out": 28
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:24+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M03|": {
+  "mail_id": "M03",
+  "intent": "invoice",
+  "shipment_id": "HF-26040",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "invoice",
+   "shipment_id": "HF-26040",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1123,
+    "tokens": 114,
+    "tokens_in": 87,
+    "tokens_out": 27
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:25+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M04|": {
+  "mail_id": "M04",
+  "intent": "booking",
+  "shipment_id": null,
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "booking",
+   "shipment_id": null,
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1035,
+    "tokens": 83,
+    "tokens_in": 63,
+    "tokens_out": 20
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:27+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M05|": {
+  "mail_id": "M05",
+  "intent": "damage",
+  "shipment_id": "HF-26037",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "damage",
+   "shipment_id": "HF-26037",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 946,
+    "tokens": 92,
+    "tokens_in": 64,
+    "tokens_out": 28
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:28+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M06|": {
+  "mail_id": "M06",
+  "intent": "other",
+  "shipment_id": null,
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "other",
+   "shipment_id": null,
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1964,
+    "tokens": 74,
+    "tokens_in": 54,
+    "tokens_out": 20
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:30+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M07|": {
+  "mail_id": "M07",
+  "intent": "tracking",
+  "shipment_id": "HF-26019",
+  "language": "nl",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "tracking",
+   "shipment_id": "HF-26019",
+   "language": "nl"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 2730,
+    "tokens": 86,
+    "tokens_in": 60,
+    "tokens_out": 26
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:32+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M08|": {
+  "mail_id": "M08",
+  "intent": "customs",
+  "shipment_id": "HF-26038",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "customs",
+   "shipment_id": "HF-26038",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 822,
+    "tokens": 94,
+    "tokens_in": 66,
+    "tokens_out": 28
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:33+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M09|": {
+  "mail_id": "M09",
+  "intent": "booking",
+  "shipment_id": null,
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "booking",
+   "shipment_id": null,
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 741,
+    "tokens": 84,
+    "tokens_in": 64,
+    "tokens_out": 20
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:34+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M10|": {
+  "mail_id": "M10",
+  "intent": "tracking",
+  "shipment_id": "HF-26016",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "tracking",
+   "shipment_id": "HF-26016",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 983,
+    "tokens": 90,
+    "tokens_in": 63,
+    "tokens_out": 27
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:35+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M11|": {
+  "mail_id": "M11",
+  "intent": "invoice",
+  "shipment_id": "HF-26031",
+  "language": "fr",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "invoice",
+   "shipment_id": "HF-26031",
+   "language": "fr"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1084,
+    "tokens": 113,
+    "tokens_in": 86,
+    "tokens_out": 27
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:36+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M12|": {
+  "mail_id": "M12",
+  "intent": "customs",
+  "shipment_id": null,
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "customs",
+   "shipment_id": null,
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1241,
+    "tokens": 74,
+    "tokens_in": 53,
+    "tokens_out": 21
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:37+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M13|": {
+  "mail_id": "M13",
+  "intent": "damage",
+  "shipment_id": "HF-26036",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "damage",
+   "shipment_id": "HF-26036",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 762,
+    "tokens": 92,
+    "tokens_in": 64,
+    "tokens_out": 28
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:38+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M14|": {
+  "mail_id": "M14",
+  "intent": "booking",
+  "shipment_id": null,
+  "language": "de",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "booking",
+   "shipment_id": null,
+   "language": "de"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 794,
+    "tokens": 88,
+    "tokens_in": 68,
+    "tokens_out": 20
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:39+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M15|": {
+  "mail_id": "M15",
+  "intent": "tracking",
+  "shipment_id": "HF-26099",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "tracking",
+   "shipment_id": "HF-26099",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 2160,
+    "tokens": 78,
+    "tokens_in": 51,
+    "tokens_out": 27
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:41+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M16|": {
+  "mail_id": "M16",
+  "intent": "other",
+  "shipment_id": null,
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "other",
+   "shipment_id": null,
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 797,
+    "tokens": 67,
+    "tokens_in": 47,
+    "tokens_out": 20
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:42+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M17|": {
+  "mail_id": "M17",
+  "intent": "invoice",
+  "shipment_id": "HF-26003",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "invoice",
+   "shipment_id": "HF-26003",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1142,
+    "tokens": 93,
+    "tokens_in": 66,
+    "tokens_out": 27
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:43+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M18|": {
+  "mail_id": "M18",
+  "intent": "damage",
+  "shipment_id": "HF-26034",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "damage",
+   "shipment_id": "HF-26034",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 953,
+    "tokens": 81,
+    "tokens_in": 53,
+    "tokens_out": 28
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:44+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M19|": {
+  "mail_id": "M19",
+  "intent": "tracking",
+  "shipment_id": "HF-26025",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "tracking",
+   "shipment_id": "HF-26025",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 919,
+    "tokens": 84,
+    "tokens_in": 57,
+    "tokens_out": 27
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:45+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ },
+ "triage|M20|": {
+  "mail_id": "M20",
+  "intent": "customs",
+  "shipment_id": "HF-26033",
+  "language": "en",
+  "model": "mistral-small-latest",
+  "expected": {
+   "intent": "customs",
+   "shipment_id": "HF-26033",
+   "language": "en"
+  },
+  "wrong_fields": [],
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 963,
+    "tokens": 85,
+    "tokens_in": 57,
+    "tokens_out": 28
+   }
+  ],
+  "recorded_at": "2026-10-29T15:54:46+00:00",
+  "git_sha": "c521e6e-dirty",
+  "sdk_version": "3.6.0"
+ }
+}
