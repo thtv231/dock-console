@@ -2,6 +2,7 @@
 
     python scripts/record.py triage        # or: handbook guardrails documents agents, or all
     python scripts/record.py designs       # only designs A and C, into replays/agents.json
+    python scripts/record.py approvals     # HF-26038, plain and safe, one real run per decision policy
 
 Every record names the commit that made it, so the tree must be clean: commit first, then record.
 
@@ -12,6 +13,7 @@ import asyncio
 import json
 import os
 import re
+import secrets
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -26,11 +28,15 @@ import numpy as np                             # noqa: E402
 from dotenv import dotenv_values               # noqa: E402
 from fastapi.testclient import TestClient      # noqa: E402
 
-from api.core import replay                    # noqa: E402
+from api.core import replay, state             # noqa: E402
 from api.index import app                      # noqa: E402
 from api.routes import agents, handbook        # noqa: E402
+from dock import hitl                          # noqa: E402
 from dock import app as dock                   # noqa: E402
 from dock._client import client, request_scope  # noqa: E402
+
+# Records hold unsigned state payloads, so any secret signs the states the walk passes along: .env's, or a throwaway.
+os.environ.setdefault("DOCK_STATE_SECRET", secrets.token_hex(32))
 
 # 32 letters and digits on their own. Mistral's object ids (ag_<32 hex>) follow an underscore, so they pass.
 KEY_LIKE = re.compile(r"(?<![A-Za-z0-9_])[A-Za-z0-9]{32}(?![A-Za-z0-9])")
@@ -197,15 +203,97 @@ def record_agents(http, key):
     return {**handoffs, **designs}, failed + failed_designs + [f"left {a.id}" for a in left]
 
 
+APPROVAL_POLICIES = {   # PLAN.md section 3: each decision path is its own real run from /start
+    "consignee": lambda to, consignee: "approve" if to == consignee else "reject",
+    "all": lambda to, consignee: "approve",   # the server still refuses non-customers
+    "none": lambda to, consignee: "reject",
+}
+APPROVAL_TRIES = 4      # runs per policy before the recorder gives up on matching the reference path
+APPROVAL_SHIPMENT = "HF-26038"
+
+
+def shown(got):
+    """What a response put in front of the person: the recipients it asks about, or that the run is done."""
+    return sorted({d["to"] for d in got["drafts"]}) if got["status"] == "paused" else "done"
+
+
+def walk(http, key, instructions, policy):
+    """One real run from /start, answering every pause with one policy. [(record key, response)], or None."""
+    consignee = hitl.consignee(APPROVAL_SHIPMENT)
+    headers = {"X-Mistral-Key": key}
+    r = http.post("/api/approvals/start", json={"shipment_id": APPROVAL_SHIPMENT, "instructions": instructions},
+                  headers=headers)
+    steps = [(replay.approvals_key(APPROVAL_SHIPMENT, instructions, 0, [], {}), r)]
+    while r.status_code == 200 and r.json()["status"] == "paused":
+        got = r.json()
+        s = state.verify(got["state"])   # the server stops a run at MAX_PAUSES with a 422, reported below
+        decisions = {d["to"]: APPROVAL_POLICIES[policy](d["to"], consignee) for d in got["drafts"]}
+        r = http.post("/api/approvals/resume", json={"state": got["state"], "decisions": decisions}, headers=headers)
+        steps.append((replay.approvals_key(APPROVAL_SHIPMENT, instructions, s["pause"], s["pending"], decisions,
+                                           s["history"]), r))
+    if r.status_code != 200 or r.json().get("mode") != "live":
+        print(f"  {policy}: FAILED {r.status_code} {r.json().get('error')}")
+        return None
+    return [(k, resp.json()) for k, resp in steps]
+
+
+def approval_record(got, key, policy):
+    """The live response as Replay serves it: no signed state (it would expire), the payload of the next one instead."""
+    record = {k: v for k, v in got.items() if k != "state"}
+    if got.get("state"):
+        s = state.verify(got["state"])
+        record["next"] = {k: s[k] for k in ("shipment_id", "instructions", "pause", "pending", "history")}
+    record["recorded_policy"] = policy
+    return stamp(record, key)
+
+
+def record_approvals(http, key):
+    records, failed = {}, []
+    for instructions in ("plain", "safe"):
+        kept = {}   # record key -> record, for this instruction set
+        for policy in APPROVAL_POLICIES:
+            for attempt in range(1, APPROVAL_TRIES + 1):
+                steps = walk(http, key, instructions, policy)
+                if steps is None:
+                    continue
+                # Where this run reached a key another run already holds, it must have put the same drafts in front
+                # of the person; otherwise its answers belong to drafts the replay never shows.
+                clash = [k for k, got in steps if k in kept and shown(kept[k]) != shown(got)]
+                path = " -> ".join(str(shown(got)) for _, got in steps)
+                if clash:
+                    print(f"{instructions:<5} {policy:<9} try {attempt}: discarded, differs at {clash[0]}: {path}")
+                    continue
+                new = {k: approval_record(got, key, policy) for k, got in steps if k not in kept}
+                kept.update(new)
+                done = steps[-1][1]
+                tokens = sum(c["tokens"] or 0 for _, g in steps for c in g["meter"])
+                ms = sum(c["ms"] for _, g in steps for c in g["meter"])
+                print(f"{instructions:<5} {policy:<9} try {attempt}: {len(steps) - 1} pauses, sent to "
+                      f"{[m['to'] for m in done['outbox']]}, {len(new)} new records, {ms} ms {tokens} tokens")
+                for k, got in steps:
+                    refusals = [t["to"] for t in got["trace"] if t.get("by") == "server"]
+                    print(f"    {k:<110} {shown(got)}" + (f" refused {refusals}" if refusals else ""))
+                break
+            else:
+                failed.append(f"{instructions}/{policy}")
+                print(f"{instructions:<5} {policy:<9} gave up after {APPROVAL_TRIES} tries")
+        records.update(kept)
+    return records, failed
+
+
 CAPABILITIES = {"triage": record_triage, "handbook": record_handbook, "guardrails": record_guardrails,
-                "documents": record_documents, "agents": record_agents, "designs": record_designs_only}
+                "documents": record_documents, "agents": record_agents, "designs": record_designs_only,
+                "approvals": record_approvals}
 FILES = {"designs": "agents"}   # a part of a capability, saved into that capability's file
+REPLACE = {"approvals": "approvals|"}   # re-recorded as a whole: old paths would mix with the new runs
 
 
 def save(capability, records):
     path = replay.REPLAYS / f"{capability}.json"
     path.parent.mkdir(exist_ok=True)
     existing = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    if capability in REPLACE:
+        existing = {k: v for k, v in existing.items() if not k.startswith(REPLACE[capability])}
     existing.update(records)
     path.write_text(json.dumps(dict(sorted(existing.items())), indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"wrote {len(records)} records to {path.relative_to(ROOT)} ({len(existing)} total)")

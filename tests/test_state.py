@@ -29,7 +29,7 @@ def replay_state(**extra):
 
 
 def live_state():
-    return {"conversation_id": "conv_fake_0001", "shipment_id": "HF-26038", "instructions": "safe", "depth": 1,
+    return {"conversation_id": "conv_fake_0001", "shipment_id": "HF-26038", "instructions": "safe", "pause": 1,
             "pending": PENDING, "trace": [], "outbox": []}
 
 

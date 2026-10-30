@@ -17,6 +17,7 @@ import httpx2   # the transport mistralai 3.6 uses (it imports httpx2 as httpx)
 from mistralai.client import Mistral
 from mistralai.client.basesdk import BaseSDK
 from mistralai.client.utils import BackoffStrategy, RetryConfig
+from mistralai.extra.exceptions import DeferredToolCallsException
 
 # One request's key, client and meter. A mutable dict, so the threadpool's copy of the context shares it.
 _SCOPE = ContextVar("dock_scope", default=None)
@@ -232,8 +233,11 @@ def _metered_run(conversations, op):
         calls = _Calls(conversations)
         started, attempts = time.perf_counter(), []
         token = _ATTEMPTS.set(attempts)
+        paused = None
         try:
             result = await type(conversations).run_async(calls, *args, **kwargs)
+        except DeferredToolCallsException as e:   # a pause for approval is a finished request with real usage
+            result, paused = None, e
         except Exception as e:
             _record(op, kwargs, started, error=e, attempts=attempts)
             raise
@@ -243,6 +247,11 @@ def _metered_run(conversations, op):
         total = {f: sum(getattr(u, f) or 0 for u in used) if used else None
                  for f in ("total_tokens", "prompt_tokens", "completion_tokens")}
         _record(op, kwargs, started, result, usage_of=SimpleNamespace(usage=SimpleNamespace(**total)), attempts=attempts)
+        if paused is not None:
+            scope = _SCOPE.get()
+            if scope:
+                scope["meter"][-1]["paused"] = True
+            raise paused
         return result
     return call
 

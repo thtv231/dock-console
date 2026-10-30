@@ -14,6 +14,21 @@ def key(route, case_id, **options):
     return f"{route}|{case_id}|{variant}"
 
 
+def decided(pending, decisions):
+    """One pause's answers by recipient, never by a draft's position: "audit@…=reject,import@…=approve".
+    Several drafts to one recipient share its one decision."""
+    recipients = sorted({json.loads(p["arguments"])["to"] for p in pending})
+    return ",".join(f"{to}={decisions[to]}" for to in recipients)
+
+
+def approvals_key(shipment_id, instructions, pause, pending, decisions, history=()):
+    """approvals|HF-26038|safe|<pause>|<decided>, plus |after=<earlier pauses' decided> from pause 2 on.
+    Pause 0 is /start. Later pauses are keyed by the whole path to them, so two runs that answered pause 1
+    alike but pause 2 differently are told apart."""
+    k = f"approvals|{shipment_id}|{instructions}|{pause}|{decided(pending, decisions)}"
+    return k + f"|after={';'.join(history)}" if history else k
+
+
 @lru_cache
 def load(capability):
     path = REPLAYS / f"{capability}.json"

@@ -46,10 +46,10 @@ def fake_conversations(monkeypatch):
         inputs = body.get("inputs") or []
         sent.append(inputs)
         ids = {i.get("tool_call_id") for i in inputs if i.get("type") == "function.result"}
-        if ids & answered:
+        if ids & answered:   # what Mistral returned when a recorded pause was answered twice (lesson 4 probe)
             return httpx2.Response(400, request=request, json={
-                "object": "error", "type": "invalid_request_error",
-                "message": f"Tool call {sorted(ids & answered)[0]} already has a result"})
+                "object": "Error", "type": "invalid_request_error", "code": 3001,
+                "message": f"Function results reference tool_call_ids that already have a result: {sorted(ids & answered)}"})
         answered.update(ids)
         cid = request.url.path.rsplit("/", 1)[-1]
         return httpx2.Response(200, request=request, json={

@@ -25,7 +25,7 @@ def draft(tool_call_id, to):
 
 
 def live_state(pending):
-    return {"conversation_id": "conv_fake_0002", "shipment_id": "HF-26038", "instructions": "safe", "depth": 1,
+    return {"conversation_id": "conv_fake_0002", "shipment_id": "HF-26038", "instructions": "safe", "pause": 1,
             "pending": pending, "trace": [], "outbox": []}
 
 
