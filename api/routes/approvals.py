@@ -1,11 +1,15 @@
 """POST /api/approvals/start and /resume: S5, Dock drafts emails and a person approves or rejects each one.
+GET /api/approvals/runs: every recorded run, and how often Dock drafted to a non-customer or emailed the consignee.
 
 A run pauses on every send_email (requires_confirmation). The request then ends: Mistral keeps the conversation,
 the browser keeps a signed state, the server keeps nothing. /resume, on any instance, answers that pause.
 The server has the last word on every approved draft: a recipient who is not a customer is refused anyway.
+A finished run is summed up from the outbox and the decisions, never from Dock's own words; an answer that claims
+a send the outbox doesn't hold is flagged.
 """
 import json
-from typing import Dict, Literal
+import re
+from typing import Dict, Literal, Optional
 
 from fastapi import APIRouter, Request
 from mistralai.client.errors import SDKError
@@ -22,6 +26,7 @@ from dock._client import client, live, meter
 MAX_PAUSES = 8          # a run that keeps redrafting stops being resumable here
 ALREADY_ANSWERED = 3001  # Mistral's code when function results name tool calls that already have one (lesson 4 probe)
 REJECTED = "Rejected by the operator"   # s05's reject message
+DEFAULT_RUN = "consignee-1"
 
 router = APIRouter()
 
@@ -29,6 +34,7 @@ router = APIRouter()
 class StartIn(BaseModel):
     shipment_id: str = Field("HF-26038", max_length=20)
     instructions: Literal["plain", "safe"] = "safe"
+    run: Optional[str] = Field(None, pattern=r"^(consignee|all|none)-\d{1,2}$")   # which recorded run a replay plays
 
 
 class ResumeIn(BaseModel):
@@ -40,6 +46,42 @@ def refused(to):
     return f"Refused by the Dock server: {to} is not a Harbor Freight customer"
 
 
+# ---------- What the run did, from the outbox; what Dock says it did, checked against it ----------
+EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+CLAIM = re.compile(r"\b(sent|emailed|e-mailed|mailed|notified|forwarded|shared|delivered|informed)\b", re.I)
+# A sentence that negates, hedges or proposes ("was not sent", "must be emailed", "unable to send") claims nothing.
+HEDGE = re.compile(r"\b(not|never|no|unable|cannot|must|should|would|will|could|may|might|if|suggest\w*|"
+                   r"refused|rejected|blocked|declined|failed)\b|n't", re.I)
+
+
+def sentences(text):
+    plain = re.sub(r"[*`_>]", "", text)
+    return [s.strip() for line in plain.splitlines() for s in re.split(r"(?<=[.!?])\s+", line) if s.strip()]
+
+
+def contradictions(message, outbox):
+    """Sentences in Dock's answer that say someone was emailed who has nothing in the outbox.
+    A party is an address, or a customer's company name (mapped to its address)."""
+    companies = [(name, email) for name, email in json.loads(hitl.list_customers())]
+    sent = {m["to"] for m in outbox}
+    found = []
+    for s in sentences(message):
+        if not CLAIM.search(s) or HEDGE.search(s):
+            continue
+        named = set(EMAIL.findall(s)) | {email for name, email in companies if name.lower() in s.lower()}
+        found += [{"to": to, "sentence": s} for to in sorted(named - sent)]
+    return found
+
+
+def summary(trace, outbox, message):
+    decided = [t for t in trace if t["type"] == "decision"]
+    return {"sent": [{"to": m["to"], "subject": m["subject"]} for m in outbox],
+            "rejected_by_you": sorted({d["to"] for d in decided if d["by"] == "person" and d["decision"] == "reject"}),
+            "refused_by_server": sorted({d["to"] for d in decided if d["by"] == "server"}),
+            "answer_contradicts": contradictions(message, outbox)}
+
+
+# ---------- Live ----------
 def trace_of(entries):
     """The run as the screen shows it, from this request's output entries only: nothing shared between requests."""
     out = []
@@ -84,34 +126,33 @@ async def run(s, inputs):
                    # results the SDK ran alongside the deferred calls: Mistral still needs them on the resume
                    "executed": [{"tool_call_id": r.tool_call_id, "result": r.result} for r in paused.executed_results],
                    "trace": s["trace"] + trace_of(paused.outputs), "outbox": outbox}
-            return paused_response(nxt)
-    messages = [t for t in trace_of(result.output_entries) if t["type"] == "message"]
+            return {"status": "paused", "shipment_id": nxt["shipment_id"], "instructions": nxt["instructions"],
+                    "pause": nxt["pause"], "drafts": drafts(pending, nxt["shipment_id"]),
+                    "trace": nxt["trace"], "outbox": outbox, "state": state.sign(nxt),
+                    "mode": mode(), "meter": meter()}
+    trace = s["trace"] + trace_of(result.output_entries)
+    messages = [t for t in trace if t["type"] == "message"]
+    message = messages[-1]["content"] if messages else ""
     return {"status": "done", "shipment_id": s["shipment_id"], "instructions": s["instructions"],
-            "message": messages[-1]["content"] if messages else "",
-            "trace": s["trace"] + trace_of(result.output_entries), "outbox": outbox,
-            "mode": mode(), "meter": meter()}
+            "message": message, "summary": summary(trace, outbox, message),
+            "trace": trace, "outbox": outbox, "mode": mode(), "meter": meter()}
 
 
-def paused_response(nxt):
-    return {"status": "paused", "shipment_id": nxt["shipment_id"], "instructions": nxt["instructions"],
-            "pause": nxt["pause"], "drafts": drafts(nxt["pending"], nxt["shipment_id"]),
-            "trace": nxt["trace"], "outbox": nxt["outbox"], "state": state.sign(nxt),
-            "mode": mode(), "meter": meter()}
+# ---------- Replay ----------
+def _prefix(shipment_id, instructions, run_id, pause):
+    return f"approvals|{shipment_id}|{instructions}|{run_id}|{pause}|"
 
 
-def recorded_choices(shipment_id, instructions, pause, history):
-    """At a replayed pause, the answers some recorded run gave, so the UI can mark them."""
-    prefix = f"approvals|{shipment_id}|{instructions}|{pause}|"
-    suffix = f"|after={';'.join(history)}" if history else ""
-    choices = []
-    for k in replay.load("approvals"):
-        if not k.startswith(prefix):
-            continue
-        rest = k[len(prefix):]
-        if (suffix and rest.endswith(suffix)) or (not suffix and "|" not in rest):
-            rest = rest[:len(rest) - len(suffix)] if suffix else rest
-            choices.append(dict(pair.split("=", 1) for pair in rest.split(",")))
-    return choices
+def recorded_key(shipment_id, instructions, run_id, pause):
+    """The one recorded key for this pause of this run: a run answered each pause once."""
+    prefix = _prefix(shipment_id, instructions, run_id, pause)
+    return next((k for k in replay.load("approvals") if k.startswith(prefix)), None)
+
+
+def recorded_choice(shipment_id, instructions, run_id, pause):
+    k = recorded_key(shipment_id, instructions, run_id, pause)
+    rest = k[len(_prefix(shipment_id, instructions, run_id, pause)):] if k else ""
+    return dict(pair.split("=", 1) for pair in rest.split(",")) if rest else None
 
 
 def served(record):
@@ -122,11 +163,52 @@ def served(record):
     nxt = record.get("next")
     if nxt:
         out["state"] = state.sign(nxt)
-        out["recorded_choices"] = recorded_choices(nxt["shipment_id"], nxt["instructions"], nxt["pause"],
-                                                   nxt.get("history", []))
+        out["recorded_choice"] = recorded_choice(nxt["shipment_id"], nxt["instructions"], nxt["run"], nxt["pause"])
+    if out["status"] == "done":   # recomputed on every serve, so the check applies to every recording
+        out["summary"] = summary(out["trace"], out["outbox"], out.get("message", ""))
     return out
 
 
+def chain(shipment_id, instructions, run_id):
+    """A recorded run's responses from /start to done, following its own recorded decisions."""
+    records = replay.load("approvals")
+    got = records.get(replay.approvals_key(shipment_id, instructions, run_id, 0, [], {}))
+    steps = []
+    while got is not None:
+        steps.append(got)
+        if got["status"] != "paused":
+            break
+        k = recorded_key(shipment_id, instructions, run_id, got["next"]["pause"])
+        got = records.get(k) if k else None
+    return steps
+
+
+@router.get("/api/approvals/runs")
+def runs(shipment_id: str = "HF-26038"):
+    consignee, customers = hitl.consignee(shipment_id), hitl.customers()
+    starts = sorted({tuple(k.split("|")[2:4]) for k in replay.load("approvals")
+                     if k.startswith(f"approvals|{shipment_id}|") and k.split("|")[4] == "0"})
+    rows = []
+    for instructions, run_id in starts:
+        steps = chain(shipment_id, instructions, run_id)
+        last = steps[-1]
+        drafted = sorted({d["to"] for s in steps for d in s.get("drafts", [])})
+        done = last["status"] == "done"
+        s = summary(last["trace"], last["outbox"], last.get("message", "")) if done else None
+        rows.append({"instructions": instructions, "run": run_id, "policy": run_id.rsplit("-", 1)[0],
+                     "pauses": sum(st["status"] == "paused" for st in steps), "complete": done,
+                     "drafted": drafted, "drafted_non_customer": [to for to in drafted if to not in customers],
+                     "sent": [m["to"] for m in last["outbox"]], "emailed_consignee": consignee in
+                     [m["to"] for m in last["outbox"]], "sent_non_customer": [m["to"] for m in last["outbox"]
+                                                                              if m["to"] not in customers],
+                     "answer_contradicts": bool(s and s["answer_contradicts"]),
+                     "ms": sum(c["ms"] for st in steps for c in st["meter"]),
+                     "tokens": sum(c.get("tokens") or 0 for st in steps for c in st["meter"]),
+                     "recorded_at": steps[0].get("recorded_at"), "git_sha": steps[0].get("git_sha")})
+    return {"shipment_id": shipment_id, "consignee": consignee, "runs": rows, "mode": "replay", "meter": []}
+
+
+# ---------- Routes ----------
 @router.post("/api/approvals/start")
 async def start(body: StartIn, request: Request):
     try:
@@ -134,14 +216,14 @@ async def start(body: StartIn, request: Request):
     except state.NoSecret:
         return error(503, "no_state_secret")
     if not live():
-        return served(replay.lookup("approvals", replay.approvals_key(body.shipment_id, body.instructions, 0, [], {})))
+        k = replay.approvals_key(body.shipment_id, body.instructions, body.run or DEFAULT_RUN, 0, [], {})
+        return served(replay.lookup("approvals", k))
 
     if not ratelimit.allow(ratelimit.client_ip(request)):
         return error(429, "rate_limited")
     if hitl.consignee(body.shipment_id) is None:
         return error(404, "unknown_shipment")
-    s = {"shipment_id": body.shipment_id, "instructions": body.instructions, "pause": 0,
-         "trace": [], "outbox": [], "history": []}
+    s = {"shipment_id": body.shipment_id, "instructions": body.instructions, "pause": 0, "trace": [], "outbox": []}
     return await run(s, [{"role": "user", "content": hitl.task(body.shipment_id)}])
 
 
@@ -158,10 +240,10 @@ async def resume(body: ResumeIn, request: Request):
     recipients = {json.loads(p["arguments"])["to"] for p in pending}
     if set(body.decisions) != recipients:
         return error(400, "decisions_mismatch", pending=sorted(recipients))
-    history = s.get("history", [])
 
-    if "conversation_id" not in s:   # a replayed run: the decisions pick the recorded path
-        k = replay.approvals_key(s["shipment_id"], s["instructions"], s["pause"], pending, body.decisions, history)
+    if "conversation_id" not in s:   # a replayed run: only the decisions that run made were recorded
+        k = replay.approvals_key(s["shipment_id"], s["instructions"], s.get("run", DEFAULT_RUN), s["pause"],
+                                 pending, body.decisions)
         return served(replay.lookup("approvals", k))
 
     if not ratelimit.allow(ratelimit.client_ip(request)):
@@ -187,8 +269,8 @@ async def resume(body: ResumeIn, request: Request):
             inputs.append(call.reject(REJECTED))
             decisions.append({"type": "decision", "to": to, "decision": "reject", "by": "person",
                               "tool_call_id": p["tool_call_id"], "result": REJECTED})
-    s = {**s, "trace": s["trace"] + decisions, "history": history + [replay.decided(pending, body.decisions)]}
-    s.pop("pending"), s.pop("executed", None)
+    s = {k: v for k, v in s.items() if k not in ("pending", "executed")}
+    s["trace"] = s["trace"] + decisions
     try:
         return await run(s, inputs)
     except SDKError as e:

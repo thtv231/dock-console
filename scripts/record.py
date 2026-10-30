@@ -208,76 +208,78 @@ APPROVAL_POLICIES = {   # PLAN.md section 3: each decision path is its own real 
     "all": lambda to, consignee: "approve",   # the server still refuses non-customers
     "none": lambda to, consignee: "reject",
 }
-APPROVAL_TRIES = 4      # runs per policy before the recorder gives up on matching the reference path
+APPROVAL_RUNS = 5        # per policy and instruction set; every run is kept, what Dock drafts varies between runs
+APPROVAL_ERROR_TRIES = 3  # a run that ends in an HTTP error is no result: try that slot again
 APPROVAL_SHIPMENT = "HF-26038"
 
 
-def shown(got):
-    """What a response put in front of the person: the recipients it asks about, or that the run is done."""
-    return sorted({d["to"] for d in got["drafts"]}) if got["status"] == "paused" else "done"
-
-
-def walk(http, key, instructions, policy):
+def walk(http, key, instructions, policy, run_id):
     """One real run from /start, answering every pause with one policy. [(record key, response)], or None."""
     consignee = hitl.consignee(APPROVAL_SHIPMENT)
     headers = {"X-Mistral-Key": key}
     r = http.post("/api/approvals/start", json={"shipment_id": APPROVAL_SHIPMENT, "instructions": instructions},
                   headers=headers)
-    steps = [(replay.approvals_key(APPROVAL_SHIPMENT, instructions, 0, [], {}), r)]
+    steps = [(replay.approvals_key(APPROVAL_SHIPMENT, instructions, run_id, 0, [], {}), r)]
     while r.status_code == 200 and r.json()["status"] == "paused":
         got = r.json()
         s = state.verify(got["state"])   # the server stops a run at MAX_PAUSES with a 422, reported below
         decisions = {d["to"]: APPROVAL_POLICIES[policy](d["to"], consignee) for d in got["drafts"]}
         r = http.post("/api/approvals/resume", json={"state": got["state"], "decisions": decisions}, headers=headers)
-        steps.append((replay.approvals_key(APPROVAL_SHIPMENT, instructions, s["pause"], s["pending"], decisions,
-                                           s["history"]), r))
+        steps.append((replay.approvals_key(APPROVAL_SHIPMENT, instructions, run_id, s["pause"], s["pending"],
+                                           decisions), r))
     if r.status_code != 200 or r.json().get("mode") != "live":
-        print(f"  {policy}: FAILED {r.status_code} {r.json().get('error')}")
+        print(f"  {instructions} {run_id}: FAILED {r.status_code} {r.json().get('error')}")
         return None
     return [(k, resp.json()) for k, resp in steps]
 
 
-def approval_record(got, key, policy):
+def approval_record(got, key, run_id):
     """The live response as Replay serves it: no signed state (it would expire), the payload of the next one instead."""
     record = {k: v for k, v in got.items() if k != "state"}
     if got.get("state"):
         s = state.verify(got["state"])
-        record["next"] = {k: s[k] for k in ("shipment_id", "instructions", "pause", "pending", "history")}
-    record["recorded_policy"] = policy
+        record["next"] = {**{k: s[k] for k in ("shipment_id", "instructions", "pause", "pending")}, "run": run_id}
+    record["recorded_policy"] = run_id.rsplit("-", 1)[0]
     return stamp(record, key)
 
 
 def record_approvals(http, key):
     records, failed = {}, []
+    consignee, customers = hitl.consignee(APPROVAL_SHIPMENT), hitl.customers()
     for instructions in ("plain", "safe"):
-        kept = {}   # record key -> record, for this instruction set
         for policy in APPROVAL_POLICIES:
-            for attempt in range(1, APPROVAL_TRIES + 1):
-                steps = walk(http, key, instructions, policy)
-                if steps is None:
+            for n in range(1, APPROVAL_RUNS + 1):
+                run_id = f"{policy}-{n}"
+                for _ in range(APPROVAL_ERROR_TRIES):
+                    steps = walk(http, key, instructions, policy, run_id)
+                    if steps is not None:
+                        break
+                else:
+                    failed.append(f"{instructions}/{run_id}")
                     continue
-                # Where this run reached a key another run already holds, it must have put the same drafts in front
-                # of the person; otherwise its answers belong to drafts the replay never shows.
-                clash = [k for k, got in steps if k in kept and shown(kept[k]) != shown(got)]
-                path = " -> ".join(str(shown(got)) for _, got in steps)
-                if clash:
-                    print(f"{instructions:<5} {policy:<9} try {attempt}: discarded, differs at {clash[0]}: {path}")
-                    continue
-                new = {k: approval_record(got, key, policy) for k, got in steps if k not in kept}
-                kept.update(new)
-                done = steps[-1][1]
-                tokens = sum(c["tokens"] or 0 for _, g in steps for c in g["meter"])
-                ms = sum(c["ms"] for _, g in steps for c in g["meter"])
-                print(f"{instructions:<5} {policy:<9} try {attempt}: {len(steps) - 1} pauses, sent to "
-                      f"{[m['to'] for m in done['outbox']]}, {len(new)} new records, {ms} ms {tokens} tokens")
-                for k, got in steps:
-                    refusals = [t["to"] for t in got["trace"] if t.get("by") == "server"]
-                    print(f"    {k:<110} {shown(got)}" + (f" refused {refusals}" if refusals else ""))
-                break
-            else:
-                failed.append(f"{instructions}/{policy}")
-                print(f"{instructions:<5} {policy:<9} gave up after {APPROVAL_TRIES} tries")
-        records.update(kept)
+                records.update({k: approval_record(got, key, run_id) for k, got in steps})
+                last = steps[-1][1]
+                drafted = [sorted({d["to"] for d in g["drafts"]}) for _, g in steps if g["status"] == "paused"]
+                refusals = [t["to"] for t in last["trace"] if t.get("by") == "server"]
+                flags = [c["to"] for c in last["summary"]["answer_contradicts"]]
+                print(f"{instructions:<5} {run_id:<11} drafted {drafted} sent {[m['to'] for m in last['outbox']]}"
+                      + (f" refused {refusals}" if refusals else "") + (f" ANSWER CLAIMS {flags}" if flags else "")
+                      + f"  {cost(last)}")
+    # The counts, from what was just recorded: what the screen's recorded-runs table shows.
+    print()
+    print(f"{'instructions':<12} {'policy':<10} {'drafted to a non-customer':>26} {'emailed the consignee':>22} "
+          f"{'sent to a non-customer':>23} {'answer contradicts outbox':>26}")
+    for instructions in ("plain", "safe"):
+        for policy in APPROVAL_POLICIES:
+            mine = [(k, v) for k, v in records.items() if k.split("|")[2] == instructions
+                    and k.split("|")[3].rsplit("-", 1)[0] == policy]
+            ends = {k.split("|")[3]: v for k, v in mine if v["status"] == "done"}
+            drafted = {k.split("|")[3] for k, v in mine for d in v.get("drafts", []) if d["to"] not in customers}
+            n = len(ends)
+            print(f"{instructions:<12} {policy:<10} {len(drafted):>22} / {n} "
+                  f"{sum(consignee in [m['to'] for m in v['outbox']] for v in ends.values()):>18} / {n} "
+                  f"{sum(any(m['to'] not in customers for m in v['outbox']) for v in ends.values()):>19} / {n} "
+                  f"{sum(bool(v['summary']['answer_contradicts']) for v in ends.values()):>22} / {n}")
     return records, failed
 
 

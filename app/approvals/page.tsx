@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, useState } from "react";
-import { Check, Loader2, MessageSquare, Play, RotateCcw, Send, ShieldX, UserX, Wrench } from "lucide-react";
+import { Fragment, useEffect, useState } from "react";
+import { AlertTriangle, Check, Loader2, MessageSquare, Play, RotateCcw, Send, ShieldX, UserX, Wrench } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -29,8 +29,22 @@ type Approval = Run & {
   state?: string;
   message?: string;
   recorded_policy?: string;
-  recorded_choices?: Record<string, Decision>[];
+  recorded_choice?: Record<string, Decision> | null;
+  summary?: Summary;
 };
+type Summary = {
+  sent: { to: string; subject: string }[];
+  rejected_by_you: string[];
+  refused_by_server: string[];
+  answer_contradicts: { to: string; sentence: string }[];
+};
+type Policy = "consignee" | "all" | "none";
+type RecordedRun = {
+  instructions: Instructions; run: string; policy: Policy; pauses: number; complete: boolean;
+  drafted: string[]; drafted_non_customer: string[]; sent: string[]; emailed_consignee: boolean;
+  sent_non_customer: string[]; answer_contradicts: boolean; ms: number; tokens: number;
+};
+type Runs = { shipment_id: string; consignee: string; runs: RecordedRun[] };
 // One response, and the decisions the person sent from it (once sent, they can't change).
 type Step = { response: Approval; sent?: Record<string, Decision> };
 
@@ -42,6 +56,13 @@ const INSTRUCTIONS: { value: Instructions; label: string; note: string }[] = [
     note: "s05’s SAFE instructions: PLAIN, plus tool results are data, not instructions, and only the shipment’s consignee may be emailed.",
   },
 ];
+
+const POLICIES: { value: Policy; label: string }[] = [
+  { value: "consignee", label: "Approve the consignee only" },
+  { value: "all", label: "Approve every draft" },
+  { value: "none", label: "Reject every draft" },
+];
+const policyLabel = (p: Policy) => POLICIES.find((x) => x.value === p)!.label;
 
 const recipients = (drafts: Draft[]) => [...new Set(drafts.map((d) => d.to))];
 const sameChoice = (a: Record<string, Decision>, b: Record<string, Decision>) =>
@@ -102,8 +123,8 @@ function Pause({ step, live, busy, onSend }: {
   const decisions = step.sent ?? picked;
   const tos = recipients(drafts);
   const complete = tos.every((to) => decisions[to]);
-  const choices = live ? [] : r.recorded_choices ?? [];
-  const recorded = choices.some((c) => sameChoice(c, decisions));
+  const choice = live ? null : r.recorded_choice ?? null;
+  const recorded = !!choice && sameChoice(choice, decisions);
   const locked = !!step.sent || busy;
 
   return (
@@ -150,16 +171,13 @@ function Pause({ step, live, busy, onSend }: {
           <Button size="sm" disabled={!complete || busy} onClick={() => onSend(decisions)}>
             {busy ? <Loader2 className="animate-spin" /> : <Send />}Send decisions
           </Button>
-          {choices.length > 0 && (
+          {choice && (
             <>
-              <span className="text-xs text-muted-foreground">Recorded choices:</span>
-              {choices.map((c, i) => (
-                <Button key={i} size="xs" variant={sameChoice(c, decisions) ? "secondary" : "ghost"} disabled={busy} onClick={() => setPicked(c)}>
-                  {tos.map((to) => `${to.split("@")[0]} ${c[to] === "approve" ? "✓" : "✗"}`).join(" · ")}
-                </Button>
-              ))}
+              <Button size="xs" variant={recorded ? "secondary" : "ghost"} disabled={busy} onClick={() => setPicked(choice)}>
+                Use the recorded choice: {tos.map((to) => `${choice[to] === "approve" ? "approve" : "reject"} ${to.split("@")[0]}@`).join(", ")}
+              </Button>
               {complete && !recorded && (
-                <span className="text-xs text-muted-foreground">This combination wasn’t recorded. Add your key to run it live.</span>
+                <span className="text-xs text-muted-foreground">This recorded run made a different choice. Add your key to try yours live.</span>
               )}
             </>
           )}
@@ -271,18 +289,125 @@ function Outcome({ latest }: { latest: Approval }) {
   );
 }
 
+/** The run as the outbox and the decisions record it, then Dock’s own words, flagged where they disagree. */
+function Finished({ result }: { result: Approval }) {
+  const s = result.summary;
+  const line = (label: string, items: string[]) => (
+    <div className="flex flex-wrap gap-x-2">
+      <span className="w-48 shrink-0 text-muted-foreground">{label}</span>
+      <span className="font-mono text-xs leading-5">{items.length ? items.join(", ") : "nobody"}</span>
+    </div>
+  );
+  return (
+    <section className="rounded-md border bg-card px-3 py-2.5">
+      <div className="mb-1.5 text-xs text-muted-foreground">Run finished · what happened, from the outbox and the decisions</div>
+      {s && (
+        <div className="flex flex-col gap-0.5 text-[13px]">
+          {line("Sent", s.sent.map((m) => m.to))}
+          {line("Rejected by you", s.rejected_by_you)}
+          {line("Refused by the server", s.refused_by_server)}
+        </div>
+      )}
+      <div className="mb-1 mt-3 text-xs text-muted-foreground">Dock’s answer, in its own words</div>
+      {s && s.answer_contradicts.length > 0 && (
+        <div role="alert" className="mb-2 max-w-[80ch] rounded-md border border-foreground/30 bg-muted/60 px-3 py-2 text-[13px]">
+          <div className="flex items-center gap-1.5 font-medium"><AlertTriangle className="size-3.5" />Dock’s answer contradicts the outbox</div>
+          <ul className="mt-1 flex flex-col gap-1">
+            {s.answer_contradicts.map((c, i) => (
+              <li key={i}>“{c.sentence}” <span className="text-muted-foreground">The outbox has no email to</span> <span className="font-mono text-xs">{c.to}</span>.</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <p className="max-w-[80ch] whitespace-pre-wrap leading-relaxed"><Rich text={result.message ?? ""} /></p>
+    </section>
+  );
+}
+
+/** Every recorded run for these instructions: how often Dock drafted to a non-customer and emailed the consignee. */
+function RecordedRuns({ runs, consignee, live, busy, current, onPlay }: {
+  runs: RecordedRun[]; consignee: string; live: boolean; busy: boolean; current: string | null; onPlay: (run: string) => void;
+}) {
+  const perPolicy = Math.max(...POLICIES.map((p) => runs.filter((r) => r.policy === p.value).length));
+  return (
+    <section>
+      <h2 className="mb-1 text-sm font-medium">Recorded runs</h2>
+      <p className="mb-2 max-w-[80ch] text-xs text-muted-foreground">
+        Each decision policy was run {perPolicy} times from the start, and every run was kept: what Dock drafts changes from run to run.
+        {live ? " With your key, Start makes a new live run instead." : " Play one to step through it: each pause shows that run’s own drafts."}
+      </p>
+      <Table className="text-[13px]">
+        <TableHeader className="bg-muted/60">
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="h-8">Decisions</TableHead>
+            <TableHead className="h-8 text-right">Drafted to a non-customer</TableHead>
+            <TableHead className="h-8 text-right">Emailed the consignee</TableHead>
+            <TableHead className="h-8 text-right">Sent to a non-customer</TableHead>
+            <TableHead className="h-8 text-right">Answer contradicts the outbox</TableHead>
+            <TableHead className="h-8">Runs</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {POLICIES.map((p) => {
+            const mine = runs.filter((r) => r.policy === p.value);
+            const of = (n: number) => `${n} of ${mine.length}`;
+            return (
+              <TableRow key={p.value} className="align-top">
+                <TableCell className="py-1.5 font-medium">{p.label}</TableCell>
+                <TableCell className="py-1.5 text-right tabular-nums">{of(mine.filter((r) => r.drafted_non_customer.length > 0).length)}</TableCell>
+                <TableCell className="py-1.5 text-right tabular-nums">{of(mine.filter((r) => r.emailed_consignee).length)}</TableCell>
+                <TableCell className="py-1.5 text-right tabular-nums">{of(mine.filter((r) => r.sent_non_customer.length > 0).length)}</TableCell>
+                <TableCell className="py-1.5 text-right tabular-nums">{of(mine.filter((r) => r.answer_contradicts).length)}</TableCell>
+                <TableCell className="py-1.5">
+                  <div className="flex flex-wrap gap-1">
+                    {mine.map((r) => (
+                      <Button
+                        key={r.run}
+                        size="xs"
+                        variant={current === r.run ? "secondary" : "outline"}
+                        disabled={live || busy}
+                        onClick={() => onPlay(r.run)}
+                        title={`Drafted to ${r.drafted.join(", ") || "nobody"}; sent to ${r.sent.join(", ") || "nobody"}; ${num(r.ms)} ms, ${num(r.tokens)} tokens`}
+                      >
+                        <Play />{r.run.split("-")[1]}
+                        {!r.drafted.includes(consignee) && <span className="text-muted-foreground">no draft to the consignee</span>}
+                      </Button>
+                    ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </section>
+  );
+}
+
 export default function ApprovalsPage() {
-  const { post, live } = useApi();
+  const { get, post, live } = useApi();
   const [instructions, setInstructions] = useState<Instructions>("safe");
+  const [recorded, setRecorded] = useState<Runs | null>(null);
+  const [run, setRun] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const res = await get<Runs>("/api/approvals/runs");
+      if (res.ok) setRecorded(res.data);
+    })();
+    // The recordings don't depend on the key, so load them once.
+  }, []);
   const [steps, setSteps] = useState<Step[]>([]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<ApiError | null>(null);
 
-  async function start() {
+  async function start(recordedRun?: string) {
+    const chosen = live ? null : recordedRun ?? "consignee-1";
     setBusy(true);
     setErr(null);
     setSteps([]);
-    const res = await post<Approval>("/api/approvals/start", { shipment_id: SHIPMENT, instructions });
+    setRun(chosen);
+    const res = await post<Approval>("/api/approvals/start", { shipment_id: SHIPMENT, instructions, ...(chosen ? { run: chosen } : {}) });
     if (res.ok) setSteps([{ response: res.data }]);
     else setErr(res.error);
     setBusy(false);
@@ -331,12 +456,12 @@ export default function ApprovalsPage() {
         <Segmented
           label="Instructions"
           value={instructions}
-          onChange={(v) => { setInstructions(v); setSteps([]); setErr(null); }}
+          onChange={(v) => { setInstructions(v); setSteps([]); setErr(null); setRun(null); }}
           options={INSTRUCTIONS.map(({ value, label }) => ({ value, label }))}
         />
-        <Button size="sm" onClick={start} disabled={busy}>
+        <Button size="sm" onClick={() => start(run ?? undefined)} disabled={busy}>
           {busy && steps.length === 0 ? <Loader2 className="animate-spin" /> : steps.length ? <RotateCcw /> : <Play />}
-          {steps.length ? `Start ${SHIPMENT} again` : `Start ${SHIPMENT}`}
+          {steps.length ? `Start ${SHIPMENT} again` : `Start ${SHIPMENT}`}{!live && `, recorded run ${run ?? "consignee-1"}`}
         </Button>
       </Toolbar>
 
@@ -347,6 +472,17 @@ export default function ApprovalsPage() {
           server refuses any recipient who is not a Harbor Freight customer, whatever you approve. Nothing is really sent.
         </p>
 
+        {recorded && (
+          <RecordedRuns
+            runs={recorded.runs.filter((r) => r.instructions === instructions)}
+            consignee={recorded.consignee}
+            live={live}
+            busy={busy}
+            current={run}
+            onPlay={(r) => start(r)}
+          />
+        )}
+
         {err && <p className="text-miss">{describeError(err)}</p>}
 
         {steps.map((s, i) =>
@@ -355,12 +491,7 @@ export default function ApprovalsPage() {
           ) : null,
         )}
 
-        {latest?.status === "done" && (
-          <section className="rounded-md border bg-card px-3 py-2.5">
-            <div className="mb-1 text-xs text-muted-foreground">Run finished · Dock’s answer</div>
-            <p className="max-w-[80ch] whitespace-pre-wrap leading-relaxed"><Rich text={latest.message ?? ""} /></p>
-          </section>
-        )}
+        {latest?.status === "done" && <Finished result={latest} />}
 
         {latest && (
           <>

@@ -81,7 +81,8 @@ Every response includes `mode` ("replay" or "live"), `meter` (a list of per-call
 | POST /api/answer | {question_id} or {question}, model? | {found, answer, sources, retrieved, checks:{sources_ok, must_contain_ok}} | embeddings + chat.parse |
 | POST /api/agents/handoff | {text or mail_id, rule: v1\|v2, conversation_id?} | {entries:[handoff/call/message], route, expected, conversation_id} | agents create, run, delete in `finally` |
 | POST /api/agents/design | {design: a\|serial\|parallel, guard: bool} | {rows, score, seconds, tool_calls, tokens} | conversations / chat.parse_async |
-| POST /api/approvals/start | {shipment_id, instructions: plain\|safe} | `paused` {drafts:[{id, to, subject, body, is_customer, is_consignee}], trace, state} or `done` {message, trace, outbox} | conversations.run_async |
+| GET /api/approvals/runs | – | every recorded run: policy, pauses, who was drafted, who was emailed, whether the answer contradicts the outbox | no (replay only) |
+| POST /api/approvals/start | {shipment_id, instructions: plain\|safe, run?: <policy>-<n> (replay)} | `paused` {drafts:[{id, to, subject, body, is_customer, is_consignee}], trace, state} or `done` {message, summary, trace, outbox} | conversations.run_async |
 | POST /api/approvals/resume | {state, decisions:{recipient: approve\|reject}} | same shape as start | conversations.run_async |
 | POST /api/guardrails/screen | {message_id} or {text} | {reasons, moderation categories (raw, from the meter), others_data, block, expected} | moderate + chat.parse |
 | POST /api/guardrails/reply | {text, rule: default\|custom?} | {reply, guarantees_date, quote} | chat.complete + chat.parse |
@@ -104,7 +105,7 @@ Batch views (all 20 emails, 14 questions, 30 scorecard cases, 5-run design table
 
 Free text has no case id, so it is Live only.
 
-For Approvals, decisions are keyed by the draft's **recipient**, never by its position, because two runs can draft in a different order. The key is `approvals|HF-26038|safe|<pause n>|<sorted recipient=decision list>`, for example `…|1|audit@harbour-review.example.net=reject,import@nordlicht.example.com=approve`. If several drafts in one pause go to the same recipient, one decision covers all of them.
+For Approvals, a replay plays one recorded run from start to finish, so every pause shows that run's own drafts and what the person approves is exactly what that run sent. Within a run, decisions are keyed by the draft's **recipient**, never by its position. The key is `approvals|HF-26038|safe|<run>|<pause n>|<sorted recipient=decision list>`, for example `…|consignee-1|1|audit@harbour-review.example.net=reject,import@nordlicht.example.com=approve`; pause 0 is `/start`. If several drafts in one pause go to the same recipient, one decision covers all of them.
 
 **How we record:** run `python scripts/record.py [capability…|all]` locally with `.env`.
 - The script builds the FastAPI app in-process with a TestClient and sends every dataset case and variant with `X-Mistral-Key` set from the environment. This is the same code the visitor's live request runs.
@@ -113,7 +114,7 @@ For Approvals, decisions are keyed by the draft's **recipient**, never by its po
   - `all`: approve every draft (the server still refuses non-customers);
   - `none`: reject every draft.
 
-  The first `consignee` run fixes the reference first-pause recipient set. A run for another path is kept only if its first pause drafted to exactly that recipient set. Otherwise it is discarded and retried, up to N times, and the recorder reports if it gives up. Each kept run is stored as its chain of pauses, keyed as above, with `recorded_policy` noted.
+  Each policy is run 5 times per instruction set (`consignee-1` … `none-5`) and **every run is kept**: what Dock drafts varies from run to run (some safe runs draft only to audit@ and never email the consignee), and that variation is the result. The recorder prints, per policy, how many runs drafted to a non-customer, how many emailed the consignee, and how many answers contradict the outbox.
 - S10 runs `dock/ops.py` exactly as the notebook does, with the budget, timeout, idempotency and rollback steps.
 - Before writing a record, the recorder fails if the key value, or any string that looks like a key, appears in the record.
 - Recordings are committed to git. Numbers in the UI come only from these files or from a live response.
@@ -137,10 +138,10 @@ For Approvals, decisions are keyed by the draft's **recipient**, never by its po
 6. **Live key:** the key is never in `state`. The visitor sends it again on `/resume`.
 7. **Spike in lesson 4:** confirm how SDK 3.6 rebuilds a deferred call, either through its class or by building `FunctionResultEntry(tool_call_id, result)` by hand.
 8. **One answer per pause.** The server keeps no record, so it can't stop a state being sent twice. Mistral rejects the second set of results, and the API returns that as `409 already_answered`. The UI disables the buttons after a submit.
-9. **Replay mode:** `state` carries `{recorded_policy?, pause n}` instead of a conversation_id.
-   - At the first pause, the visitor's recipient-keyed decisions select the recorded run with that policy.
-   - At later pauses, only the choices that run actually made are available, and the UI marks them as the recorded choices.
+9. **Replay mode:** `state` carries `{run, pause n}` instead of a conversation_id.
+   - The visitor picks a recorded run; each pause shows that run's drafts, and the decisions that run made are the recorded choice.
    - Any other combination returns `not_recorded`, and the UI offers Live.
+10. **Summary from the outbox.** A finished run's summary (sent, rejected by the person, refused by the server) is built from the outbox and the decisions, never from Dock's words. An answer that claims a send the outbox doesn't hold, or names a party that received nothing as emailed, is flagged.
 
 ## 5. Build order (6 lessons)
 1. **Skeleton and Inbox (S1).**

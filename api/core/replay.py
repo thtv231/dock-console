@@ -21,12 +21,10 @@ def decided(pending, decisions):
     return ",".join(f"{to}={decisions[to]}" for to in recipients)
 
 
-def approvals_key(shipment_id, instructions, pause, pending, decisions, history=()):
-    """approvals|HF-26038|safe|<pause>|<decided>, plus |after=<earlier pauses' decided> from pause 2 on.
-    Pause 0 is /start. Later pauses are keyed by the whole path to them, so two runs that answered pause 1
-    alike but pause 2 differently are told apart."""
-    k = f"approvals|{shipment_id}|{instructions}|{pause}|{decided(pending, decisions)}"
-    return k + f"|after={';'.join(history)}" if history else k
+def approvals_key(shipment_id, instructions, run, pause, pending, decisions):
+    """approvals|HF-26038|safe|<run>|<pause>|<decided>. A replay plays one recorded run (consignee-1 … none-5) from
+    start to finish, so every pause shows that run's own drafts. Pause 0 is /start."""
+    return f"approvals|{shipment_id}|{instructions}|{run}|{pause}|{decided(pending, decisions)}"
 
 
 @lru_cache
