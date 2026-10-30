@@ -90,10 +90,10 @@ def test_a_client_lists_exactly_the_three_tools(mcp_url):
 
 def test_send_email_is_marked_as_writing_and_the_others_as_reading(mcp_url):
     tools = {t.name: t.annotations for t in mcp(mcp_url, lambda c: c.list_tools())}
-    assert tools["send_email"] and tools["send_email"].destructiveHint is True, tools["send_email"]
-    assert not tools["send_email"].readOnlyHint, tools["send_email"]
+    assert tools["send_email"] and tools["send_email"].destructive_hint is True, tools["send_email"]
+    assert not tools["send_email"].read_only_hint, tools["send_email"]
     for name in TOOLS - {"send_email"}:
-        assert tools[name] and tools[name].readOnlyHint is True, (name, tools[name])
+        assert tools[name] and tools[name].read_only_hint is True, (name, tools[name])
 
 
 def test_send_email_to_audit_is_refused(mcp_url, repo_writes):

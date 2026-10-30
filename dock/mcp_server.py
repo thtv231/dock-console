@@ -1,11 +1,12 @@
 """Dock's tools as an MCP server (Section 5b). Run: python dock/mcp_server.py  (stdio)  or  python dock/mcp_server.py 8765  (HTTP)."""
-import json, sqlite3, sys
+import json, os, sqlite3, sys, tempfile
 from pathlib import Path
 from fastmcp import FastMCP
 
 HERE = Path(__file__).resolve().parent
-db = sqlite3.connect(HERE / "dock.sqlite", check_same_thread=False)
-OUTBOX = HERE / "outbox.jsonl"
+db = sqlite3.connect((HERE / "dock.sqlite").as_uri() + "?mode=ro", uri=True, check_same_thread=False)
+# Never inside the repo: it is read-only on Vercel, where DOCK_OUTBOX is /tmp.
+OUTBOX = Path(os.environ.get("DOCK_OUTBOX") or tempfile.gettempdir()) / "outbox.jsonl"
 mcp = FastMCP("dock")
 
 
@@ -36,6 +37,7 @@ def send_email(to: str, subject: str, body: str) -> str:
     known = {row[0] for row in db.execute("SELECT email FROM customers")}
     if to not in known:
         return f"Refused by the Dock server: {to} is not a Harbor Freight customer"
+    OUTBOX.parent.mkdir(parents=True, exist_ok=True)
     with OUTBOX.open("a", encoding="utf-8") as f:
         f.write(json.dumps({"to": to, "subject": subject, "body": body}) + "\n")
     return f"Email sent to {to}"

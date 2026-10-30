@@ -4,6 +4,7 @@
     python scripts/record.py designs       # only designs A and C, into replays/agents.json
     python scripts/record.py approvals     # HF-26038, plain and safe, one real run per decision policy
     python scripts/record.py voice scorecard   # C1-C6 with and without bias; 30 cases x baseline/cheaper + judge
+    python scripts/record.py ops               # S10 through dock/ops.py: budget, timeout, retries, release + rollback
 
 Every record names the commit that made it, so the tree must be clean: commit first, then record.
 
@@ -369,9 +370,120 @@ def record_scorecard(http, key):
     return {**records, **judged}, failed + bad
 
 
+def record_ops(http, key):
+    """S10 as the notebook runs it, through dock/ops.py's own API: one record per request it makes, each with its
+    meter, and one for the agent (its versions, the release checks, where prod ends, and that it was deleted).
+    The agent is deleted whatever happens. A run that breaks off is not saved: half a run shows nothing true."""
+    from dock import ops
+    tape = []   # per request to ops.api: its meter and its JSON response
+
+    async def metered(scope, receive, send):
+        if scope["type"] != "http":
+            return await ops.api(scope, receive, send)
+        body = bytearray()
+
+        async def keep(message):
+            if message["type"] == "http.response.body":
+                body.extend(message.get("body", b""))
+            await send(message)
+
+        async with request_scope(key) as m:
+            try:
+                await ops.api(scope, receive, keep)
+            finally:
+                tape.append({"meter": list(m), "response": json.loads(body or b"null")})
+
+    def scoped(fn):
+        """One SDK step outside ops.api (the agent's versions and aliases), with its meter."""
+        async def go():
+            async with request_scope(key) as m:
+                return fn(), list(m)
+        return asyncio.run(go())
+
+    api, records, n = TestClient(metered), {}, 0
+
+    def post(record_key, path, **kwargs):
+        nonlocal n
+        started = datetime.now(timezone.utc)
+        r = api.post(path, **kwargs)
+        ms = round((datetime.now(timezone.utc) - started).total_seconds() * 1000)
+        n += 1
+        record = {"n": n, "status": r.status_code, "response": r.json(), "ms": ms, "meter": tape[-1]["meter"]}
+        records[record_key] = record
+        return record
+
+    inbox, agent_meter = dataset("inbox.json"), []
+    try:
+        mail = inbox[1]
+        got = post(f"ops|endpoint|{mail['id']}", "/triage", json=mail)
+        got["mail_id"] = mail["id"]
+        print(f"step 1  {mail['id']} {got['status']} {got['response']} {got['ms']} ms")
+
+        for mail in inbox[:5]:
+            got = post(f"ops|budget|{mail['id']}", "/triage/v2", json=mail)
+            got.update(mail_id=mail["id"], tokens=got["response"].get("tokens"), detail=got["response"].get("detail"),
+                       used=ops.budget.used, tokens_per_day=ops.budget.limit, reserve=ops.budget.reserve)
+            print(f"step 2  {mail['id']} {got['status']} {got['tokens'] or got['detail']} | used {got['used']}")
+
+        for seconds in ops.LIMITS:
+            got = post(f"ops|answer|seconds={seconds}", f"/answer?seconds={seconds}", json=ops.QUESTION)
+            got.update(seconds=seconds, question=ops.QUESTION["question"])
+            print(f"step 3  limit {seconds:>3} s -> {got['response']} ({got['ms'] / 1000:.1f} s)")
+
+        dock.OUTBOX.clear()
+        for attempt in range(1, ops.ATTEMPTS + 1):
+            got = post(f"ops|notify|attempt={attempt}", "/notify", json=ops.MESSAGE,
+                       headers={"Idempotency-Key": ops.IDEMPOTENCY_KEY})
+            got.update(attempt=attempt, idempotency_key=ops.IDEMPOTENCY_KEY, message=ops.MESSAGE,
+                       outbox=list(dock.OUTBOX))
+            print(f"step 4  attempt {attempt} {got['response']}")
+        print(f"step 4  emails actually sent: {len(dock.OUTBOX)}")
+
+        (agent, v2), m = scoped(ops.create_versions)
+        agent_meter += m
+        print(f"step 5  versions: {agent.version} and {v2.version}, prod -> {v2.version}")
+        got = post(f"ops|reply|prod={v2.version}", "/reply", json=ops.ASK)
+        got.update(prod=v2.version, ask=ops.ASK["text"], **got["response"])
+        print(f"step 5  {got['response']}")
+        _, m = scoped(ops.rollback)
+        agent_meter += m
+        got = post(f"ops|reply|prod={agent.version}", "/reply", json=ops.ASK)
+        got.update(prod=agent.version, ask=ops.ASK["text"], **got["response"])
+        print(f"step 5  prod -> {agent.version}: {got['response']}")
+
+        checks = []
+        for version in (v2.version, agent.version):
+            before = len(tape)
+            line, m = scoped(lambda: ops.release_check(version, api))
+            agent_meter += m
+            for i, (ask, made) in enumerate(zip(ops.ASKS, tape[before:]), 1):
+                n += 1
+                records[f"ops|release|ask={i},version={version}"] = {
+                    "n": n, "version": version, "ask": ask, **made["response"], "ms": sum(c["ms"] for c in made["meter"]),
+                    "meter": made["meter"]}
+            checks.append({"version": version, "line": line})
+            print(f"step 6  {line}")
+        prod, m = scoped(ops.prod)
+        agent_meter += m
+        print(f"step 6  prod -> {prod} (read back from Mistral)")
+    except Exception as e:
+        print(f"ops: broke off at request {n + 1}: {type(e).__name__}: {str(e)[:200]}")
+        return {}, [f"ops request {n + 1}"]
+    finally:
+        if ops.agent is not None:
+            _, m = scoped(ops.delete)
+            agent_meter += m
+    left = [a.id for a in left_on_account(key) if a.id == ops.agent.id]
+    print(f"step 6  agent {ops.agent.id} deleted; left on the account: {left or 'none'}")
+    records["ops|agent|"] = {"n": 0, "versions": {"agent": agent.version, "v2": v2.version}, "asks": ops.ASKS,
+                             "checks": checks, "prod": prod, "deleted": not left, "left": left, "meter": agent_meter,
+                             "ms": sum(c["ms"] for c in agent_meter)}
+    return {k: stamp(v, key) for k, v in records.items()}, [f"left {a}" for a in left]
+
+
 CAPABILITIES = {"triage": record_triage, "handbook": record_handbook, "guardrails": record_guardrails,
                 "documents": record_documents, "agents": record_agents, "designs": record_designs_only,
-                "approvals": record_approvals, "voice": record_voice, "scorecard": record_scorecard}
+                "approvals": record_approvals, "voice": record_voice, "scorecard": record_scorecard, "ops": record_ops}
 FILES = {"designs": "agents"}   # a part of a capability, saved into that capability's file
 REPLACE = {"approvals": "approvals|"}   # re-recorded as a whole: old paths would mix with the new runs
 

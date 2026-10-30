@@ -1,4 +1,7 @@
-"""GET /api/overview: numbers computed from replays/*.json only, never typed in. So far: the S8 scorecard."""
+"""GET /api/overview: numbers computed from replays/*.json only, never typed in: the S8 scorecard, and for every
+screen the median latency and tokens of one recorded request, when it was recorded, and from which commits."""
+from statistics import median
+
 from fastapi import APIRouter
 
 from api.core import replay
@@ -33,8 +36,28 @@ def scorecard():
                             if baseline[cid][0] and not cheaper[cid][0]] if cheaper else None}
 
 
+# lib/screens.ts, in sidebar order, with the replay files each screen shows. The Overview is built from the others.
+SCREENS = [("/", []), ("/inbox", ["triage"]), ("/documents", ["documents"]), ("/handbook", ["handbook"]),
+           ("/agents", ["agents"]), ("/approvals", ["approvals"]), ("/guardrails", ["guardrails"]),
+           ("/voice", ["voice"]), ("/scorecard", ["scorecard"]), ("/operations", ["ops"])]
+
+
+def screen(href, names):
+    """One request is one record with a meter: its latency is the sum of its calls' ms, its tokens the sum of the
+    tokens its calls report (OCR reports pages, not tokens, so a request with only OCR calls has no tokens)."""
+    every = [r for name in names for r in replay.load(name).values()]
+    requests = [r for r in every if r.get("meter")]
+    ms = [sum(c["ms"] for c in r["meter"]) for r in requests]
+    tokens = [sum(c["tokens"] for c in r["meter"] if c["tokens"] is not None) for r in requests
+              if any(c["tokens"] is not None for c in r["meter"])]
+    return {"href": href, "replays": names, "requests": len(requests),
+            "median_ms": median(ms) if ms else None, "median_tokens": median(tokens) if tokens else None,
+            "recorded_at": max((r["recorded_at"] for r in every), default=None),
+            "git_shas": sorted({r["git_sha"] for r in every})}
+
+
 @router.get("/api/overview")
 def overview():
     recorded = [r["recorded_at"] for r in replay.load("scorecard").values()]
-    return {"scorecard": scorecard(), "recorded_at": {"scorecard": max(recorded, default=None)},
-            "mode": "replay", "meter": []}
+    return {"screens": [screen(href, names) for href, names in SCREENS], "scorecard": scorecard(),
+            "recorded_at": {"scorecard": max(recorded, default=None)}, "mode": "replay", "meter": []}

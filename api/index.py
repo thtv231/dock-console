@@ -2,16 +2,23 @@
 from importlib.metadata import version
 
 from fastapi import FastAPI
+from starlette.routing import Route
 from mistralai.client.errors import MistralError, NoResponseError
 
 from api.core import replay
 from api.core.mode import ModeMiddleware, error, mode
-from api.routes import (agents, approvals, data, documents, guardrails, handbook, overview, scorecard,
+from api.routes import (agents, approvals, data, documents, guardrails, handbook, ops, overview, scorecard,
                         triage, voice)
+from dock import mcp_server
 from dock._client import NoKey, scrub
 
+# Dock's MCP server at /api/mcp. Stateless with JSON replies: no session survives between serverless instances.
+# Its lifespan runs the session manager, so it is FastAPI's lifespan; without it /api/mcp answers 500.
+mcp_app = mcp_server.mcp.http_app(path="/api/mcp", stateless_http=True, json_response=True)
+
+# Everything outside /api belongs to Next.
 app = FastAPI(title="Dock Console API", docs_url="/api/docs", openapi_url="/api/openapi.json",
-              redoc_url=None, swagger_ui_oauth2_redirect_url=None)   # everything outside /api belongs to Next
+              redoc_url=None, swagger_ui_oauth2_redirect_url=None, lifespan=mcp_app.lifespan)
 app.add_middleware(ModeMiddleware)
 app.include_router(data.router)
 app.include_router(triage.router)
@@ -22,7 +29,9 @@ app.include_router(agents.router)
 app.include_router(approvals.router)
 app.include_router(voice.router)
 app.include_router(scorecard.router)
+app.include_router(ops.router)
 app.include_router(overview.router)
+app.router.routes.append(Route("/api/mcp", mcp_app))   # the whole MCP app (its middleware too), at exactly /api/mcp
 
 
 @app.get("/api/health")
