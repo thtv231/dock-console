@@ -1,5 +1,6 @@
 """Tests run in Replay with no key: keep the developer's .env out of the test process."""
 import os
+import tempfile
 
 import dotenv
 import pytest
@@ -28,6 +29,7 @@ def replayed(client):
 
 
 os.environ.setdefault("DOCK_STATE_SECRET", "dock-tests-only-state-secret")   # not a real secret
+os.environ["DOCK_OUTBOX"] = tempfile.mkdtemp(prefix="dock-outbox-")   # never the repo: read-only on Vercel
 
 
 @pytest.fixture
