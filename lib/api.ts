@@ -38,6 +38,18 @@ export function describeError(e: ApiError): string {
         : `Mistral returned an error${e.message ? `: ${e.message}` : "."}`;
     case "mistral_unreachable":
       return "Mistral did not respond. Run it again in a moment.";
+    case "already_answered":
+      return "This pause was already answered. Mistral accepts one set of decisions per pause; start again.";
+    case "decisions_mismatch":
+      return "Decide every recipient Dock drafted to, and only those.";
+    case "expired":
+      return "These drafts waited too long and the pause expired. Start again.";
+    case "bad_state":
+      return "The paused run could not be verified. Start again.";
+    case "no_state_secret":
+      return "The API has no DOCK_STATE_SECRET, so it can't pause a run. Set it in .env and restart uvicorn.";
+    case "too_many_pauses":
+      return "Dock kept redrafting, so the run was stopped. Start again.";
     case "api_unreachable":
       return "The API is not reachable. Start it with: uvicorn api.index:app --port 8000";
     default:

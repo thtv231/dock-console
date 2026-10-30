@@ -22,7 +22,7 @@ export const SCREENS: Screen[] = [
   { href: "/documents", title: "Documents", summary: "Invoices and bills of lading read with OCR and checked against the database.", icon: FileText, lesson: 2, built: true },
   { href: "/handbook", title: "Handbook", summary: "Answers from the ops handbook, with the sections they come from.", icon: BookOpen, lesson: 2, built: true },
   { href: "/agents", title: "Agents", summary: "Triage hands off to tracking and billing agents; one agent vs parallel workers on the customs hold report.", icon: Workflow, lesson: 3, built: true },
-  { href: "/approvals", title: "Approvals", summary: "Dock drafts emails; a person approves each one before it is sent.", icon: ListChecks, lesson: 4, built: false },
+  { href: "/approvals", title: "Approvals", summary: "Dock drafts emails; a person approves each one before it is sent.", icon: ListChecks, lesson: 4, built: true },
   { href: "/guardrails", title: "Guardrails", summary: "Inbound screening and the never-guarantee-a-date rule.", icon: Shield, lesson: 2, built: true },
   { href: "/voice", title: "Voice desk", summary: "Phone calls transcribed, noted and answered by voice.", icon: Phone, lesson: 5, built: false },
   { href: "/scorecard", title: "Scorecard", summary: "Every capability tested against its expected result.", icon: ClipboardCheck, lesson: 5, built: false },
