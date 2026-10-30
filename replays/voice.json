@@ -1,0 +1,1094 @@
+{
+ "voice|C1|": {
+  "call_id": "C1",
+  "bias": false,
+  "speak": true,
+  "transcript": "Hi, this is Marco, driving for Lotus. I'm stuck on the A7 near Hamburg. Big accident. Shipment HF26038 will be about two hours late. Call me back if that's a problem.",
+  "note": {
+   "shipment_id": "HF-26038",
+   "issue": "delay",
+   "callback": true
+  },
+  "truth": {
+   "shipment_id": "HF-26038",
+   "issue": "delay",
+   "callback": true
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hey Marco, this is Dock. Thanks for the update on HF26038. We'll adjust and keep an eye out for your revised ETA.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 460844,
+  "stages": {
+   "transcribe": 1836,
+   "understand": 708,
+   "reply": 785,
+   "speech": 3186
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1836,
+    "retries": 0,
+    "retried": [],
+    "tokens": 428,
+    "tokens_in": 5,
+    "tokens_out": 48,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 708,
+    "retries": 0,
+    "retried": [],
+    "tokens": 89,
+    "tokens_in": 64,
+    "tokens_out": 25,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 785,
+    "retries": 0,
+    "retried": [],
+    "tokens": 124,
+    "tokens_in": 90,
+    "tokens_out": 34,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 552,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 3186,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C1_nobias.wav",
+  "recorded_at": "2026-10-30T01:08:10+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C1|bias=1": {
+  "call_id": "C1",
+  "bias": true,
+  "speak": true,
+  "transcript": "Hi, this is Marco, driving for Lotus. I'm stuck on the A7 near Hamburg. Big accident. Shipment HF26038 will be about two hours late. Call me back if that's a problem.",
+  "note": {
+   "shipment_id": "HF-26038",
+   "issue": "delay",
+   "callback": true
+  },
+  "truth": {
+   "shipment_id": "HF-26038",
+   "issue": "delay",
+   "callback": true
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hey Marco, this is Dock. Thanks for the update on HF26038. I'll check with the client and get back to you as soon as I can.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 460844,
+  "stages": {
+   "transcribe": 1919,
+   "understand": 1135,
+   "reply": 774,
+   "speech": 2401
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1919,
+    "retries": 0,
+    "retried": [],
+    "tokens": 750,
+    "tokens_in": 327,
+    "tokens_out": 48,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1135,
+    "retries": 0,
+    "retried": [],
+    "tokens": 89,
+    "tokens_in": 64,
+    "tokens_out": 25,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 774,
+    "retries": 0,
+    "retried": [],
+    "tokens": 127,
+    "tokens_in": 90,
+    "tokens_out": 37,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 344,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 2401,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C1_bias.wav",
+  "recorded_at": "2026-10-30T01:08:46+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C2|": {
+  "call_id": "C2",
+  "bias": false,
+  "speak": true,
+  "transcript": "Morning, Jenny here. I'm at the Felixstowe Gate with HF26016. The gate says the booking reference is wrong. They won't let me in. Can someone fix it?",
+  "note": {
+   "shipment_id": "HF-26016",
+   "issue": "question",
+   "callback": true
+  },
+  "truth": {
+   "shipment_id": "HF-26016",
+   "issue": "question",
+   "callback": true
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hey Jenny, thanks for letting us know. We'll check the reference and get back to you shortly.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 265004,
+  "stages": {
+   "transcribe": 1483,
+   "understand": 785,
+   "reply": 823,
+   "speech": 2860
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1483,
+    "retries": 0,
+    "retried": [],
+    "tokens": 424,
+    "tokens_in": 5,
+    "tokens_out": 44,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 785,
+    "retries": 0,
+    "retried": [],
+    "tokens": 85,
+    "tokens_in": 60,
+    "tokens_out": 25,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 823,
+    "retries": 0,
+    "retried": [],
+    "tokens": 108,
+    "tokens_in": 86,
+    "tokens_out": 22,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 556,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 2860,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C2_nobias.wav",
+  "recorded_at": "2026-10-30T01:08:16+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C2|bias=1": {
+  "call_id": "C2",
+  "bias": true,
+  "speak": true,
+  "transcript": "Morning, Jenny here. I'm at the Felixstowe Gate with HF 26016. The gate says the booking reference is wrong. They won't let me in. Can someone fix it?",
+  "note": {
+   "shipment_id": "HF-26016",
+   "issue": "question",
+   "callback": true
+  },
+  "truth": {
+   "shipment_id": "HF-26016",
+   "issue": "question",
+   "callback": true
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hey Jenny, thanks for calling. I'll get someone to check the booking reference and call you back shortly.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 253484,
+  "stages": {
+   "transcribe": 1572,
+   "understand": 648,
+   "reply": 697,
+   "speech": 1687
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1572,
+    "retries": 0,
+    "retried": [],
+    "tokens": 747,
+    "tokens_in": 327,
+    "tokens_out": 45,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 648,
+    "retries": 0,
+    "retried": [],
+    "tokens": 87,
+    "tokens_in": 61,
+    "tokens_out": 26,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 697,
+    "retries": 0,
+    "retried": [],
+    "tokens": 110,
+    "tokens_in": 87,
+    "tokens_out": 23,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 541,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 1687,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C2_bias.wav",
+  "recorded_at": "2026-10-30T01:08:52+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C3|": {
+  "call_id": "C3",
+  "bias": false,
+  "speak": true,
+  "transcript": "Hello, it's Tom. Just letting you know container for HF26025 is delivered to the warehouse in Los Angeles. All good, no need to call back.",
+  "note": {
+   "shipment_id": "HF-26025",
+   "issue": "arrived",
+   "callback": false
+  },
+  "truth": {
+   "shipment_id": "HF-26025",
+   "issue": "arrived",
+   "callback": false
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hey Tom, thanks for the update on HF26025. I'll make sure to check in with the warehouse team about it.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 457004,
+  "stages": {
+   "transcribe": 1880,
+   "understand": 616,
+   "reply": 844,
+   "speech": 2138
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1880,
+    "retries": 0,
+    "retried": [],
+    "tokens": 417,
+    "tokens_in": 5,
+    "tokens_out": 37,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 616,
+    "retries": 0,
+    "retried": [],
+    "tokens": 80,
+    "tokens_in": 53,
+    "tokens_out": 27,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 844,
+    "retries": 0,
+    "retried": [],
+    "tokens": 109,
+    "tokens_in": 79,
+    "tokens_out": 30,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 353,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 2138,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C3_nobias.wav",
+  "recorded_at": "2026-10-30T01:08:22+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C3|bias=1": {
+  "call_id": "C3",
+  "bias": true,
+  "speak": true,
+  "transcript": "Hello, it's Tom. Just letting you know container for HF26025 is delivered to the warehouse in Los Angeles. All good, no need to call back.",
+  "note": {
+   "shipment_id": "HF-26025",
+   "issue": "arrived",
+   "callback": false
+  },
+  "truth": {
+   "shipment_id": "HF-26025",
+   "issue": "arrived",
+   "callback": false
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Thanks for the update, Tom. I'll make sure to note that down.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 165164,
+  "stages": {
+   "transcribe": 1806,
+   "understand": 675,
+   "reply": 874,
+   "speech": 1985
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1806,
+    "retries": 0,
+    "retried": [],
+    "tokens": 739,
+    "tokens_in": 327,
+    "tokens_out": 37,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 675,
+    "retries": 0,
+    "retried": [],
+    "tokens": 80,
+    "tokens_in": 53,
+    "tokens_out": 27,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 874,
+    "retries": 0,
+    "retried": [],
+    "tokens": 96,
+    "tokens_in": 79,
+    "tokens_out": 17,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 618,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 1985,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C3_bias.wav",
+  "recorded_at": "2026-10-30T01:08:58+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C4|": {
+  "call_id": "C4",
+  "bias": false,
+  "speak": true,
+  "transcript": "This is Peter's driver for shipment 26019. The address on my papers is an old warehouse. It's closed. Where do I deliver?",
+  "note": {
+   "shipment_id": "HF-26019",
+   "issue": "address",
+   "callback": true
+  },
+  "truth": {
+   "shipment_id": "HF-26019",
+   "issue": "address",
+   "callback": true
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hey Peter, this is Dock. Thanks for letting me know. Please hold on while I check the system for an updated address.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 391724,
+  "stages": {
+   "transcribe": 1201,
+   "understand": 659,
+   "reply": 1680,
+   "speech": 3122
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1201,
+    "retries": 0,
+    "retried": [],
+    "tokens": 414,
+    "tokens_in": 5,
+    "tokens_out": 34,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 659,
+    "retries": 0,
+    "retried": [],
+    "tokens": 76,
+    "tokens_in": 50,
+    "tokens_out": 26,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 1680,
+    "retries": 0,
+    "retried": [],
+    "tokens": 103,
+    "tokens_in": 76,
+    "tokens_out": 27,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 320,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 3122,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C4_nobias.wav",
+  "recorded_at": "2026-10-30T01:08:29+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C4|bias=1": {
+  "call_id": "C4",
+  "bias": true,
+  "speak": true,
+  "transcript": "This is Pieter's driver for shipment 26019. The address on my papers is an old warehouse. It's closed. Where do I deliver?",
+  "note": {
+   "shipment_id": "HF-26019",
+   "issue": "address",
+   "callback": true
+  },
+  "truth": {
+   "shipment_id": "HF-26019",
+   "issue": "address",
+   "callback": true
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hey Pieter, this is Dock. Thanks for the heads-up. Please confirm the new delivery address with the customer or check your system for updates.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 441644,
+  "stages": {
+   "transcribe": 1362,
+   "understand": 719,
+   "reply": 948,
+   "speech": 3358
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1362,
+    "retries": 0,
+    "retried": [],
+    "tokens": 736,
+    "tokens_in": 327,
+    "tokens_out": 34,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 719,
+    "retries": 0,
+    "retried": [],
+    "tokens": 76,
+    "tokens_in": 50,
+    "tokens_out": 26,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 948,
+    "retries": 0,
+    "retried": [],
+    "tokens": 106,
+    "tokens_in": 76,
+    "tokens_out": 30,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 624,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 3358,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C4_bias.wav",
+  "recorded_at": "2026-10-30T01:09:05+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C5|": {
+  "call_id": "C5",
+  "bias": false,
+  "speak": true,
+  "transcript": "Hi, Sam calling about HF26036. Two pallets fell over during unloading. Some cartons are crushed. I've taken photos.",
+  "note": {
+   "shipment_id": "HF-26036",
+   "issue": "damage",
+   "callback": true
+  },
+  "truth": {
+   "shipment_id": "HF-26036",
+   "issue": "damage",
+   "callback": true
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hi Sam, thanks for letting me know about HF26036. I'll review the photos and get back to you shortly.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 349484,
+  "stages": {
+   "transcribe": 1135,
+   "understand": 738,
+   "reply": 1406,
+   "speech": 2591
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1135,
+    "retries": 0,
+    "retried": [],
+    "tokens": 413,
+    "tokens_in": 5,
+    "tokens_out": 33,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 738,
+    "retries": 0,
+    "retried": [],
+    "tokens": 75,
+    "tokens_in": 49,
+    "tokens_out": 26,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 1406,
+    "retries": 0,
+    "retried": [],
+    "tokens": 104,
+    "tokens_in": 75,
+    "tokens_out": 29,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 555,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 2591,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C5_nobias.wav",
+  "recorded_at": "2026-10-30T01:08:35+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C5|bias=1": {
+  "call_id": "C5",
+  "bias": true,
+  "speak": true,
+  "transcript": "Hi, Sam calling about HF26036. Two pallets fell over during unloading. Some cartons are crushed. I've taken photos.",
+  "note": {
+   "shipment_id": "HF-26036",
+   "issue": "damage",
+   "callback": true
+  },
+  "truth": {
+   "shipment_id": "HF-26036",
+   "issue": "damage",
+   "callback": true
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Thanks for the update, Sam. I'll check with the team and get back to you as soon as I can.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 245804,
+  "stages": {
+   "transcribe": 1153,
+   "understand": 1907,
+   "reply": 1434,
+   "speech": 2105
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1153,
+    "retries": 0,
+    "retried": [],
+    "tokens": 735,
+    "tokens_in": 327,
+    "tokens_out": 33,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1907,
+    "retries": 0,
+    "retried": [],
+    "tokens": 75,
+    "tokens_in": 49,
+    "tokens_out": 26,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 1434,
+    "retries": 0,
+    "retried": [],
+    "tokens": 100,
+    "tokens_in": 75,
+    "tokens_out": 25,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 646,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 2105,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C5_bias.wav",
+  "recorded_at": "2026-10-30T01:09:12+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C6|": {
+  "call_id": "C6",
+  "bias": false,
+  "speak": true,
+  "transcript": "Yeah, hi, it's Anna. Running about 40 minutes behind with HF26040 traffic at the port. No reply needed.",
+  "note": {
+   "shipment_id": "HF-26040",
+   "issue": "delay",
+   "callback": false
+  },
+  "truth": {
+   "shipment_id": "HF-26040",
+   "issue": "delay",
+   "callback": false
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Thanks for the update, Anna. I'll keep an eye out for your arrival.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 176684,
+  "stages": {
+   "transcribe": 1429,
+   "understand": 692,
+   "reply": 578,
+   "speech": 1329
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1429,
+    "retries": 0,
+    "retried": [],
+    "tokens": 412,
+    "tokens_in": 5,
+    "tokens_out": 32,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 692,
+    "retries": 0,
+    "retried": [],
+    "tokens": 74,
+    "tokens_in": 48,
+    "tokens_out": 26,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 578,
+    "retries": 0,
+    "retried": [],
+    "tokens": 92,
+    "tokens_in": 74,
+    "tokens_out": 18,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 339,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 1329,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C6_nobias.wav",
+  "recorded_at": "2026-10-30T01:08:40+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "voice|C6|bias=1": {
+  "call_id": "C6",
+  "bias": true,
+  "speak": true,
+  "transcript": "Yeah, hi, it's Ana. Running about 40 minutes behind with HF26040 traffic at the port. No reply needed.",
+  "note": {
+   "shipment_id": "HF-26040",
+   "issue": "delay",
+   "callback": false
+  },
+  "truth": {
+   "shipment_id": "HF-26040",
+   "issue": "delay",
+   "callback": false
+  },
+  "score_vs_truth": {
+   "shipment_id": true,
+   "issue": true,
+   "callback": true
+  },
+  "reply_text": "Hey Ana, thanks for the update. I'll be here when you're ready.",
+  "voice": "gb_oliver_neutral",
+  "audio_bytes": 169004,
+  "stages": {
+   "transcribe": 1170,
+   "understand": 866,
+   "reply": 560,
+   "speech": 1391
+  },
+  "meter": [
+   {
+    "op": "audio.transcriptions.complete",
+    "model": "voxtral-mini-latest",
+    "ms": 1170,
+    "retries": 0,
+    "retried": [],
+    "tokens": 734,
+    "tokens_in": 327,
+    "tokens_out": 32,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 866,
+    "retries": 0,
+    "retried": [],
+    "tokens": 74,
+    "tokens_in": 48,
+    "tokens_out": 26,
+    "pages": null
+   },
+   {
+    "op": "chat.complete",
+    "model": "mistral-small-latest",
+    "ms": 560,
+    "retries": 0,
+    "retried": [],
+    "tokens": 92,
+    "tokens_in": 74,
+    "tokens_out": 18,
+    "pages": null
+   },
+   {
+    "op": "audio.voices.list",
+    "model": null,
+    "ms": 532,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "audio.speech.complete",
+    "model": "voxtral-mini-tts-latest",
+    "ms": 1391,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "audio_url": "/api/files/voice/C6_bias.wav",
+  "recorded_at": "2026-10-30T01:09:16+00:00",
+  "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ }
+}

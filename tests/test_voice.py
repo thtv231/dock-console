@@ -1,5 +1,6 @@
 """Voice desk (S9): six driver voicemails are transcribed, turned into a call note and answered by voice.
-Without context bias C2 comes back as an address problem (the notebook's miss); with bias every note matches the truth."""
+Without context bias each call is recorded 5 times and counted against the truth (the notebook's one run heard C2 as
+an address problem; one run cannot show what bias changes); with bias every note matches the truth."""
 import io
 import json
 import re
@@ -14,14 +15,16 @@ ROOT = Path(__file__).resolve().parent.parent
 TRUTH = json.loads((ROOT / "dock" / "calls" / "truth.json").read_text(encoding="utf-8"))
 CALLS = sorted(TRUTH)
 FIELDS = ["shipment_id", "issue", "callback"]
+RUNS = range(1, 6)   # without bias; with bias, one run
+VARIANTS = [(False, n) for n in RUNS] + [(True, 1)]
 VOICE = ROOT / "replays" / "voice.json"
 LIVE = {"X-Mistral-Key": "dock-test-key-0000000000000000"}   # not a real key: it only switches a request to Live
 MAX_UPLOAD = 4 * 1024 * 1024   # PLAN.md: a live mic upload is at most 4 MB, under Vercel's 4.5 MB request limit
 BASE64_RUN = re.compile(r"[A-Za-z0-9+/=]{2000,}")
 
 
-def run(replayed, call_id, bias):
-    return replayed("/api/voice/run", {"call_id": call_id, "bias": bias})
+def run(replayed, call_id, bias, n=1):
+    return replayed("/api/voice/run", {"call_id": call_id, "bias": bias, "run": n})
 
 
 def recorded():
@@ -34,21 +37,37 @@ def test_the_fixtures_are_what_the_tests_assume():
     assert TRUTH["C2"]["issue"] == "question"
 
 
-@pytest.mark.parametrize("bias", [False, True], ids=["no_bias", "bias"])
+@pytest.mark.parametrize("bias,n", VARIANTS, ids=[f"{'bias' if b else 'no_bias'}-{n}" for b, n in VARIANTS])
 @pytest.mark.parametrize("call_id", CALLS)
-def test_every_call_has_a_recorded_run(replayed, call_id, bias):
-    assert replay.key("voice", call_id, bias=1 if bias else None) in recorded()
-    got = run(replayed, call_id, bias)
+def test_every_call_has_a_recorded_run(replayed, call_id, bias, n):
+    assert replay.key("voice", call_id, bias=1 if bias else None, run=None if n == 1 else n) in recorded()
+    got = run(replayed, call_id, bias, n)
     assert got["call_id"] == call_id and got["bias"] is bias
     assert got["transcript"] and got["reply_text"], got.get("error")
     assert set(FIELDS) <= set(got["note"]), got["note"]
     assert got["score_vs_truth"] == {f: got["note"][f] == TRUTH[call_id][f] for f in FIELDS}, got["score_vs_truth"]
 
 
-def test_without_bias_c2_is_heard_as_an_address_problem(replayed):
-    """s09 step 4: the gate problem reads as a wrong address until Voxtral is told what words to expect."""
-    note = run(replayed, "C2", False)["note"]
-    assert note["issue"] == "address", f"C2 without bias: issue {note['issue']!r}; the recorded run should show the miss"
+def test_runs_are_counted_against_the_truth(client, replayed):
+    """What the screen shows for bias: per call and in total, how many recorded runs got each field right."""
+    want = {"calls": {}, "totals": {}}
+    for variant, bias, runs in (("nobias", False, RUNS), ("bias", True, [1])):
+        total = {"runs": 0, "right": dict.fromkeys(FIELDS, 0)}
+        for call_id in CALLS:
+            notes = [run(replayed, call_id, bias, n)["note"] for n in runs]
+            right = {f: sum(note[f] == TRUTH[call_id][f] for note in notes) for f in FIELDS}
+            issues = {}
+            for note in notes:
+                issues[note["issue"]] = issues.get(note["issue"], 0) + 1
+            want["calls"].setdefault(call_id, {})[variant] = {"runs": len(notes), "right": right, "issues": issues}
+            total["runs"] += len(notes)
+            total["right"] = {f: total["right"][f] + right[f] for f in FIELDS}
+        want["totals"][variant] = total
+    r = client.get("/api/voice/runs")
+    assert r.status_code == 200, r.text[:200]
+    got = r.json()
+    assert {k: got[k] for k in want} == want
+    assert got["totals"]["nobias"]["runs"] == len(CALLS) * len(RUNS)
 
 
 def test_with_bias_every_note_matches_the_truth(replayed):

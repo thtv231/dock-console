@@ -286,13 +286,18 @@ def record_approvals(http, key):
 
 
 def record_voice(http, key):
-    """The six voicemails with and without context bias, each with its spoken reply. The reply's base64 becomes a
-    WAV in replays/voice/ and the record keeps its URL."""
+    """The six voicemails, 5 runs without context bias and one with, each with its spoken reply. Runs already
+    recorded are kept and skipped: only missing ones are made. The reply's base64 becomes a WAV in replays/voice/
+    and the record keeps its URL."""
     voice.AUDIO.mkdir(parents=True, exist_ok=True)
+    existing = replay.load("voice")
+    plan = [(False, n) for n in range(1, voice.RUNS + 1)] + [(True, 1)]
     records, failed = {}, []
-    for bias in (False, True):
+    for bias, n in plan:
         for call_id in dataset("calls/truth.json"):
-            record_key = replay.key("voice", call_id, bias=1 if bias else None)
+            record_key = voice.run_key(call_id, bias, n)
+            if record_key in existing:
+                continue
             r = http.post("/api/voice/run", json={"call_id": call_id, "bias": bias, "speak": True},
                           headers={"X-Mistral-Key": key})
             got = r.json()
@@ -300,18 +305,20 @@ def record_voice(http, key):
                 failed.append(record_key)
                 print(f"{record_key}  FAILED {r.status_code} {got.get('error')}")
                 continue
-            name = voice.audio_name(call_id, bias)
+            name = voice.audio_name(call_id, bias, n)
             (voice.AUDIO / name).write_bytes(base64.b64decode(got.pop("audio_b64")))
             got["audio_url"] = f"/api/files/voice/{name}"
+            got["run"] = n
             records[record_key] = stamp(got, key)
             wrong = [f"{f}={got['note'][f]!r}" for f, ok in got["score_vs_truth"].items() if not ok]
             print(f"{record_key:<16} {str(got['note']['shipment_id']):<9} {got['note']['issue']:<8} "
                   f"callback={got['note']['callback']!s:<5} {'WRONG ' + ' '.join(wrong) if wrong else 'ok':<24} "
                   f"{got['stages']} {got['audio_bytes'] // 1000} kB")
+    every = {**existing, **records}
     for bias in (False, True):
-        rows = [v for k, v in records.items() if k.endswith("|bias=1" if bias else "|")]
+        rows = [v for k, v in every.items() if ("bias=1" in k) == bias]
         right = {f: sum(r["score_vs_truth"][f] for r in rows) for f in ("shipment_id", "issue", "callback")}
-        print(f"bias={bias!s:<5} " + " ".join(f"{f} {n}/{len(rows)}" for f, n in right.items()))
+        print(f"bias={bias!s:<5} {len(rows)} runs: " + " ".join(f"{f} {n}/{len(rows)}" for f, n in right.items()))
     return records, failed
 
 

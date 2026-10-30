@@ -23,13 +23,20 @@ FORM_SLACK = 64 * 1024         # the multipart boundaries and form fields around
 FIELDS = ["shipment_id", "issue", "callback"]
 STAGES = {"transcribe": "audio.transcriptions.complete", "understand": "chat.parse",
           "reply": "chat.complete", "speech": "audio.speech.complete"}
-RECORDED_WAV = re.compile(r"^C\d+_(bias|nobias)\.wav$")
+RECORDED_WAV = re.compile(r"^C\d+_(bias|nobias)(_run\d+)?\.wav$")
+RUNS = 5   # recorded runs per call without bias: one run cannot show what bias changes
 
 router = APIRouter()
 
 
-def audio_name(call_id, bias):
-    return f"{call_id}_{'bias' if bias else 'nobias'}.wav"
+def audio_name(call_id, bias, run=1):
+    return f"{call_id}_{'bias' if bias else 'nobias'}{'' if run == 1 else f'_run{run}'}.wav"
+
+
+def run_key(call_id, bias, run=1, speak=True):
+    """voice|C2| is run 1 without bias; voice|C2|run=3 and voice|C2|bias=1 are the others."""
+    return replay.key("voice", call_id, bias=1 if bias else None, run=None if run == 1 else run,
+                      speak=None if speak else 0)
 
 
 def handle(file_name, content, bias, speak, call_id=None):
@@ -57,13 +64,13 @@ class RunIn(BaseModel):
     call_id: str = Field(max_length=8)
     bias: bool = False
     speak: bool = True
+    run: int = Field(1, ge=1, le=RUNS)   # which recorded run (Replay); a live call is always a new run
 
 
 @router.post("/api/voice/run")
 async def run(body: RunIn, request: Request):
     if not live():
-        options = {"bias": 1 if body.bias else None, "speak": None if body.speak else 0}
-        return replay.lookup("voice", replay.key("voice", body.call_id, **options)) or replay.not_recorded()
+        return replay.lookup("voice", run_key(body.call_id, body.bias, body.run, body.speak)) or replay.not_recorded()
 
     if not ratelimit.allow(ratelimit.client_ip(request)):
         return error(429, "rate_limited")
@@ -71,6 +78,26 @@ async def run(body: RunIn, request: Request):
         return error(404, "unknown_call")
     path = voice.CALLS / f"{body.call_id}.wav"
     return await run_in_threadpool(handle, path.name, path.read_bytes(), body.bias, body.speak, body.call_id)
+
+
+@router.get("/api/voice/runs")
+def runs():
+    """Every recorded run counted against the truth, per call and in total, with and without bias."""
+    records = replay.load("voice")
+    out = {"calls": {}, "totals": {}}
+    for variant, bias in (("nobias", False), ("bias", True)):
+        total = {"runs": 0, "right": dict.fromkeys(FIELDS, 0)}
+        for call_id in voice.TRUTH:
+            mine = [r for n in range(1, RUNS + 1) if (r := records.get(run_key(call_id, bias, n)))]
+            right = {f: sum(r["note"][f] == voice.TRUTH[call_id][f] for r in mine) for f in FIELDS}
+            issues = {}
+            for r in mine:
+                issues[r["note"]["issue"]] = issues.get(r["note"]["issue"], 0) + 1
+            out["calls"].setdefault(call_id, {})[variant] = {"runs": len(mine), "right": right, "issues": issues}
+            total["runs"] += len(mine)
+            total["right"] = {f: total["right"][f] + right[f] for f in FIELDS}
+        out["totals"][variant] = total
+    return {**out, "mode": "replay", "meter": []}
 
 
 @router.post("/api/voice/upload")
