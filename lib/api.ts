@@ -50,6 +50,8 @@ export function describeError(e: ApiError): string {
       return "The API has no DOCK_STATE_SECRET, so it can't pause a run. Set it in .env and restart uvicorn.";
     case "too_many_pauses":
       return "Dock kept redrafting, so the run was stopped. Start again.";
+    case "audio_too_large":
+      return "The recording is over 4 MB. Keep it under about two minutes.";
     case "api_unreachable":
       return "The API is not reachable. Start it with: uvicorn api.index:app --port 8000";
     default:
@@ -92,5 +94,10 @@ export function useApi() {
       call<T>(path, key, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }),
     [key],
   );
-  return { get, post, live: key !== null };
+  // multipart (the mic recording): the browser sets the boundary, so no Content-Type here.
+  const upload = useCallback(
+    <T,>(path: string, form: FormData) => call<T>(path, key, { method: "POST", body: form }),
+    [key],
+  );
+  return { get, post, upload, live: key !== null };
 }
