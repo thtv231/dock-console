@@ -90,3 +90,62 @@ def test_every_replay_the_overview_uses_comes_from_a_clean_commit(name):
     assert None not in shas, f"replays/{name}.json has records with no git_sha"
     missing = sorted(sha for sha in shas if not on_this_branch(sha))
     assert not missing, f"replays/{name}.json names commits not on this branch: {missing}"
+
+
+def scores(overview, href):
+    return {s["label"]: s for s in next(s for s in overview["screens"] if s["href"] == href)["scores"]}
+
+
+@pytest.mark.parametrize("href", [h for h in REPLAYS_OF if REPLAYS_OF[h]])
+def test_every_screen_card_has_a_score(overview, href):
+    got = scores(overview, href)
+    assert got, f"{href}: no score"
+    for s in got.values():
+        assert "n" not in s or (0 <= s["n"] <= s["of"] and s["value"] == f"{s['n']}/{s['of']}"), s
+
+
+def test_scores_are_recounted_from_the_replays(overview):
+    triage = records("triage")
+    assert scores(overview, "/inbox")["Emails with intent, shipment and language right"]["value"] == \
+        f"{sum(not r['wrong_fields'] for r in triage)}/{len(triage)}"
+    routed = [r for k, r in json.loads((REPLAYS / "agents.json").read_text(encoding="utf-8")).items()
+              if k.startswith("handoff|") and k.endswith("|rule=v1")]
+    assert scores(overview, "/agents")["Routed right, rule v1"]["value"] == \
+        f"{sum(r['right'] for r in routed)}/{len(routed)}"
+    budget = [r for r in records("ops") if r.get("status") == 429 and "tokens_per_day" in r]
+    asked = [r for r in records("ops") if "tokens_per_day" in r]
+    assert scores(overview, "/operations")["Requests refused by the budget"]["value"] == f"{len(budget)}/{len(asked)}"
+    agent = next(r for r in records("ops") if "checks" in r)
+    assert scores(overview, "/operations")["Prod after the rollback"]["value"] == f"version {agent['prod']}"
+
+
+# ---------- Each card's sentence says only what its numbers show ----------
+PROVES = dict(re.findall(r'\{ href: "([^"]+)",.*?proves: "([^"]*)"', (ROOT / "lib" / "screens.ts").read_text(encoding="utf-8")))
+# Words that claim a cause or a comparison. A card counts; it doesn't say what made the counts differ.
+CLAIMS = re.compile(r"\b(fix\w*|improv\w*|help\w*|better|worse|more|fewer|less|clearer|correct(s|ed|ing)|reduc\w*|prevent\w*|"
+                    r"stop\w*|catch\w*|because|caus\w*|so that|ensur\w*|mishear\w*|hears?)\b", re.I)
+
+
+@pytest.mark.parametrize("href", [h for h in REPLAYS_OF if REPLAYS_OF[h]])
+def test_no_card_claims_a_cause(href):
+    sentence = PROVES.get(href, "")
+    assert sentence, f"{href} has no sentence"
+    assert not CLAIMS.search(sentence), f"{href}: {CLAIMS.search(sentence).group(0)!r} in {sentence!r}"
+
+
+def test_the_voice_card_makes_no_claim_its_counts_do_not_support(client, overview):
+    """Lesson 5: C2's transcript was noted again 5 times per source, so that a miss can be put on hearing or on
+    understanding. Bias can be credited with a change only if understanding is stable on fixed words (every re-note of
+    one transcript gives the same issue). The recordings don't show that, so the card must not claim it, and must show
+    the re-note counts that say so."""
+    notes = client.get("/api/voice/runs").json()["notes"]
+    assert notes, "no call was noted again on a fixed transcript"
+    stable = all(len(n["issues"]) == 1 for sources in notes.values() for n in sources.values())
+    sentence = PROVES["/voice"]
+    if not stable:
+        assert not CLAIMS.search(sentence) and not re.search(r"bias (\w+s|is|was|made)\b", sentence), sentence
+    shown = scores(overview, "/voice")
+    for call_id, sources in notes.items():
+        for source, label in (("nobias", "no bias"), ("bias", "with bias")):
+            got = shown[f"{call_id} noted again on one transcript, issue right, {label}"]
+            assert got["value"] == f"{sources[source]['right']['issue']}/{sources[source]['runs']}", got

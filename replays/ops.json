@@ -125,12 +125,40 @@
    "status": "queued",
    "message": "A person from operations will reply."
   },
-  "ms": 234,
+  "ms": 236,
   "meter": [],
   "seconds": 0.2,
   "question": "How many free days do we get at Los Angeles before demurrage starts?",
-  "recorded_at": "2026-10-30T03:21:05+00:00",
-  "git_sha": "1e05557",
+  "abandoned": {
+   "meter": [
+    {
+     "op": "embeddings.create",
+     "model": "mistral-embed",
+     "ms": 881,
+     "retries": 0,
+     "retried": [],
+     "tokens": 18,
+     "tokens_in": 18,
+     "tokens_out": 0,
+     "pages": null
+    },
+    {
+     "op": "chat.parse",
+     "model": "mistral-medium-latest",
+     "ms": 613,
+     "retries": 0,
+     "retried": [],
+     "tokens": 321,
+     "tokens_in": 297,
+     "tokens_out": 24,
+     "pages": null
+    }
+   ],
+   "ms": 1749,
+   "error": null
+  },
+  "recorded_at": "2026-10-30T03:46:28+00:00",
+  "git_sha": "7ec8f1b",
   "sdk_version": "3.6.0"
  },
  "ops|answer|seconds=8.0": {

@@ -1,10 +1,7 @@
 fastapi
 python-multipart
-uvicorn
 mistralai==3.6.*
 fastmcp
 numpy
 pydantic
 python-dotenv
-httpx
-pytest

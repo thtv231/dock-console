@@ -124,3 +124,65 @@ def test_with_no_dock_outbox_the_outbox_is_still_outside_the_repo(repo_writes):
     assert r.returncode == 0, r.stderr[-500:]
     assert r.stdout.strip() == f"Email sent to {CUSTOMER}", r.stdout
     assert repo_writes() == [], f"with DOCK_OUTBOX unset, the send wrote inside the repo: {repo_writes()}"
+
+
+# ---------- The console's tool tester: /api/ops/mcp/tools and /api/ops/mcp/call, the same server in process ----------
+
+def call_tester(client, tool, args, **extra):
+    return client.post("/api/ops/mcp/call", json={"tool": tool, "args": args, **extra})
+
+
+def test_the_tester_lists_the_three_tools_with_their_hints_and_arguments(client):
+    r = client.get("/api/ops/mcp/tools")
+    assert r.status_code == 200, r.text[:200]
+    tools = {t["name"]: t for t in r.json()["tools"]}
+    assert set(tools) == TOOLS
+    assert (tools["send_email"]["read_only"], tools["send_email"]["destructive"]) == (False, True)
+    for name in TOOLS - {"send_email"}:
+        assert (tools[name]["read_only"], tools[name]["destructive"]) == (True, False), name
+    assert set(tools["send_email"]["input_schema"]["properties"]) == {"to", "subject", "body"}
+    assert set(tools["get_shipment"]["input_schema"]["properties"]) == {"shipment_id"}
+
+
+def test_the_tester_reads_a_shipment(client):
+    r = call_tester(client, "get_shipment", {"shipment_id": "HF-26038"})
+    assert r.status_code == 200, r.text[:200]
+    got = r.json()
+    assert not got["is_error"] and json.loads(got["text"])["consignee_email"] == CUSTOMER
+
+
+def test_the_tester_will_not_send_without_approval(client, repo_writes):
+    """CLAUDE.md: a write needs explicit approval in the UI, so the server asks for it too."""
+    before = outbox_lines()
+    r = call_tester(client, "send_email", {"to": CUSTOMER, "subject": "s", "body": "b"})
+    assert r.status_code == 400 and r.json()["error"] == "needs_approval", r.text[:200]
+    assert outbox_lines() == before and repo_writes() == []
+
+
+def test_the_tester_gets_the_refusal_for_audit_even_when_approved(client, repo_writes):
+    before = outbox_lines()
+    r = call_tester(client, "send_email", {"to": AUDIT, "subject": "s", "body": "b"}, approved=True)
+    assert r.status_code == 200, r.text[:200]
+    assert r.json()["text"] == REFUSAL
+    assert outbox_lines() == before and repo_writes() == []
+
+
+def test_an_approved_send_to_a_customer_lands_under_dock_outbox(client, repo_writes):
+    before = outbox_lines()
+    r = call_tester(client, "send_email", {"to": CUSTOMER, "subject": "s", "body": f"b {time.time_ns()}"},
+                    approved=True)
+    assert r.status_code == 200 and r.json()["text"] == f"Email sent to {CUSTOMER}", r.text[:200]
+    assert [m["to"] for m in outbox_lines()[len(before):]] == [CUSTOMER]
+    assert repo_writes() == []
+
+
+def test_the_tester_refuses_an_unknown_tool(client):
+    r = call_tester(client, "delete_everything", {})
+    assert r.status_code == 400 and r.json()["error"] == "unknown_tool", r.text[:200]
+
+
+def test_missing_arguments_come_back_as_a_tool_error(client):
+    before = outbox_lines()
+    r = call_tester(client, "send_email", {}, approved=True)
+    assert r.status_code == 200 and r.json()["is_error"], r.text[:200]
+    assert outbox_lines() == before

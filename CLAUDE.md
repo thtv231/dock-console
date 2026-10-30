@@ -38,7 +38,7 @@ A web app that shows every capability of **Dock**, the operations agent of Harbo
 ```bash
 # API (from repo root)
 python -m venv .venv && .venv/Scripts/activate   # Windows; use .venv/bin/activate elsewhere
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # requirements.txt (what Vercel installs) + uvicorn, pytest, httpx
 uvicorn api.index:app --reload --port 8000
 
 # Web app
@@ -47,6 +47,11 @@ npx next dev        # open http://localhost:3000 (not 127.0.0.1)
 
 # Tests
 pytest
+
+# Deploy check (needs the network; nothing is deployed)
+python scripts/bundle_size.py   # the Python function against Vercel's 500 MB limit
 ```
+
+Runtime packages go in `requirements.txt`; anything only tests or local runs need goes in `requirements-dev.txt`.
 
 Tests must run in replay mode with no key set.

@@ -1,0 +1,5 @@
+# Local only: the API server and the tests. Vercel installs requirements.txt alone.
+-r requirements.txt
+uvicorn
+pytest
+httpx

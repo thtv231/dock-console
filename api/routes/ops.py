@@ -48,7 +48,8 @@ def runs():
                    "requests": [{k: r[k] for k in ("mail_id", "status", "tokens", "detail", "used")} | ms(r)
                                 for r in budget], **stamped(budget)},
         "timeout": {"question": answer[0]["question"],
-                    "limits": [{"seconds": r["seconds"], **r["response"]} | ms(r) for r in answer], **stamped(answer)},
+                    "limits": [{"seconds": r["seconds"], **r["response"], "abandoned": r.get("abandoned")} | ms(r)
+                               for r in answer], **stamped(answer)},
         "idempotency": {"key": notify[0]["idempotency_key"], "message": notify[0]["message"],
                         "attempts": [{"attempt": r["attempt"], **r["response"]} for r in notify],
                         "outbox": notify[-1]["outbox"], **stamped(notify)},
@@ -77,12 +78,17 @@ async def mcp_tools():
 class Call(BaseModel):
     tool: str
     args: dict = {}
+    approved: bool = False   # set by the UI only after the person approved this exact write
 
 
 @router.post("/api/ops/mcp/call")
 async def mcp_call(body: Call):
-    if body.tool not in {t.name for t in await tools()}:
+    known = {t.name: t for t in await tools()}
+    if body.tool not in known:
         return error(400, "unknown_tool", tool=body.tool)
+    writes = not (known[body.tool].annotations and known[body.tool].annotations.read_only_hint)
+    if writes and not body.approved:   # CLAUDE.md: a write always needs explicit approval
+        return error(400, "needs_approval", tool=body.tool)
     async with Client(mcp_server.mcp) as c:
         r = await c.call_tool(body.tool, body.args, raise_on_error=False)
     return {"tool": body.tool, "args": body.args, "is_error": bool(r.is_error),

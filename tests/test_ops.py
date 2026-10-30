@@ -111,3 +111,80 @@ def test_the_rollback_puts_prod_back_on_0(runs):
     assert [c["version"] for c in release["checks"]] == [1, 0], "release v1 first, then roll back to v0"
     assert release["prod"] == 0, f"prod ends on version {release['prod']}"
     assert guaranteed(release["checks"][-1]) == 0
+
+
+# ---------- The handover's abandoned call is metered when it finishes ----------
+
+def fake_answer(delay):
+    """dock.answer without Mistral: after `delay` s, one metered call of 42 tokens lands in whatever scope it runs in."""
+    import time as clock
+    from types import SimpleNamespace
+    from dock import _client
+
+    def answer(question):
+        started = clock.perf_counter()
+        clock.sleep(delay)
+        usage = SimpleNamespace(total_tokens=42, prompt_tokens=40, completion_tokens=2)
+        _client._record("chat.parse", {"model": "fake"}, started, result=SimpleNamespace(usage=usage))
+        return SimpleNamespace(answer="Four days", sources=["HB-07"]), ["HB-07"]
+    return answer
+
+
+@pytest.fixture
+def ops_api(monkeypatch):
+    """dock/ops.py's API under a request scope per request, as the recorder runs it; yields (client, meters, ledger)."""
+    from fastapi.testclient import TestClient
+    from dock import ops
+    from dock._client import request_scope
+
+    meters, ledger = [], []
+    monkeypatch.setattr(ops, "ABANDONED", ledger)
+
+    async def scoped(scope, receive, send):
+        if scope["type"] != "http":
+            return await ops.api(scope, receive, send)
+        async with request_scope("dock-test-key-0000000000000000") as m:
+            await ops.api(scope, receive, send)
+            meters.append(list(m))
+
+    with TestClient(scoped) as http:
+        yield http, meters, ledger
+
+
+def wait_for(ledger, seconds=5):
+    import time as clock
+    deadline = clock.monotonic() + seconds
+    while not ledger and clock.monotonic() < deadline:
+        clock.sleep(0.02)
+    return ledger
+
+
+def test_an_abandoned_answer_is_metered_when_it_finishes(ops_api, monkeypatch):
+    from dock import ops
+    http, meters, ledger = ops_api
+    monkeypatch.setattr(ops.dock, "answer", fake_answer(0.4))
+    r = http.post("/answer?seconds=0.05", json=ops.QUESTION)
+    assert r.json() == FALLBACK
+    assert meters[-1] == [] and ledger == [], "the request ended before the call did"
+    (cost,) = wait_for(ledger)
+    assert [c["tokens"] for c in cost["meter"]] == [42], cost
+    assert cost["ms"] >= 400 and cost["error"] is None, cost
+
+
+def test_an_answer_in_time_is_on_its_own_request_meter(ops_api, monkeypatch):
+    from dock import ops
+    http, meters, ledger = ops_api
+    monkeypatch.setattr(ops.dock, "answer", fake_answer(0))
+    r = http.post("/answer?seconds=5", json=ops.QUESTION)
+    assert r.json() == {"status": "answered", "answer": "Four days", "sources": ["HB-07"]}
+    assert [c["tokens"] for c in meters[-1]] == [42]
+    assert ledger == [], "an answered call is not abandoned"
+
+
+def test_the_recorded_handover_shows_what_the_abandoned_call_cost(runs):
+    limits = {run["seconds"]: run for run in runs["timeout"]["limits"]}
+    late = limits[0.2].get("abandoned")
+    assert late, "the 0.2 s run has no metered abandoned call (python scripts/record.py handover)"
+    assert late["meter"] and all(c["ms"] > 0 for c in late["meter"]), late
+    assert sum(c["tokens"] or 0 for c in late["meter"]) > 0, late
+    assert late["ms"] > limits[0.2]["ms"], "the abandoned call should outlive the request that gave up on it"
