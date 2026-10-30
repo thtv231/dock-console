@@ -88,9 +88,11 @@ def wav_of(size):
 
 @pytest.fixture
 def mistral_calls(monkeypatch):
-    """Every request that would leave for Mistral, refused with a 401 (not retried) so a test never waits."""
+    """Every request that would leave for Mistral, refused with a 401 (not retried) so a test never waits.
+    The rate limit is off: earlier live tests in this process have spent the test client's tokens."""
     import httpx2
 
+    monkeypatch.setenv("DOCK_LIVE_PER_MIN", "0")
     calls = []
 
     def refuse(request):

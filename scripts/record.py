@@ -3,6 +3,7 @@
     python scripts/record.py triage        # or: handbook guardrails documents agents, or all
     python scripts/record.py designs       # only designs A and C, into replays/agents.json
     python scripts/record.py approvals     # HF-26038, plain and safe, one real run per decision policy
+    python scripts/record.py voice scorecard   # C1-C6 with and without bias; 30 cases x baseline/cheaper + judge
 
 Every record names the commit that made it, so the tree must be clean: commit first, then record.
 
@@ -10,6 +11,7 @@ Reads MISTRAL_API_KEY from .env and sends it as X-Mistral-Key to the in-process 
 printed, and a record that contains it (or anything shaped like a key) is refused before it is written.
 """
 import asyncio
+import base64
 import json
 import os
 import re
@@ -30,7 +32,7 @@ from fastapi.testclient import TestClient      # noqa: E402
 
 from api.core import replay, state             # noqa: E402
 from api.index import app                      # noqa: E402
-from api.routes import agents, handbook        # noqa: E402
+from api.routes import agents, handbook, voice  # noqa: E402
 from dock import hitl                          # noqa: E402
 from dock import app as dock                   # noqa: E402
 from dock._client import client, request_scope  # noqa: E402
@@ -283,9 +285,64 @@ def record_approvals(http, key):
     return records, failed
 
 
+def record_voice(http, key):
+    """The six voicemails with and without context bias, each with its spoken reply. The reply's base64 becomes a
+    WAV in replays/voice/ and the record keeps its URL."""
+    voice.AUDIO.mkdir(parents=True, exist_ok=True)
+    records, failed = {}, []
+    for bias in (False, True):
+        for call_id in dataset("calls/truth.json"):
+            record_key = replay.key("voice", call_id, bias=1 if bias else None)
+            r = http.post("/api/voice/run", json={"call_id": call_id, "bias": bias, "speak": True},
+                          headers={"X-Mistral-Key": key})
+            got = r.json()
+            if r.status_code != 200 or got.get("mode") != "live" or not got.get("audio_b64"):
+                failed.append(record_key)
+                print(f"{record_key}  FAILED {r.status_code} {got.get('error')}")
+                continue
+            name = voice.audio_name(call_id, bias)
+            (voice.AUDIO / name).write_bytes(base64.b64decode(got.pop("audio_b64")))
+            got["audio_url"] = f"/api/files/voice/{name}"
+            records[record_key] = stamp(got, key)
+            wrong = [f"{f}={got['note'][f]!r}" for f, ok in got["score_vs_truth"].items() if not ok]
+            print(f"{record_key:<16} {str(got['note']['shipment_id']):<9} {got['note']['issue']:<8} "
+                  f"callback={got['note']['callback']!s:<5} {'WRONG ' + ' '.join(wrong) if wrong else 'ok':<24} "
+                  f"{got['stages']} {got['audio_bytes'] // 1000} kB")
+    for bias in (False, True):
+        rows = [v for k, v in records.items() if k.endswith("|bias=1" if bias else "|")]
+        right = {f: sum(r["score_vs_truth"][f] for r in rows) for f in ("shipment_id", "issue", "callback")}
+        print(f"bias={bias!s:<5} " + " ".join(f"{f} {n}/{len(rows)}" for f, n in right.items()))
+    return records, failed
+
+
+def record_scorecard(http, key):
+    """The 30 cases for the baseline and the cheaper candidate, and the judge on every answer case with sources."""
+    cases = dataset("scorecard.json")
+    records, failed = {}, []
+    for version in ("baseline", "cheaper"):
+        got, bad = record_cases(http, key, "/api/scorecard/case", [
+            (replay.key("case", c["id"], versions=None if version == "baseline" else version),
+             {"case_id": c["id"], "versions": version}) for c in cases],
+            lambda g: f"{'pass' if g['ok'] else 'FAIL'} {g['detail'][:52]}")
+        records.update(got)
+        failed += bad
+        mine = [got.get(replay.key("case", c["id"], versions=None if version == "baseline" else version)) for c in cases]
+        print(f"{version}: {sum(bool(m and m['ok']) for m in mine)}/{len(cases)} passed")
+    for c in cases:
+        was, now = records.get(replay.key("case", c["id"])), records.get(replay.key("case", c["id"], versions="cheaper"))
+        if was and now and was["ok"] != now["ok"]:
+            print(f"  {c['id']:<11} {'pass' if was['ok'] else 'fail'} -> {'pass' if now['ok'] else 'FAIL'}  "
+                  f"{now['detail'][:70]}")
+    judged, bad = record_cases(http, key, "/api/scorecard/judge", [
+        (replay.key("judge", c["id"]), {"case_id": c["id"]})
+        for c in cases if c["kind"] == "answer" and c["expect"]["sources"]],
+        lambda g: f"{'grounded' if g['grounded'] else 'UNSUPPORTED: ' + repr(g['unsupported'])[:40]} | {g['answer'][:30]}")
+    return {**records, **judged}, failed + bad
+
+
 CAPABILITIES = {"triage": record_triage, "handbook": record_handbook, "guardrails": record_guardrails,
                 "documents": record_documents, "agents": record_agents, "designs": record_designs_only,
-                "approvals": record_approvals}
+                "approvals": record_approvals, "voice": record_voice, "scorecard": record_scorecard}
 FILES = {"designs": "agents"}   # a part of a capability, saved into that capability's file
 REPLACE = {"approvals": "approvals|"}   # re-recorded as a whole: old paths would mix with the new runs
 

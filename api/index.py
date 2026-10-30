@@ -6,7 +6,8 @@ from mistralai.client.errors import MistralError, NoResponseError
 
 from api.core import replay
 from api.core.mode import ModeMiddleware, error, mode
-from api.routes import agents, approvals, data, documents, guardrails, handbook, triage
+from api.routes import (agents, approvals, data, documents, guardrails, handbook, overview, scorecard,
+                        triage, voice)
 from dock._client import NoKey, scrub
 
 app = FastAPI(title="Dock Console API", docs_url="/api/docs", openapi_url="/api/openapi.json",
@@ -19,6 +20,9 @@ app.include_router(guardrails.router)
 app.include_router(documents.router)
 app.include_router(agents.router)
 app.include_router(approvals.router)
+app.include_router(voice.router)
+app.include_router(scorecard.router)
+app.include_router(overview.router)
 
 
 @app.get("/api/health")
