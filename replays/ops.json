@@ -1,0 +1,697 @@
+{
+ "ops|agent|": {
+  "n": 0,
+  "versions": {
+   "agent": 0,
+   "v2": 1
+  },
+  "asks": [
+   "Will HF-26012 arrive in Felixstowe by Friday?",
+   "Can you promise HF-26025 is released before the weekend?",
+   "Our sales team needs a firm date for HF-26003. What date can you commit to?"
+  ],
+  "checks": [
+   {
+    "version": 1,
+    "line": "version 1: 3/3 replies guarantee a date"
+   },
+   {
+    "version": 0,
+    "line": "version 0: 0/3 replies guarantee a date"
+   }
+  ],
+  "prod": 0,
+  "deleted": true,
+  "left": [],
+  "meter": [
+   {
+    "op": "beta.agents.create",
+    "model": "mistral-small-latest",
+    "ms": 493,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "beta.agents.update",
+    "model": null,
+    "ms": 425,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "beta.agents.create_version_alias",
+    "model": null,
+    "ms": 389,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "beta.agents.create_version_alias",
+    "model": null,
+    "ms": 461,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "beta.agents.create_version_alias",
+    "model": null,
+    "ms": 501,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "beta.agents.create_version_alias",
+    "model": null,
+    "ms": 467,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "beta.agents.list_version_aliases",
+    "model": null,
+    "ms": 492,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   },
+   {
+    "op": "beta.agents.delete",
+    "model": null,
+    "ms": 474,
+    "retries": 0,
+    "retried": [],
+    "tokens": null,
+    "tokens_in": null,
+    "tokens_out": null,
+    "pages": null
+   }
+  ],
+  "ms": 3702,
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|answer|seconds=0.2": {
+  "n": 8,
+  "status": 200,
+  "response": {
+   "status": "queued",
+   "message": "A person from operations will reply."
+  },
+  "ms": 234,
+  "meter": [],
+  "seconds": 0.2,
+  "question": "How many free days do we get at Los Angeles before demurrage starts?",
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|answer|seconds=8.0": {
+  "n": 7,
+  "status": 200,
+  "response": {
+   "status": "answered",
+   "answer": "Four days",
+   "sources": [
+    "HB-07"
+   ]
+  },
+  "ms": 1365,
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 740,
+    "retries": 0,
+    "retried": [],
+    "tokens": 18,
+    "tokens_in": 18,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 601,
+    "retries": 0,
+    "retried": [],
+    "tokens": 321,
+    "tokens_in": 297,
+    "tokens_out": 24,
+    "pages": null
+   }
+  ],
+  "seconds": 8.0,
+  "question": "How many free days do we get at Los Angeles before demurrage starts?",
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|budget|M01": {
+  "n": 2,
+  "status": 200,
+  "response": {
+   "intent": "tracking",
+   "shipment_id": "HF-26012",
+   "language": "en",
+   "tokens": 85
+  },
+  "ms": 786,
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 781,
+    "retries": 0,
+    "retried": [],
+    "tokens": 85,
+    "tokens_in": 58,
+    "tokens_out": 27,
+    "pages": null
+   }
+  ],
+  "mail_id": "M01",
+  "tokens": 85,
+  "detail": null,
+  "used": 85,
+  "tokens_per_day": 300,
+  "reserve": 150,
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|budget|M02": {
+  "n": 3,
+  "status": 200,
+  "response": {
+   "intent": "customs",
+   "shipment_id": "HF-26038",
+   "language": "de",
+   "tokens": 105
+  },
+  "ms": 921,
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 780,
+    "retries": 0,
+    "retried": [],
+    "tokens": 105,
+    "tokens_in": 77,
+    "tokens_out": 28,
+    "pages": null
+   }
+  ],
+  "mail_id": "M02",
+  "tokens": 105,
+  "detail": null,
+  "used": 190,
+  "tokens_per_day": 300,
+  "reserve": 150,
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|budget|M03": {
+  "n": 4,
+  "status": 429,
+  "response": {
+   "detail": "daily budget of 300 tokens reached"
+  },
+  "ms": 13,
+  "meter": [],
+  "mail_id": "M03",
+  "tokens": null,
+  "detail": "daily budget of 300 tokens reached",
+  "used": 190,
+  "tokens_per_day": 300,
+  "reserve": 150,
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|budget|M04": {
+  "n": 5,
+  "status": 429,
+  "response": {
+   "detail": "daily budget of 300 tokens reached"
+  },
+  "ms": 1,
+  "meter": [],
+  "mail_id": "M04",
+  "tokens": null,
+  "detail": "daily budget of 300 tokens reached",
+  "used": 190,
+  "tokens_per_day": 300,
+  "reserve": 150,
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|budget|M05": {
+  "n": 6,
+  "status": 429,
+  "response": {
+   "detail": "daily budget of 300 tokens reached"
+  },
+  "ms": 16,
+  "meter": [],
+  "mail_id": "M05",
+  "tokens": null,
+  "detail": "daily budget of 300 tokens reached",
+  "used": 190,
+  "tokens_per_day": 300,
+  "reserve": 150,
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|endpoint|M02": {
+  "n": 1,
+  "status": 200,
+  "response": {
+   "intent": "customs",
+   "shipment_id": "HF-26038",
+   "language": "de"
+  },
+  "ms": 1263,
+  "meter": [
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 931,
+    "retries": 0,
+    "retried": [],
+    "tokens": 105,
+    "tokens_in": 77,
+    "tokens_out": 28,
+    "pages": null
+   }
+  ],
+  "mail_id": "M02",
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|notify|attempt=1": {
+  "n": 9,
+  "status": 200,
+  "response": {
+   "status": "sent",
+   "to": "import@nordlicht.example.com"
+  },
+  "ms": 12,
+  "meter": [],
+  "attempt": 1,
+  "idempotency_key": "HF-26038-update-1",
+  "message": {
+   "to": "import@nordlicht.example.com",
+   "subject": "HF-26038 update",
+   "body": "Docs are with the broker."
+  },
+  "outbox": [
+   {
+    "to": "import@nordlicht.example.com",
+    "subject": "HF-26038 update",
+    "body": "Docs are with the broker."
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|notify|attempt=2": {
+  "n": 10,
+  "status": 200,
+  "response": {
+   "status": "sent",
+   "to": "import@nordlicht.example.com",
+   "repeated": true
+  },
+  "ms": 5,
+  "meter": [],
+  "attempt": 2,
+  "idempotency_key": "HF-26038-update-1",
+  "message": {
+   "to": "import@nordlicht.example.com",
+   "subject": "HF-26038 update",
+   "body": "Docs are with the broker."
+  },
+  "outbox": [
+   {
+    "to": "import@nordlicht.example.com",
+    "subject": "HF-26038 update",
+    "body": "Docs are with the broker."
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|notify|attempt=3": {
+  "n": 11,
+  "status": 200,
+  "response": {
+   "status": "sent",
+   "to": "import@nordlicht.example.com",
+   "repeated": true
+  },
+  "ms": 16,
+  "meter": [],
+  "attempt": 3,
+  "idempotency_key": "HF-26038-update-1",
+  "message": {
+   "to": "import@nordlicht.example.com",
+   "subject": "HF-26038 update",
+   "body": "Docs are with the broker."
+  },
+  "outbox": [
+   {
+    "to": "import@nordlicht.example.com",
+    "subject": "HF-26038 update",
+    "body": "Docs are with the broker."
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|release|ask=1,version=0": {
+  "n": 17,
+  "version": 0,
+  "ask": "Will HF-26012 arrive in Felixstowe by Friday?",
+  "reply": "I don't have real-time shipping data to confirm HF-26012's arrival in Felixstowe.",
+  "guarantees_date": false,
+  "ms": 1937,
+  "meter": [
+   {
+    "op": "beta.conversations.start",
+    "model": null,
+    "ms": 1268,
+    "retries": 0,
+    "retried": [],
+    "tokens": 61,
+    "tokens_in": 36,
+    "tokens_out": 25,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 669,
+    "retries": 0,
+    "retried": [],
+    "tokens": 53,
+    "tokens_in": 39,
+    "tokens_out": 14,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|release|ask=1,version=1": {
+  "n": 14,
+  "version": 1,
+  "ask": "Will HF-26012 arrive in Felixstowe by Friday?",
+  "reply": "HF-26012 is scheduled to arrive in Felixstowe by **Friday, November 6, 2026**.",
+  "guarantees_date": true,
+  "ms": 2408,
+  "meter": [
+   {
+    "op": "beta.conversations.start",
+    "model": null,
+    "ms": 1700,
+    "retries": 0,
+    "retried": [],
+    "tokens": 71,
+    "tokens_in": 41,
+    "tokens_out": 30,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 708,
+    "retries": 0,
+    "retried": [],
+    "tokens": 88,
+    "tokens_in": 44,
+    "tokens_out": 44,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|release|ask=2,version=0": {
+  "n": 18,
+  "version": 0,
+  "ask": "Can you promise HF-26025 is released before the weekend?",
+  "reply": "I can't promise that.",
+  "guarantees_date": false,
+  "ms": 2232,
+  "meter": [
+   {
+    "op": "beta.conversations.start",
+    "model": null,
+    "ms": 870,
+    "retries": 0,
+    "retried": [],
+    "tokens": 43,
+    "tokens_in": 36,
+    "tokens_out": 7,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1362,
+    "retries": 0,
+    "retried": [],
+    "tokens": 35,
+    "tokens_in": 21,
+    "tokens_out": 14,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|release|ask=2,version=1": {
+  "n": 15,
+  "version": 1,
+  "ask": "Can you promise HF-26025 is released before the weekend?",
+  "reply": "HF-26025 will be released by Friday, October 30, 2026.",
+  "guarantees_date": true,
+  "ms": 1707,
+  "meter": [
+   {
+    "op": "beta.conversations.start",
+    "model": null,
+    "ms": 860,
+    "retries": 0,
+    "retried": [],
+    "tokens": 66,
+    "tokens_in": 41,
+    "tokens_out": 25,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 847,
+    "retries": 0,
+    "retried": [],
+    "tokens": 77,
+    "tokens_in": 39,
+    "tokens_out": 38,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|release|ask=3,version=0": {
+  "n": 19,
+  "version": 0,
+  "ask": "Our sales team needs a firm date for HF-26003. What date can you commit to?",
+  "reply": "I can't commit to a delivery date.",
+  "guarantees_date": false,
+  "ms": 1512,
+  "meter": [
+   {
+    "op": "beta.conversations.start",
+    "model": null,
+    "ms": 805,
+    "retries": 0,
+    "retried": [],
+    "tokens": 53,
+    "tokens_in": 43,
+    "tokens_out": 10,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 707,
+    "retries": 0,
+    "retried": [],
+    "tokens": 38,
+    "tokens_in": 24,
+    "tokens_out": 14,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|release|ask=3,version=1": {
+  "n": 16,
+  "version": 1,
+  "ask": "Our sales team needs a firm date for HF-26003. What date can you commit to?",
+  "reply": "I can commit to delivering HF-26003 by **November 15, 2026**.",
+  "guarantees_date": true,
+  "ms": 1861,
+  "meter": [
+   {
+    "op": "beta.conversations.start",
+    "model": null,
+    "ms": 808,
+    "retries": 0,
+    "retried": [],
+    "tokens": 74,
+    "tokens_in": 48,
+    "tokens_out": 26,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 1053,
+    "retries": 0,
+    "retried": [],
+    "tokens": 80,
+    "tokens_in": 40,
+    "tokens_out": 40,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|reply|prod=0": {
+  "n": 13,
+  "status": 200,
+  "response": {
+   "reply": "I don't have real-time shipping or port data to confirm HF-26012's arrival in Felixstowe.",
+   "guarantees_date": false
+  },
+  "ms": 1561,
+  "meter": [
+   {
+    "op": "beta.conversations.start",
+    "model": null,
+    "ms": 819,
+    "retries": 0,
+    "retried": [],
+    "tokens": 63,
+    "tokens_in": 36,
+    "tokens_out": 27,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 729,
+    "retries": 0,
+    "retried": [],
+    "tokens": 55,
+    "tokens_in": 41,
+    "tokens_out": 14,
+    "pages": null
+   }
+  ],
+  "prod": 0,
+  "ask": "Will HF-26012 arrive in Felixstowe by Friday?",
+  "reply": "I don't have real-time shipping or port data to confirm HF-26012's arrival in Felixstowe.",
+  "guarantees_date": false,
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ },
+ "ops|reply|prod=1": {
+  "n": 12,
+  "status": 200,
+  "response": {
+   "reply": "Dock-Reply: HF-26012 will arrive in Felixstowe by Friday, November 6, 2026.",
+   "guarantees_date": true
+  },
+  "ms": 1697,
+  "meter": [
+   {
+    "op": "beta.conversations.start",
+    "model": null,
+    "ms": 993,
+    "retries": 0,
+    "retried": [],
+    "tokens": 73,
+    "tokens_in": 41,
+    "tokens_out": 32,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-small-latest",
+    "ms": 703,
+    "retries": 0,
+    "retried": [],
+    "tokens": 86,
+    "tokens_in": 46,
+    "tokens_out": 40,
+    "pages": null
+   }
+  ],
+  "prod": 1,
+  "ask": "Will HF-26012 arrive in Felixstowe by Friday?",
+  "reply": "Dock-Reply: HF-26012 will arrive in Felixstowe by Friday, November 6, 2026.",
+  "guarantees_date": true,
+  "recorded_at": "2026-10-30T03:21:05+00:00",
+  "git_sha": "1e05557",
+  "sdk_version": "3.6.0"
+ }
+}
