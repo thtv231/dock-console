@@ -102,6 +102,9 @@ def test_reply_audio_is_a_wav_url_not_base64(client):
     for k, record in recorded().items():
         assert "audio_b64" not in record, f"{k}: reply audio stored as base64"
         assert not BASE64_RUN.search(json.dumps(record)), f"{k}: a long base64 run is in the record"
+        if k.startswith("note|"):   # note() again on a transcript: no speech, so no audio at all
+            assert "audio_url" not in record, f"{k}: a note repeat carries audio"
+            continue
         url = record.get("audio_url")
         assert url and url.startswith("/api/") and url.endswith(".wav"), f"{k}: audio_url {url!r}"
         assert (ROOT / "replays" / "voice" / url.rsplit("/", 1)[-1]).exists(), f"{k}: {url} is not in replays/voice/"

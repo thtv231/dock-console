@@ -3153,6 +3153,65 @@
   "git_sha": "16e042e",
   "sdk_version": "3.6.0"
  },
+ "judge|A-Q01|versions=cheaper": {
+  "case_id": "A-Q01",
+  "versions": "cheaper",
+  "models": {
+   "answer": {
+    "model": "ministral-8b-latest"
+   },
+   "triage": {
+    "model": "ministral-8b-latest"
+   }
+  },
+  "question": "Can we import roasted coffee into Germany, and what must the invoice show?",
+  "grounded": true,
+  "unsupported": "",
+  "answer": "Yes, roasted coffee can be imported into Germany. The commercial invoice must show the HS code for each line.",
+  "judge": {
+   "grounded": true,
+   "unsupported": "",
+   "unsupported_in_answer": false
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 799,
+    "retries": 0,
+    "retried": [],
+    "tokens": 19,
+    "tokens_in": 19,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "ministral-8b-latest",
+    "ms": 805,
+    "retries": 0,
+    "retried": [],
+    "tokens": 336,
+    "tokens_in": 288,
+    "tokens_out": 48,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 537,
+    "retries": 0,
+    "retried": [],
+    "tokens": 253,
+    "tokens_in": 240,
+    "tokens_out": 13,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T01:34:45+00:00",
+  "git_sha": "02e4053",
+  "sdk_version": "3.6.0"
+ },
  "judge|A-Q02|": {
   "case_id": "A-Q02",
   "question": "Shipment HF-26038 is on customs hold in Hamburg. Which three documents does the broker need?",
@@ -3201,6 +3260,65 @@
   ],
   "recorded_at": "2026-10-30T01:11:09+00:00",
   "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "judge|A-Q02|versions=cheaper": {
+  "case_id": "A-Q02",
+  "versions": "cheaper",
+  "models": {
+   "answer": {
+    "model": "ministral-8b-latest"
+   },
+   "triage": {
+    "model": "ministral-8b-latest"
+   }
+  },
+  "question": "Shipment HF-26038 is on customs hold in Hamburg. Which three documents does the broker need?",
+  "grounded": true,
+  "unsupported": "",
+  "answer": "The provided sections do not specify the required documents for a customs hold in **Hamburg**. The handbook only outlines requirements for imports into the **United States** (HB-01, HB-11) and general customs hold procedures (HB-06).",
+  "judge": {
+   "grounded": true,
+   "unsupported": "",
+   "unsupported_in_answer": false
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 858,
+    "retries": 0,
+    "retried": [],
+    "tokens": 27,
+    "tokens_in": 27,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "ministral-8b-latest",
+    "ms": 915,
+    "retries": 0,
+    "retried": [],
+    "tokens": 369,
+    "tokens_in": 294,
+    "tokens_out": 75,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 607,
+    "retries": 0,
+    "retried": [],
+    "tokens": 282,
+    "tokens_in": 269,
+    "tokens_out": 13,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T01:34:47+00:00",
+  "git_sha": "02e4053",
   "sdk_version": "3.6.0"
  },
  "judge|A-Q04|": {
@@ -3253,6 +3371,65 @@
   "git_sha": "16e042e",
   "sdk_version": "3.6.0"
  },
+ "judge|A-Q04|versions=cheaper": {
+  "case_id": "A-Q04",
+  "versions": "cheaper",
+  "models": {
+   "answer": {
+    "model": "ministral-8b-latest"
+   },
+   "triage": {
+    "model": "ministral-8b-latest"
+   }
+  },
+  "question": "Our customer ships wooden chairs on pallets to Hamburg. What mark must the pallets carry?",
+  "grounded": true,
+  "unsupported": "",
+  "answer": "The pallets must carry the **ISPM 15 mark**, which confirms the wood has been heat-treated.",
+  "judge": {
+   "grounded": true,
+   "unsupported": "",
+   "unsupported_in_answer": false
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 523,
+    "retries": 0,
+    "retried": [],
+    "tokens": 21,
+    "tokens_in": 21,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "ministral-8b-latest",
+    "ms": 725,
+    "retries": 0,
+    "retried": [],
+    "tokens": 350,
+    "tokens_in": 302,
+    "tokens_out": 48,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 557,
+    "retries": 0,
+    "retried": [],
+    "tokens": 264,
+    "tokens_in": 251,
+    "tokens_out": 13,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T01:34:49+00:00",
+  "git_sha": "02e4053",
+  "sdk_version": "3.6.0"
+ },
  "judge|A-Q05|": {
   "case_id": "A-Q05",
   "question": "Can Harbor Freight carry a carton of loose lithium batteries of 160 Wh each?",
@@ -3301,6 +3478,65 @@
   ],
   "recorded_at": "2026-10-30T01:11:13+00:00",
   "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "judge|A-Q05|versions=cheaper": {
+  "case_id": "A-Q05",
+  "versions": "cheaper",
+  "models": {
+   "answer": {
+    "model": "ministral-8b-latest"
+   },
+   "triage": {
+    "model": "ministral-8b-latest"
+   }
+  },
+  "question": "Can Harbor Freight carry a carton of loose lithium batteries of 160 Wh each?",
+  "grounded": true,
+  "unsupported": "",
+  "answer": "No information provided in the given sections about cartons of loose lithium batteries of 160 Wh each.",
+  "judge": {
+   "grounded": true,
+   "unsupported": "",
+   "unsupported_in_answer": false
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 702,
+    "retries": 0,
+    "retried": [],
+    "tokens": 24,
+    "tokens_in": 24,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "ministral-8b-latest",
+    "ms": 795,
+    "retries": 0,
+    "retried": [],
+    "tokens": 309,
+    "tokens_in": 267,
+    "tokens_out": 42,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 577,
+    "retries": 0,
+    "retried": [],
+    "tokens": 238,
+    "tokens_in": 225,
+    "tokens_out": 13,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T01:34:51+00:00",
+  "git_sha": "02e4053",
   "sdk_version": "3.6.0"
  },
  "judge|A-Q06|": {
@@ -3353,6 +3589,65 @@
   "git_sha": "16e042e",
   "sdk_version": "3.6.0"
  },
+ "judge|A-Q06|versions=cheaper": {
+  "case_id": "A-Q06",
+  "versions": "cheaper",
+  "models": {
+   "answer": {
+    "model": "ministral-8b-latest"
+   },
+   "triage": {
+    "model": "ministral-8b-latest"
+   }
+  },
+  "question": "A container has been on customs hold for six days. From which day is port storage charged, and how much?",
+  "grounded": true,
+  "unsupported": "",
+  "answer": "Port storage is charged from the **fourth day** of the hold at **85 USD per container per day**.",
+  "judge": {
+   "grounded": true,
+   "unsupported": "",
+   "unsupported_in_answer": false
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 512,
+    "retries": 0,
+    "retried": [],
+    "tokens": 25,
+    "tokens_in": 25,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "ministral-8b-latest",
+    "ms": 767,
+    "retries": 0,
+    "retried": [],
+    "tokens": 349,
+    "tokens_in": 299,
+    "tokens_out": 50,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 513,
+    "retries": 0,
+    "retried": [],
+    "tokens": 257,
+    "tokens_in": 244,
+    "tokens_out": 13,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T01:34:53+00:00",
+  "git_sha": "02e4053",
+  "sdk_version": "3.6.0"
+ },
  "judge|A-Q07|": {
   "case_id": "A-Q07",
   "question": "How many free days do we get at Los Angeles before demurrage starts?",
@@ -3401,6 +3696,65 @@
   ],
   "recorded_at": "2026-10-30T01:11:17+00:00",
   "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "judge|A-Q07|versions=cheaper": {
+  "case_id": "A-Q07",
+  "versions": "cheaper",
+  "models": {
+   "answer": {
+    "model": "ministral-8b-latest"
+   },
+   "triage": {
+    "model": "ministral-8b-latest"
+   }
+  },
+  "question": "How many free days do we get at Los Angeles before demurrage starts?",
+  "grounded": true,
+  "unsupported": "",
+  "answer": "4 free days",
+  "judge": {
+   "grounded": true,
+   "unsupported": "",
+   "unsupported_in_answer": false
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 585,
+    "retries": 0,
+    "retried": [],
+    "tokens": 18,
+    "tokens_in": 18,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "ministral-8b-latest",
+    "ms": 642,
+    "retries": 0,
+    "retried": [],
+    "tokens": 326,
+    "tokens_in": 297,
+    "tokens_out": 29,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 538,
+    "retries": 0,
+    "retried": [],
+    "tokens": 247,
+    "tokens_in": 234,
+    "tokens_out": 13,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T01:34:55+00:00",
+  "git_sha": "02e4053",
   "sdk_version": "3.6.0"
  },
  "judge|A-Q09|": {
@@ -3453,6 +3807,65 @@
   "git_sha": "16e042e",
   "sdk_version": "3.6.0"
  },
+ "judge|A-Q09|versions=cheaper": {
+  "case_id": "A-Q09",
+  "versions": "cheaper",
+  "models": {
+   "answer": {
+    "model": "ministral-8b-latest"
+   },
+   "triage": {
+    "model": "ministral-8b-latest"
+   }
+  },
+  "question": "A customer found damaged cartons nine days after delivery. Can they still claim?",
+  "grounded": true,
+  "unsupported": "",
+  "answer": "No information in the provided sections addresses claims made beyond the seven-day window for reporting damage.",
+  "judge": {
+   "grounded": true,
+   "unsupported": "",
+   "unsupported_in_answer": false
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 516,
+    "retries": 0,
+    "retried": [],
+    "tokens": 18,
+    "tokens_in": 18,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "ministral-8b-latest",
+    "ms": 708,
+    "retries": 0,
+    "retried": [],
+    "tokens": 308,
+    "tokens_in": 270,
+    "tokens_out": 38,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 514,
+    "retries": 0,
+    "retried": [],
+    "tokens": 238,
+    "tokens_in": 225,
+    "tokens_out": 13,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T01:34:57+00:00",
+  "git_sha": "02e4053",
+  "sdk_version": "3.6.0"
+ },
  "judge|A-Q11|": {
   "case_id": "A-Q11",
   "question": "When must the ISF be filed for a shipment to Los Angeles?",
@@ -3501,6 +3914,65 @@
   ],
   "recorded_at": "2026-10-30T01:11:21+00:00",
   "git_sha": "16e042e",
+  "sdk_version": "3.6.0"
+ },
+ "judge|A-Q11|versions=cheaper": {
+  "case_id": "A-Q11",
+  "versions": "cheaper",
+  "models": {
+   "answer": {
+    "model": "ministral-8b-latest"
+   },
+   "triage": {
+    "model": "ministral-8b-latest"
+   }
+  },
+  "question": "When must the ISF be filed for a shipment to Los Angeles?",
+  "grounded": true,
+  "unsupported": "",
+  "answer": "The Importer Security Filing (ISF or 10+2) must be filed at least 24 hours before the cargo is loaded at the origin port for a shipment to Los Angeles.",
+  "judge": {
+   "grounded": true,
+   "unsupported": "",
+   "unsupported_in_answer": false
+  },
+  "meter": [
+   {
+    "op": "embeddings.create",
+    "model": "mistral-embed",
+    "ms": 501,
+    "retries": 0,
+    "retried": [],
+    "tokens": 17,
+    "tokens_in": 17,
+    "tokens_out": 0,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "ministral-8b-latest",
+    "ms": 884,
+    "retries": 0,
+    "retried": [],
+    "tokens": 354,
+    "tokens_in": 288,
+    "tokens_out": 66,
+    "pages": null
+   },
+   {
+    "op": "chat.parse",
+    "model": "mistral-medium-latest",
+    "ms": 639,
+    "retries": 0,
+    "retried": [],
+    "tokens": 275,
+    "tokens_in": 262,
+    "tokens_out": 13,
+    "pages": null
+   }
+  ],
+  "recorded_at": "2026-10-30T01:34:59+00:00",
+  "git_sha": "02e4053",
   "sdk_version": "3.6.0"
  }
 }
