@@ -7,13 +7,15 @@ shows recorded runs of it, never live ones.
     agent, v2 = ops.create_versions() · ops.release_check(v2.version, http) · ops.rollback() · ops.delete()
 
 Ported from notebooks/s10_ship.ipynb: routes, prompts and instructions exactly as written. The notebook's
-top-level agent steps are functions here, and the agent carries the console's tag so a leftover can be found.
+top-level agent steps are functions here, the agent carries the console's tag so a leftover can be found, and an
+answer call abandoned by its time limit is metered when it finishes (ABANDONED).
 """
 import asyncio
 
 from fastapi import FastAPI, Header, HTTPException
 
 from dock import app as dock
+from dock._client import Detached
 
 TAG = {"created_by": "dock-console"}   # api/routes/agents.TAG: the recorder looks for leftovers by it
 api = FastAPI(title="Dock")
@@ -54,13 +56,18 @@ def triage_v2(mail: dict):
 
 # ---------- s10 step 3: answer in time, or hand over ----------
 FALLBACK = {"status": "queued", "message": "A person from operations will reply."}
+# The notebook's handover returns at once, but the answer call it gives up on runs to the end and is billed.
+# Each abandoned call lands here with its meter when it finishes, so that spend is never unseen.
+ABANDONED = []
 
 
 @api.post("/answer")
 async def answer(body: dict, seconds: float = 8.0):
+    call = Detached(dock.answer, body["question"])   # its own meter: it may outlive this request
     try:
-        a, sources = await asyncio.wait_for(asyncio.to_thread(dock.answer, body["question"]), timeout=seconds)
+        a, sources = await asyncio.wait_for(asyncio.to_thread(call), timeout=seconds)
     except asyncio.TimeoutError:
+        call.abandon(ABANDONED)
         return FALLBACK
     return {"status": "answered", "answer": a.answer, "sources": a.sources}
 

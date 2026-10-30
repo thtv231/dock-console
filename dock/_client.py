@@ -6,8 +6,10 @@
 Inside a request scope the key comes only from that scope: no key means NoKey, never a fallback.
 Outside any scope (a notebook, a script) the developer's MISTRAL_API_KEY is used, as app.py did before.
 """
+import asyncio
 import inspect
 import os
+import threading
 import time
 from contextlib import asynccontextmanager
 from contextvars import ContextVar
@@ -119,6 +121,72 @@ async def request_scope(key=None):
             await built.__aexit__(None, None, None)
             for http in getattr(built, "_dock_http", ()):
                 await http.aclose() if isinstance(http, httpx2.AsyncClient) else http.close()
+
+
+class Detached:
+    """fn(*args) under a scope of its own: this request's key, its own client and its own meter. A call a time limit
+    abandons keeps running after its request has ended, and still costs: run it detached, and abandon(ledger) adds
+    what it cost to ledger when it finishes, so that spend is never unseen.
+
+        call = Detached(dock.answer, question)
+        a = await asyncio.wait_for(asyncio.to_thread(call), timeout=seconds)   # or, on timeout: call.abandon(LEDGER)
+    """
+
+    def __init__(self, fn, *args):
+        parent = _SCOPE.get()
+        # Outside any request (a notebook, a script) the developer's key, as _current() does.
+        self._key = parent.get("key") if parent is not None else os.environ.get("MISTRAL_API_KEY")
+        self._fn, self._args = fn, args
+        self.meter, self.ms, self.error = [], None, None
+        self.finished = threading.Event()
+        self._ledger, self._lock = None, threading.Lock()
+
+    def __call__(self):
+        scope = {"key": self._key, "client": None, "meter": self.meter, "results": []}
+        token = _SCOPE.set(scope)
+        started = time.perf_counter()
+        try:
+            return self._fn(*self._args)
+        except Exception as e:
+            self.error = type(e).__name__
+            raise
+        finally:
+            _SCOPE.reset(token)
+            self.ms = round((time.perf_counter() - started) * 1000)
+            built = scope["client"]
+            scope.clear()
+            self._key = None   # the key lives no longer than the call
+            if built is not None:
+                _close(built)
+            with self._lock:
+                self.finished.set()
+                if self._ledger is not None:
+                    self._ledger.append(self.cost())
+                else:   # finished while its request still runs: its cost is on that request's meter
+                    _add_to_meter(self.meter)
+
+    def cost(self):
+        return {"meter": list(self.meter), "ms": self.ms, "error": self.error}
+
+    def abandon(self, ledger):
+        """Nobody waits for the result any more: put what the call cost in ledger when it finishes. A call that
+        finished just before its time limit is already on its request's meter, so it is not counted twice."""
+        with self._lock:
+            if not self.finished.is_set():
+                self._ledger = ledger
+
+
+def _close(built):
+    """request_scope's cleanup, for a thread with no event loop of its own."""
+    built.__exit__(None, None, None)
+    for http in getattr(built, "_dock_http", ()):
+        asyncio.run(http.aclose()) if isinstance(http, httpx2.AsyncClient) else http.close()
+
+
+def _add_to_meter(entries):
+    scope = _SCOPE.get()
+    if scope and "meter" in scope:
+        scope["meter"].extend(entries)
 
 
 def live():

@@ -5,6 +5,7 @@
     python scripts/record.py approvals     # HF-26038, plain and safe, one real run per decision policy
     python scripts/record.py voice scorecard   # C1-C6 with and without bias; 30 cases x baseline/cheaper + judge
     python scripts/record.py ops               # S10 through dock/ops.py: budget, timeout, retries, release + rollback
+    python scripts/record.py handover          # only S10's 0.2 s run again, with the abandoned call metered
 
 Every record names the commit that made it, so the tree must be clean: commit first, then record.
 
@@ -19,6 +20,7 @@ import re
 import secrets
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from importlib.metadata import version
 from pathlib import Path
@@ -481,10 +483,48 @@ def record_ops(http, key):
     return {k: stamp(v, key) for k, v in records.items()}, [f"left {a}" for a in left]
 
 
+def record_handover(http, key):
+    """S10 step 3's 0.2 s run only, again: the request hands over, and the answer call it abandons is metered when it
+    finishes. The record replaces ops|answer|seconds=0.2 in its place; every other S10 record is kept as recorded."""
+    from dock import ops
+    record_key, seconds = "ops|answer|seconds=0.2", 0.2
+    was = replay.load("ops").get(record_key)
+    if was is None:
+        raise SystemExit("record ops first: the handover takes the place of a recorded S10 run")
+    meters = []
+
+    async def metered(scope, receive, send):
+        if scope["type"] != "http":
+            return await ops.api(scope, receive, send)
+        async with request_scope(key) as m:
+            await ops.api(scope, receive, send)
+            meters.append(list(m))
+
+    ops.ABANDONED.clear()
+    with TestClient(metered) as api:   # one event loop for the whole run: the abandoned call finishes on it
+        started = datetime.now(timezone.utc)
+        r = api.post(f"/answer?seconds={seconds}", json=ops.QUESTION)
+        ms = round((datetime.now(timezone.utc) - started).total_seconds() * 1000)
+        deadline = time.monotonic() + 120
+        while not ops.ABANDONED and time.monotonic() < deadline:
+            time.sleep(0.1)
+    if r.status_code != 200 or not ops.ABANDONED:
+        print(f"handover FAILED {r.status_code} abandoned={len(ops.ABANDONED)}")
+        return {}, [record_key]
+    late = ops.ABANDONED[0]
+    record = {"n": was["n"], "status": r.status_code, "response": r.json(), "ms": ms, "meter": meters[-1],
+              "seconds": seconds, "question": ops.QUESTION["question"], "abandoned": late}
+    print(f"step 3  limit {seconds} s -> {r.json()} ({ms} ms)")
+    print(f"step 3  abandoned call finished after {late['ms']} ms: "
+          f"{sum(c['tokens'] or 0 for c in late['meter'])} tokens in {[c['op'] for c in late['meter']]}"
+          f"{', error ' + late['error'] if late['error'] else ''}")
+    return {record_key: stamp(record, key)}, []
+
+
 CAPABILITIES = {"triage": record_triage, "handbook": record_handbook, "guardrails": record_guardrails,
                 "documents": record_documents, "agents": record_agents, "designs": record_designs_only,
-                "approvals": record_approvals, "voice": record_voice, "scorecard": record_scorecard, "ops": record_ops}
-FILES = {"designs": "agents"}   # a part of a capability, saved into that capability's file
+                "approvals": record_approvals, "voice": record_voice, "scorecard": record_scorecard, "ops": record_ops, "handover": record_handover}
+FILES = {"designs": "agents", "handover": "ops"}   # a part of a capability, saved into that capability's file
 REPLACE = {"approvals": "approvals|"}   # re-recorded as a whole: old paths would mix with the new runs
 
 
