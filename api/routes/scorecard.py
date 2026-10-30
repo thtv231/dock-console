@@ -52,21 +52,26 @@ async def case(body: CaseIn, request: Request):
 
 class JudgeIn(BaseModel):
     case_id: str = Field(max_length=20)
+    versions: Literal["baseline", "cheaper"] = "baseline"   # whose answer is judged; the judge is the same
 
 
 @router.post("/api/scorecard/judge")
 async def judge(body: JudgeIn, request: Request):
     if not live():
-        return replay.lookup("scorecard", replay.key("judge", body.case_id)) or replay.not_recorded()
+        options = {"versions": body.versions if body.versions != "baseline" else None}
+        record = replay.lookup("scorecard", replay.key("judge", body.case_id, **options))
+        # verdicts recorded before they named their version were all on the baseline: the key says whose answer it is
+        return {"versions": body.versions, **record} if record else replay.not_recorded()
 
     if not ratelimit.allow(ratelimit.client_ip(request)):
         return error(429, "rate_limited")
     c = CASES.get(body.case_id)
     if c is None or c["kind"] != "answer":
         return error(404, "unknown_answer_case")
-    grounded, answer, unsupported = await run_in_threadpool(scorer.judge, c["input"])
+    grounded, answer, unsupported = await run_in_threadpool(scorer.judge, c["input"], **scorer.VERSIONS[body.versions])
     verdict = results("chat.parse")[-1].choices[0].message.parsed   # the Grounded judge() reduced with its evidence
-    return {"case_id": c["id"], "question": c["input"], "grounded": grounded, "unsupported": unsupported,
+    return {"case_id": c["id"], "versions": body.versions, "models": scorer.VERSIONS[body.versions],
+            "question": c["input"], "grounded": grounded, "unsupported": unsupported,
             "answer": answer, "judge": {"grounded": verdict.grounded, "unsupported": verdict.unsupported,
                                         "unsupported_in_answer": bool(verdict.unsupported.strip())
                                         and verdict.unsupported.strip() in answer},

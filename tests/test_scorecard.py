@@ -91,10 +91,13 @@ def test_overview_reports_the_scorecard_recomputed_from_replays(client):
                                      "regressions": regressions(baseline, cheaper)}
 
 
+@pytest.mark.parametrize("version", VERSIONS)
 @pytest.mark.parametrize("case", JUDGED, ids=lambda c: c["id"])
-def test_every_judge_verdict_quotes_the_answer_it_judged(replayed, case):
-    assert replay.key("judge", case["id"]) in recorded()
-    got = replayed("/api/scorecard/judge", {"case_id": case["id"]})
+def test_every_judge_verdict_quotes_the_answer_it_judged(replayed, case, version):
+    """Both versions' answers are judged, and each verdict says whose answer it judged."""
+    assert case_key(case["id"], version).replace("case|", "judge|", 1) in recorded()
+    got = replayed("/api/scorecard/judge", {"case_id": case["id"], "versions": version})
+    assert got["versions"] == version, f"{case['id']}: verdict for {got.get('versions')!r}, asked for {version}"
     assert got["answer"].strip(), f"{case['id']}: the verdict carries no answer"
     unsupported = got["unsupported"].strip()
     if not got["grounded"]:   # s08 step 6: an ungrounded verdict counts only with a phrase found in the answer

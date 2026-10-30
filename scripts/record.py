@@ -291,7 +291,7 @@ def record_voice(http, key):
     and the record keeps its URL."""
     voice.AUDIO.mkdir(parents=True, exist_ok=True)
     existing = replay.load("voice")
-    plan = [(False, n) for n in range(1, voice.RUNS + 1)] + [(True, 1)]
+    plan = [(bias, n) for bias in (False, True) for n in range(1, voice.RUNS + 1)]
     records, failed = {}, []
     for bias, n in plan:
         for call_id in dataset("calls/truth.json"):
@@ -314,35 +314,57 @@ def record_voice(http, key):
             print(f"{record_key:<16} {str(got['note']['shipment_id']):<9} {got['note']['issue']:<8} "
                   f"callback={got['note']['callback']!s:<5} {'WRONG ' + ' '.join(wrong) if wrong else 'ok':<24} "
                   f"{got['stages']} {got['audio_bytes'] // 1000} kB")
+    # note() again on run 1's transcript of each source: the same words each time, so only understanding varies
+    for call_id in voice.NOTE_CALLS:
+        for source in ("nobias", "bias"):
+            for n in range(1, voice.RUNS + 1):
+                record_key = voice.note_key(call_id, source, n)
+                if record_key in existing:
+                    continue
+                r = http.post("/api/voice/note", json={"call_id": call_id, "source": source, "run": n},
+                              headers={"X-Mistral-Key": key})
+                got = r.json()
+                if r.status_code != 200 or got.get("mode") != "live":
+                    failed.append(record_key)
+                    print(f"{record_key}  FAILED {r.status_code} {got.get('error')}")
+                    continue
+                records[record_key] = stamp(got, key)
+                print(f"{record_key:<24} issue={got['note']['issue']:<9} {cost(got)}")
     every = {**existing, **records}
     for bias in (False, True):
-        rows = [v for k, v in every.items() if ("bias=1" in k) == bias]
+        rows = [v for k, v in every.items() if k.startswith("voice|") and ("bias=1" in k) == bias]
         right = {f: sum(r["score_vs_truth"][f] for r in rows) for f in ("shipment_id", "issue", "callback")}
         print(f"bias={bias!s:<5} {len(rows)} runs: " + " ".join(f"{f} {n}/{len(rows)}" for f, n in right.items()))
     return records, failed
 
 
 def record_scorecard(http, key):
-    """The 30 cases for the baseline and the cheaper candidate, and the judge on every answer case with sources."""
+    """The 30 cases for the baseline and the cheaper candidate, and the judge on every answer case with sources for
+    both. Keys already recorded are kept and skipped: only missing ones are made."""
     cases = dataset("scorecard.json")
+    existing = replay.load("scorecard")
+    vkey = lambda what, cid, version: replay.key(what, cid, versions=None if version == "baseline" else version)
     records, failed = {}, []
     for version in ("baseline", "cheaper"):
         got, bad = record_cases(http, key, "/api/scorecard/case", [
-            (replay.key("case", c["id"], versions=None if version == "baseline" else version),
-             {"case_id": c["id"], "versions": version}) for c in cases],
+            (vkey("case", c["id"], version), {"case_id": c["id"], "versions": version})
+            for c in cases if vkey("case", c["id"], version) not in existing],
             lambda g: f"{'pass' if g['ok'] else 'FAIL'} {g['detail'][:52]}")
         records.update(got)
         failed += bad
-        mine = [got.get(replay.key("case", c["id"], versions=None if version == "baseline" else version)) for c in cases]
+    every = {**existing, **records}
+    for version in ("baseline", "cheaper"):
+        mine = [every.get(vkey("case", c["id"], version)) for c in cases]
         print(f"{version}: {sum(bool(m and m['ok']) for m in mine)}/{len(cases)} passed")
     for c in cases:
-        was, now = records.get(replay.key("case", c["id"])), records.get(replay.key("case", c["id"], versions="cheaper"))
+        was, now = every.get(vkey("case", c["id"], "baseline")), every.get(vkey("case", c["id"], "cheaper"))
         if was and now and was["ok"] != now["ok"]:
             print(f"  {c['id']:<11} {'pass' if was['ok'] else 'fail'} -> {'pass' if now['ok'] else 'FAIL'}  "
                   f"{now['detail'][:70]}")
     judged, bad = record_cases(http, key, "/api/scorecard/judge", [
-        (replay.key("judge", c["id"]), {"case_id": c["id"]})
-        for c in cases if c["kind"] == "answer" and c["expect"]["sources"]],
+        (vkey("judge", c["id"], version), {"case_id": c["id"], "versions": version})
+        for version in ("baseline", "cheaper") for c in cases
+        if c["kind"] == "answer" and c["expect"]["sources"] and vkey("judge", c["id"], version) not in existing],
         lambda g: f"{'grounded' if g['grounded'] else 'UNSUPPORTED: ' + repr(g['unsupported'])[:40]} | {g['answer'][:30]}")
     return {**records, **judged}, failed + bad
 

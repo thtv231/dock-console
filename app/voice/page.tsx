@@ -30,7 +30,12 @@ type VoiceRun = Run & {
 };
 type Pair = Run & { plain: VoiceRun; biased: VoiceRun };
 type Counts = { runs: number; right: Record<Field, number>; issues?: Record<string, number> };
-type RunsSummary = { calls: Record<string, { nobias: Counts; bias: Counts }>; totals: { nobias: Counts; bias: Counts } };
+type Noted = Counts & { transcripts: string[] };
+type RunsSummary = {
+  calls: Record<string, { nobias: Counts; bias: Counts }>;
+  totals: { nobias: Counts; bias: Counts };
+  notes: Record<string, Partial<Record<"nobias" | "bias", Noted>>>;
+};
 
 const FIELDS: { key: Field; label: string }[] = [
   { key: "shipment_id", label: "Shipment" },
@@ -250,6 +255,59 @@ function Counted({ summary, calls }: { summary: RunsSummary; calls: string[] }) 
   );
 }
 
+/** note() run again on one recorded transcript per source: on the same words, a changing issue is understanding. */
+function HearingOrUnderstanding({ callId, noted, truth }: {
+  callId: string; noted: RunsSummary["notes"][string]; truth: Note;
+}) {
+  const plain = noted.nobias;
+  const biased = noted.bias;
+  const diff = plain && biased ? diffWords(plain.transcripts[0] ?? "", biased.transcripts[0] ?? "") : null;
+  const rows: { label: string; c: Noted | undefined; words: { w: string; changed: boolean }[] | null }[] = [
+    { label: "Without bias", c: plain, words: diff?.a ?? null },
+    { label: "With bias", c: biased, words: diff?.b ?? null },
+  ];
+  return (
+    <section aria-labelledby={`noted-${callId}`} className="flex max-w-[64ch] flex-col gap-1.5">
+      <h2 id={`noted-${callId}`} className="text-xs font-medium">
+        Hearing or understanding: {callId}, the call note written again on one recorded transcript
+      </h2>
+      <p className="text-[11px] text-muted-foreground">
+        Each transcript below is run 1 of its column, noted again with the same prompt and nothing else changed.
+        If the issue changes on the same words, the miss is in understanding, not in hearing.
+        {diff && " Marked words differ between the two transcripts."}
+      </p>
+      <table className="text-xs">
+        <thead className="text-muted-foreground">
+          <tr>
+            <th className="pr-3 text-left font-normal">Transcript</th>
+            <th className="pr-3 text-left font-normal">Issue, as noted</th>
+            <th className="text-right font-normal">Right</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(({ label, c, words }) => c && (
+            <tr key={label} className="align-top">
+              <td className="py-1 pr-3">
+                <div className="text-muted-foreground">{label}{c.transcripts.length > 1 ? `, ${c.transcripts.length} different transcripts` : ""}</div>
+                {words ? <Words words={words} /> : <p className="leading-relaxed">{c.transcripts[0]}</p>}
+              </td>
+              <td className="whitespace-nowrap py-1 pr-3 tabular-nums">
+                {Object.entries(c.issues ?? {}).sort((a, b) => b[1] - a[1]).map(([issue, n]) => (
+                  <div key={issue} className={cn(issue !== truth.issue && "text-miss")}>{issue} {n}</div>
+                ))}
+              </td>
+              <td className={cn("py-1 text-right tabular-nums", c.right.issue !== c.runs && "font-medium text-miss")}>
+                {c.right.issue}/{c.runs}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="text-[11px] text-muted-foreground">The truth for {callId} is {truth.issue}.</p>
+    </section>
+  );
+}
+
 // ---------- the mic, Live only ----------
 async function toWav(blob: Blob): Promise<Blob> {
   const ctx = new AudioContext();
@@ -382,7 +440,7 @@ export default function VoicePage() {
   const [summary, setSummary] = useState<RunsSummary | null>(null);
   const [loadError, setLoadError] = useState<ApiError | null>(null);
   const [open, setOpen] = useState<Record<string, boolean>>({});
-  const [plainRun, setPlainRun] = useState<(typeof RUNS)[number]>("1");
+  const [recordedRun, setRecordedRun] = useState<(typeof RUNS)[number]>("1");
 
   useEffect(() => {
     (async () => {
@@ -400,13 +458,13 @@ export default function VoicePage() {
   const run = useCallback(async (id: string): Promise<Result<Pair>> => {
     // Live ignores the run number: every live call is a new run.
     const [plain, biased] = await Promise.all([
-      post<VoiceRun>("/api/voice/run", { call_id: id, bias: false, run: Number(plainRun) }),
-      post<VoiceRun>("/api/voice/run", { call_id: id, bias: true }),
+      post<VoiceRun>("/api/voice/run", { call_id: id, bias: false, run: Number(recordedRun) }),
+      post<VoiceRun>("/api/voice/run", { call_id: id, bias: true, run: Number(recordedRun) }),
     ]);
     if (!plain.ok) return plain;
     if (!biased.ok) return biased;
     return { ok: true, data: { plain: plain.data, biased: biased.data, mode: biased.data.mode, meter: [...plain.data.meter, ...biased.data.meter] } };
-  }, [post, plainRun]);
+  }, [post, recordedRun]);
   const { rows, runOne, runAll, runningAll, running, failed, done, clear } = useRows(run);
 
   if (loadError) return <p className="p-6 text-miss">{describeError(loadError)}</p>;
@@ -436,11 +494,11 @@ export default function VoicePage() {
         </Button>
         {!live && (
           <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
-            Run without bias
+            Recorded run
             <Segmented
-              label="Recorded run without bias"
-              value={plainRun}
-              onChange={(v) => { setPlainRun(v); clear(); }}
+              label="Recorded run, with and without bias"
+              value={recordedRun}
+              onChange={(v) => { setRecordedRun(v); clear(); }}
               options={RUNS.map((n) => ({ value: n, label: n }))}
             />
           </span>
@@ -465,8 +523,8 @@ export default function VoicePage() {
             <TableHead className="h-8">Call</TableHead>
             <TableHead className="h-8">Listen</TableHead>
             <TableHead className="h-8 border-l">Shipment · issue · callback</TableHead>
-            <TableHead className="h-8 border-l">Without bias{live ? "" : `, run ${plainRun}`}</TableHead>
-            <TableHead className="h-8">With bias</TableHead>
+            <TableHead className="h-8 border-l">Without bias{live ? "" : `, run ${recordedRun}`}</TableHead>
+            <TableHead className="h-8">With bias{live ? "" : `, run ${recordedRun}`}</TableHead>
             <TableHead className="h-8 border-l text-right">Latency</TableHead>
             <TableHead className="h-8 w-24" aria-label="Action" />
           </TableRow>
@@ -531,8 +589,8 @@ export default function VoicePage() {
                             <mark className="rounded-sm bg-primary/15 px-0.5 text-foreground">Marked</mark> words differ between the two transcripts.
                           </p>
                           <div className="grid gap-3 lg:grid-cols-2">
-                            <RunDetail title={`Without bias${pair.plain.mode === "replay" ? `, run ${plainRun}` : ""}`} run={pair.plain} words={diff.a} />
-                            <RunDetail title="With bias" run={pair.biased} words={diff.b} />
+                            <RunDetail title={`Without bias${pair.plain.mode === "replay" ? `, run ${recordedRun}` : ""}`} run={pair.plain} words={diff.a} />
+                            <RunDetail title={`With bias${pair.biased.mode === "replay" ? `, run ${recordedRun}` : ""}`} run={pair.biased} words={diff.b} />
                           </div>
                         </>
                       ) : (
@@ -552,6 +610,9 @@ export default function VoicePage() {
           <p className="text-xs text-muted-foreground">Run the calls to see the latency budget per stage.</p>
         )}
         {summary && !live && <Counted summary={summary} calls={ids} />}
+        {summary && !live && Object.entries(summary.notes).map(([id, noted]) => (
+          <HearingOrUnderstanding key={id} callId={id} noted={noted} truth={calls[id]} />
+        ))}
       </div>
     </div>
   );

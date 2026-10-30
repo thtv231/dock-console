@@ -74,8 +74,9 @@ class Grounded(BaseModel):
     unsupported: str = Field(description="The exact unsupported phrase from the answer, or empty")
 
 
-def judge(question):
-    a, retrieved = app.answer(question)
+def judge(question, **versions):
+    # versions as check() takes them, so the cheaper candidate's answers are judged too (s08 judged the baseline's)
+    a, retrieved = app.answer(question, **versions.get("answer", {}))
     context = "\n".join(d["text"] for d in app.HANDBOOK if d["id"] in retrieved)
     r = app.client.chat.parse(model="mistral-medium-latest", response_format=Grounded, messages=[
         {"role": "system", "content": "You check if an answer is supported by the sections."},

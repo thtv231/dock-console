@@ -26,6 +26,7 @@ type CaseResult = Run & {
 };
 type Judged = Run & {
   case_id: string;
+  versions: Version;
   question: string;
   grounded: boolean;
   unsupported: string;
@@ -46,7 +47,7 @@ const VERSIONS: { v: Version; label: string }[] = [
 ];
 
 const caseRow = (id: string, v: Version) => `case|${id}|${v}`;
-const judgeRow = (id: string) => `judge|${id}`;
+const judgeRow = (id: string, v: Version) => `judge|${id}|${v}`;
 const judged = (c: Case) => c.kind === "answer" && Array.isArray(c.expect.sources) && c.expect.sources.length > 0;
 
 /** What one case sends to Dock, as one line. */
@@ -69,7 +70,7 @@ function Quoted({ j }: { j: Judged }) {
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <span>Judge</span>
+        <span>Judge, on the {j.versions === "baseline" ? "baseline’s" : "cheaper candidate’s"} answer</span>
         <Verdict ok={j.grounded} yes="Grounded in the sections" no="Unsupported" />
       </div>
       <blockquote className="border-l-2 pl-3 leading-relaxed">
@@ -82,6 +83,7 @@ function Quoted({ j }: { j: Judged }) {
         ) : j.answer}
       </blockquote>
       <p className="text-xs text-muted-foreground">
+        The judge asks Dock the question again on this version, so this answer can differ from the one the case checked.{" "}
         {phrase === ""
           ? "The judge named no unsupported phrase."
           : at >= 0
@@ -92,7 +94,9 @@ function Quoted({ j }: { j: Judged }) {
   );
 }
 
-function CaseDetail({ c, results, judge }: { c: Case; results: Partial<Record<Version, CaseResult>>; judge: Judged | null }) {
+function CaseDetail({ c, results, judges }: {
+  c: Case; results: Partial<Record<Version, CaseResult>>; judges: Partial<Record<Version, Judged>>;
+}) {
   return (
     <div className="flex flex-col gap-3">
       <div className="max-w-[80ch]">
@@ -132,11 +136,16 @@ function CaseDetail({ c, results, judge }: { c: Case; results: Partial<Record<Ve
                   <MeterTable run={r} />
                 </>
               ) : <p className="text-muted-foreground">Not run yet.</p>}
+              {judges[v] && (
+                <div className="mt-1 border-t pt-2">
+                  <Quoted j={judges[v]} />
+                  <div className="mt-2"><MeterTable run={judges[v]} /></div>
+                </div>
+              )}
             </div>
           );
         })}
       </div>
-      {judge && <div className="max-w-[80ch]"><Quoted j={judge} /><div className="mt-2"><MeterTable run={judge} /></div></div>}
     </div>
   );
 }
@@ -159,7 +168,7 @@ export default function ScorecardPage() {
   const run = useCallback((rowId: string) => {
     const [what, id, v] = rowId.split("|");
     return what === "judge"
-      ? post<CaseResult | Judged>("/api/scorecard/judge", { case_id: id })
+      ? post<CaseResult | Judged>("/api/scorecard/judge", { case_id: id, versions: v })
       : post<CaseResult | Judged>("/api/scorecard/case", { case_id: id, versions: v });
   }, [post]);
   const { rows, runOne, runAll, runningAll, running, failed, done, clear } = useRows(run);
@@ -172,10 +181,10 @@ export default function ScorecardPage() {
     return r?.status === "done" ? r.result : null;
   };
   const caseResult = (id: string, v: Version) => result(caseRow(id, v)) as CaseResult | null;
-  const judgeResult = (id: string) => result(judgeRow(id)) as Judged | null;
+  const judgeResult = (id: string, v: Version) => result(judgeRow(id, v)) as Judged | null;
   const allRows = (list: Case[]) => [
     ...list.flatMap((c) => VERSIONS.map(({ v }) => caseRow(c.id, v))),
-    ...list.filter(judged).map((c) => judgeRow(c.id)),
+    ...list.filter(judged).flatMap((c) => VERSIONS.map(({ v }) => judgeRow(c.id, v))),
   ];
 
   const scored = (v: Version, list = cases) => {
@@ -252,7 +261,8 @@ export default function ScorecardPage() {
             <TableHead className="h-8">Input</TableHead>
             <TableHead className="h-8 border-l">Baseline</TableHead>
             <TableHead className="h-8">Cheaper</TableHead>
-            <TableHead className="h-8 border-l">Judge</TableHead>
+            <TableHead className="h-8 border-l">Judge, baseline</TableHead>
+            <TableHead className="h-8">Judge, cheaper</TableHead>
             <TableHead className="h-8 border-l text-right">Latency</TableHead>
             <TableHead className="h-8 w-24" aria-label="Action" />
           </TableRow>
@@ -269,16 +279,27 @@ export default function ScorecardPage() {
                   <TableCell colSpan={3} className="py-1.5 text-xs font-medium">{label} <span className="font-normal text-muted-foreground">({list.length})</span></TableCell>
                   <TableCell className="border-l py-1.5 text-xs tabular-nums text-muted-foreground">{b.run ? `${b.passed}/${b.run}` : ""}</TableCell>
                   <TableCell className="py-1.5 text-xs tabular-nums text-muted-foreground">{ch.run ? `${ch.passed}/${ch.run}` : ""}</TableCell>
-                  <TableCell colSpan={3} className="border-l" />
+                  <TableCell colSpan={4} className="border-l" />
                 </TableRow>
                 {list.map((c) => {
                   const res = { baseline: caseResult(c.id, "baseline") ?? undefined, cheaper: caseResult(c.id, "cheaper") ?? undefined };
-                  const j = judgeResult(c.id);
-                  const ids = [caseRow(c.id, "baseline"), caseRow(c.id, "cheaper"), ...(judged(c) ? [judgeRow(c.id)] : [])];
+                  const js = { baseline: judgeResult(c.id, "baseline") ?? undefined, cheaper: judgeResult(c.id, "cheaper") ?? undefined };
+                  const ids = [caseRow(c.id, "baseline"), caseRow(c.id, "cheaper"),
+                    ...(judged(c) ? VERSIONS.map(({ v }) => judgeRow(c.id, v)) : [])];
                   const busy = ids.some((i) => rows[i]?.status === "running");
                   const errors = ids.flatMap((i) => (rows[i]?.status === "error" ? [(rows[i] as { error: ApiError }).error] : []));
                   const isOpen = open[c.id] ?? false;
-                  const ran = [res.baseline, res.cheaper, j].filter((r): r is CaseResult | Judged => !!r);
+                  const ran = [res.baseline, res.cheaper, js.baseline, js.cheaper].filter((r): r is CaseResult | Judged => !!r);
+                  const judgeCell = (v: Version, first: boolean) => {
+                    const j = js[v];
+                    return (
+                      <TableCell className={cn("max-w-[12rem] py-1.5", first && "border-l")}>
+                        {rows[judgeRow(c.id, v)]?.status === "running" && <Running />}
+                        {j && <span className="block truncate" title={j.judge.unsupported || undefined}><Verdict ok={j.grounded} yes="Grounded" no={`“${j.unsupported.trim()}”`} /></span>}
+                        {!judged(c) && first && <span className="text-muted-foreground" aria-label="Not judged">–</span>}
+                      </TableCell>
+                    );
+                  };
                   const regressed = res.baseline?.ok && res.cheaper && !res.cheaper.ok;
                   const cell = (v: Version) => {
                     const r = res[v];
@@ -303,7 +324,7 @@ export default function ScorecardPage() {
                         <TableCell className="py-1.5 font-mono text-xs">{c.id}</TableCell>
                         <TableCell className="max-w-[24rem] truncate py-1.5" title={inputText(c)}>{inputText(c)}</TableCell>
                         {errors.length > 0 && !busy ? (
-                          <TableCell colSpan={4} className="max-w-0 border-l py-1.5">
+                          <TableCell colSpan={5} className="max-w-0 border-l py-1.5">
                             <span className="block truncate text-miss" title={describeError(errors[0])}>{describeError(errors[0])}</span>
                           </TableCell>
                         ) : (
@@ -313,11 +334,8 @@ export default function ScorecardPage() {
                               {cell("cheaper")}
                               {regressed && <span className="sr-only"> (regression)</span>}
                             </TableCell>
-                            <TableCell className="max-w-[14rem] border-l py-1.5">
-                              {rows[judgeRow(c.id)]?.status === "running" && <Running />}
-                              {j && <span className="block truncate" title={j.judge.unsupported || undefined}><Verdict ok={j.grounded} yes="Grounded" no={`“${j.unsupported.trim()}”`} /></span>}
-                              {!judged(c) && <span className="text-muted-foreground" aria-label="Not judged">–</span>}
-                            </TableCell>
+                            {judgeCell("baseline", true)}
+                            {judgeCell("cheaper", false)}
                             <TableCell className="border-l py-1.5 text-right tabular-nums">
                               {ran.length > 0 && <Latency run={{ mode: ran[0].mode, meter: ran.flatMap((r) => r.meter), recorded_at: ran[0].recorded_at, git_sha: ran[0].git_sha }} />}
                             </TableCell>
@@ -332,8 +350,8 @@ export default function ScorecardPage() {
                       {isOpen && (
                         <TableRow className="bg-muted/40 hover:bg-muted/40">
                           <TableCell />
-                          <TableCell colSpan={7} className="whitespace-normal pb-3 pt-0">
-                            <CaseDetail c={c} results={res} judge={j} />
+                          <TableCell colSpan={8} className="whitespace-normal pb-3 pt-0">
+                            <CaseDetail c={c} results={res} judges={js} />
                           </TableCell>
                         </TableRow>
                       )}

@@ -6,6 +6,7 @@ A recorded reply is a WAV in replays/voice/, served by URL. A live reply comes b
 import base64
 import re
 from pathlib import Path
+from typing import Literal
 
 from fastapi import APIRouter, Request
 from fastapi.responses import FileResponse
@@ -24,7 +25,8 @@ FIELDS = ["shipment_id", "issue", "callback"]
 STAGES = {"transcribe": "audio.transcriptions.complete", "understand": "chat.parse",
           "reply": "chat.complete", "speech": "audio.speech.complete"}
 RECORDED_WAV = re.compile(r"^C\d+_(bias|nobias)(_run\d+)?\.wav$")
-RUNS = 5   # recorded runs per call without bias: one run cannot show what bias changes
+RUNS = 5   # recorded runs per call, with and without bias: one run cannot show what bias changes
+NOTE_CALLS = ("C2",)   # calls whose recorded transcripts are noted again, to tell hearing from understanding
 
 router = APIRouter()
 
@@ -80,23 +82,66 @@ async def run(body: RunIn, request: Request):
     return await run_in_threadpool(handle, path.name, path.read_bytes(), body.bias, body.speak, body.call_id)
 
 
+def note_key(call_id, source, run=1):
+    """note|C2| is note() run 1 on the no-bias transcript; note|C2|run=3,source=bias the third on the bias one."""
+    return replay.key("note", call_id, source=None if source == "nobias" else source, run=None if run == 1 else run)
+
+
+class NoteIn(BaseModel):
+    call_id: str = Field(max_length=8)
+    source: Literal["nobias", "bias"] = "nobias"
+    run: int = Field(1, ge=1, le=RUNS)
+
+
+@router.post("/api/voice/note")
+def note_again(body: NoteIn, request: Request):
+    """Only the understand step: note() on a transcript already recorded (run 1 of that source), no audio.
+    If the issue changes on the same words, the miss is in understanding, not in hearing."""
+    if not live():
+        return replay.lookup("voice", note_key(body.call_id, body.source, body.run)) or replay.not_recorded()
+
+    if not ratelimit.allow(ratelimit.client_ip(request)):
+        return error(429, "rate_limited")
+    heard = replay.load("voice").get(run_key(body.call_id, body.source == "bias"))
+    if heard is None:
+        return error(404, "no_recorded_transcript")
+    note, _ = voice.note(heard["transcript"])
+    note = note.model_dump()
+    truth = voice.TRUTH[body.call_id]
+    return {"call_id": body.call_id, "source": body.source, "run": body.run, "transcript": heard["transcript"],
+            "note": note, "truth": {f: truth[f] for f in FIELDS},
+            "score_vs_truth": {f: note[f] == truth[f] for f in FIELDS}, "mode": mode(), "meter": meter()}
+
+
+def counted(rows, truth):
+    issues = {}
+    for r in rows:
+        issues[r["note"]["issue"]] = issues.get(r["note"]["issue"], 0) + 1
+    return {"runs": len(rows), "right": {f: sum(r["note"][f] == truth[f] for r in rows) for f in FIELDS},
+            "issues": issues}
+
+
 @router.get("/api/voice/runs")
 def runs():
-    """Every recorded run counted against the truth, per call and in total, with and without bias."""
+    """Every recorded run counted against the truth, per call and in total, with and without bias; and note() run
+    again on one recorded transcript per source, with the distinct transcripts it was given."""
     records = replay.load("voice")
-    out = {"calls": {}, "totals": {}}
+    out = {"calls": {}, "totals": {}, "notes": {}}
     for variant, bias in (("nobias", False), ("bias", True)):
         total = {"runs": 0, "right": dict.fromkeys(FIELDS, 0)}
         for call_id in voice.TRUTH:
             mine = [r for n in range(1, RUNS + 1) if (r := records.get(run_key(call_id, bias, n)))]
-            right = {f: sum(r["note"][f] == voice.TRUTH[call_id][f] for r in mine) for f in FIELDS}
-            issues = {}
-            for r in mine:
-                issues[r["note"]["issue"]] = issues.get(r["note"]["issue"], 0) + 1
-            out["calls"].setdefault(call_id, {})[variant] = {"runs": len(mine), "right": right, "issues": issues}
-            total["runs"] += len(mine)
-            total["right"] = {f: total["right"][f] + right[f] for f in FIELDS}
+            c = counted(mine, voice.TRUTH[call_id])
+            out["calls"].setdefault(call_id, {})[variant] = c
+            total["runs"] += c["runs"]
+            total["right"] = {f: total["right"][f] + c["right"][f] for f in FIELDS}
         out["totals"][variant] = total
+    for call_id in NOTE_CALLS:
+        for source in ("nobias", "bias"):
+            mine = [r for n in range(1, RUNS + 1) if (r := records.get(note_key(call_id, source, n)))]
+            if mine:
+                out["notes"].setdefault(call_id, {})[source] = {
+                    **counted(mine, voice.TRUTH[call_id]), "transcripts": sorted({r["transcript"] for r in mine})}
     return {**out, "mode": "replay", "meter": []}
 
 
